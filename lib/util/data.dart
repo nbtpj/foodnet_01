@@ -2,6 +2,7 @@ import 'package:tuple/tuple.dart';
 import 'entities.dart';
 
 /// định nghĩa các API sử dụng
+/// các hàm này nên hỗ trợ cache dữ liệu
 
 Future<PostData?> get_post(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
