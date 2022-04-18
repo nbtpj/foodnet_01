@@ -139,3 +139,38 @@ class Confirmed extends StatelessWidget {
     );
   }
 }
+
+class FriendListItem extends StatefulWidget {
+  final String userAsset;
+  final String name;
+  final int mutual_friends;
+
+  const FriendListItem({
+    Key? key,
+    required this.userAsset,
+    required this.name,
+    required this.mutual_friends,
+  }) : super(key: key);
+
+  @override
+  _FriendListItemState createState() => _FriendListItemState();
+}
+
+class _FriendListItemState extends State<FriendListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(widget.name),
+      isThreeLine: false,
+      trailing: Icon(Icons.more_vert),
+      leading: CircleAvatar(
+        radius: 30,
+        child: CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage(widget.userAsset),
+        ),
+      ),
+      subtitle: Text(widget.mutual_friends.toString() + " bạn chung"),
+    );
+  }
+}
