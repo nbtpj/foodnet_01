@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../../util/navigate.dart';
-import '../components/friend_item.dart';
+import '../../../util/navigate.dart';
+import '../../components/friend_item.dart';
 
 List friend1s = [
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "images/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "images/tarek.jpg"},
+  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
 ];
 
 class FriendList extends StatefulWidget {

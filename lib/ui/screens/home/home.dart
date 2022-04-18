@@ -21,7 +21,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Scaffold(
       appBar:
           AppBar(title: Text(name), automaticallyImplyLeading: false, actions: [

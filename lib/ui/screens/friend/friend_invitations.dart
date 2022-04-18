@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/friend_list.dart';
+import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
-import '../components/friend_item.dart';
+import '../../components/friend_item.dart';
 
 List friends = [
-  {"name": "Luong Dat", "time": "31W", "userAsset": "images/tarek.jpg"},
-  {"name": "Minh Quang", "time": "31H", "userAsset": "images/tarek.jpg"},
-  {"name": "Dao Tuan", "time": "31W", "userAsset": "images/tarek.jpg"},
-  {"name": "Pham Trong", "time": "31M", "userAsset": "images/tarek.jpg"},
-  {"name": "Luong Dat", "time": "31W", "userAsset": "images/tarek.jpg"},
-  {"name": "Minh Quang", "time": "31H", "userAsset": "images/tarek.jpg"},
-  {"name": "Dao Tuan", "time": "31W", "userAsset": "images/tarek.jpg"},
-  {"name": "Pham Trong", "time": "31M", "userAsset": "images/tarek.jpg"},
+  {"name": "Luong Dat", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Minh Quang", "time": "31H", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Dao Tuan", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Pham Trong", "time": "31M", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Luong Dat", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Minh Quang", "time": "31H", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Dao Tuan", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
+  {"name": "Pham Trong", "time": "31M", "userAsset": "assets/friend/tarek.jpg"},
 ];
 
 class Friends extends StatefulWidget {

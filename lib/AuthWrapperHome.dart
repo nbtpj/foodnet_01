@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/ui/screens/login.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
 
+import 'ui/screens/nav_bar.dart';
+
 class AuthWrapperHome extends StatelessWidget {
   const AuthWrapperHome({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class AuthWrapperHome extends StatelessWidget {
           if (u == null) {
             return const Login();
           } else {
-            return const Home();
+            return MyHomePage();
           }
         } else {
           return const Scaffold(
