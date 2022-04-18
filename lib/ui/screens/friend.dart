@@ -21,6 +21,12 @@ class Friends extends StatefulWidget {
 }
 
 class _FriendsState extends State<Friends> {
+  void _eraseFriendsList(int index) {
+    setState(() {
+      friends.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +90,7 @@ class _FriendsState extends State<Friends> {
               height: 5,
             ),
             Container(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
               child: Row(
                 children: const [
                   Text(
@@ -109,6 +115,8 @@ class _FriendsState extends State<Friends> {
                     userAsset: friendItem['userAsset'],
                     name: friendItem['name'],
                     time: friendItem['time'],
+                    eraseFriendsList: _eraseFriendsList,
+                    index: index,
                   );
                 }
             ),
