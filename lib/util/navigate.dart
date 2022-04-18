@@ -29,4 +29,8 @@ class Navigate {
   static pushPageWithFadeAnimation(BuildContext context, Widget page) async {
     return await Navigator.pushReplacement(context, FadePageRoute(page));
   }
+
+  static popPage(BuildContext context) async {
+    return Navigator.pop(context);
+  }
 }
