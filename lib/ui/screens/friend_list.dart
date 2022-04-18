@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../util/navigate.dart';
 import '../components/friend_item.dart';
 
 List friend1s = [
@@ -40,7 +41,9 @@ class _FriendListState extends State<FriendList> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigate.popPage(context);
+                    },
                     icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
                     color: Colors.black,
                     iconSize: 30,
