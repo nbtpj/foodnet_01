@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/ui/screens/login.dart';
-import 'package:foodnet_01/ui/screens/home.dart';
+import 'package:foodnet_01/ui/screens/home/home.dart';
 
 class AuthWrapperHome extends StatelessWidget {
   const AuthWrapperHome({Key? key}) : super(key: key);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 
-import '../../util/entities.dart';
-import '../../util/global.dart';
+
 
 class PostView extends StatefulWidget {
   late PostData post;
