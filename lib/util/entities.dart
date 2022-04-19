@@ -1,5 +1,7 @@
 import 'package:tuple/tuple.dart';
 import 'dart:math';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 final randomNumberGenerator = Random();
 
@@ -10,28 +12,47 @@ class LazyLoadData {
   /// ví dụ như: nếu đối tượng PostData chỉ cần hiển thị brief view thì không cần phải load toàn bộ các media.
   void loadMore() async {}
 }
+class CommentData{
+  late String username;
+  late String avatarUrl;
+  late String comment;
+  late DateTime timestamp;
+
+  CommentData({
+    this.username = "Tuan",
+    this.avatarUrl = "assets/friend/tarek.jpg",
+    this.comment = "nice",
+    required this.timestamp,
+  });
+}
+
 
 class PostData implements LazyLoadData {
   String? id;
-  String title = '';
-  String description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-      " elit, sed do eiusmod tempor incididunt ut labore et dolore magna "
-      "aliqua. Ut enim ad minim veniam, quis nostrud eslednjn";
-  List<String> mediaUrls = [];
-  String outstandingIMGURL = '';
-  int price = 0;
-  bool isGood = true;
+  late String title;
+  late String description;
+  late List<String> mediaUrls;
+  late String outstandingIMGURL;
+  int? price;
+  late bool isGood;
   int react = randomNumberGenerator.nextInt(2)-1;
-  List<String> cateList = []; // chứa string ID của các post category
+  late List<String> cateList; // chứa string ID của các post category
   PostData({
     this.id,
     this.title = "",
-    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        " elit, sed do eiusmod tempor incididunt ut labore et dolore magna "
-        "aliqua. Ut enim ad minim veniam, quis nostrud eslednjn",
+    this.description =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+            ,
     this.mediaUrls = const [],
     this.outstandingIMGURL = '',
-    this.price = 0,
+    this.price,
     this.isGood = true,
     this.cateList = const [],
   });
@@ -39,6 +60,9 @@ class PostData implements LazyLoadData {
   @override
   void loadMore() {
     // TODO: implement loadMore
+  }
+  CommentData get_a_previous_comment() {
+    return CommentData(timestamp:DateTime.now());
   }
 
   int get_num_rate() {
@@ -56,8 +80,6 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  double get_rate() { return (randomNumberGenerator.nextDouble()*1000).ceil().toDouble();}
-
   String get_location_name() {return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";}
 
   int get_react() { return react;}
@@ -68,7 +90,11 @@ class PostData implements LazyLoadData {
       react = -1;
     }
   }
+  int get_upvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+
+  int get_downvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
 }
+
 
 class BoxChatData implements LazyLoadData {
   @override

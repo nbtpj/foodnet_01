@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/components/post_detail/components/separator.dart';
+import 'package:foodnet_01/ui/screens/post_detail/components/separator.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';

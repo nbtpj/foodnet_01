@@ -10,16 +10,17 @@ class FoodDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: SizeConfig.screenHeight / 45.54),
+        padding: EdgeInsets.only(top: SizeConfig.screenHeight / 45.54),
 
-      /// 15.0
-      child: Container(
-        child: Text(
-          food.description,
-          style: const TextStyle(color: Colors.black38),
-          textAlign: TextAlign.justify,
-        ),
-      ),
-    );
+        /// 15.0
+        child: Container(
+            child: Text(
+              food.description,
+              style: const TextStyle(color: Colors.black38),
+              textAlign: TextAlign.justify,
+            ),
+          ),
+
+        );
   }
 }

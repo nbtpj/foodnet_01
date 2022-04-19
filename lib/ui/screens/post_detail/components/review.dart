@@ -29,11 +29,37 @@ class _ReviewStarsState extends State<ReviewStars> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.star_rounded,
+                    Icons.favorite,
                     color: textColor,
                   ),
                   Text(
-                    "${widget.food.get_rate()}",
+                    "${widget.food.get_upvote_rate()}",
+                    style: TextStyle(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: SizeConfig.screenHeight / 45.54),
+                  ),
+
+                  /// 15.0
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
+                  //
+                  //   /// 8.0
+                  //   child: Text("${widget.food.get_num_rate()} Reviews",
+                  //       style: TextStyle(color: Colors.black26)),
+                  // )
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.heart_broken,
+                    color: textColor,
+                  ),
+                  Text(
+                    "${widget.food.get_downvote_rate()}",
                     style: TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,
@@ -43,7 +69,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                   /// 15.0
                   Padding(
                     padding:
-                        EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
+                    EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
 
                     /// 8.0
                     child: Text("${widget.food.get_num_rate()} Reviews",

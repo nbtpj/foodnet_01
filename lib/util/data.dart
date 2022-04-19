@@ -4,13 +4,13 @@ import 'entities.dart';
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
 
-Future<PostData?> get_post(String id) async {
+PostData? get_post(String id) {
   /// hàm lấy một đối tượng PostData dựa trên id
   // TODO: implement get_post
   return null;
 }
 
-Stream<PostData> get_posts(Filter filter) async* {
+Iterable<PostData> get_posts(Filter filter) sync* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_posts
@@ -103,20 +103,21 @@ Stream<PostData> get_posts(Filter filter) async* {
   // ver 1: giả dữ liệu local
 }
 
-Future<UserData?> get_user(String id) async {
+UserData? get_user(String id)  {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
   return null;
 }
 
-Stream<UserData> get_users(Filter filter) async* {
+Iterable<UserData> get_users(Filter filter) sync* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users
   yield UserData();
 }
 
-Stream<Tuple2<double, Object>?> search(Filter filter) async* {
+
+Iterable<Tuple2<double, Object>?> search(Filter filter) sync* {
   /// hàm tìm kiếm một tập các Object theo filter và trả về 1 stream các object tìm kiếm được
   /// cùng với một số double thể hiện độ 'matching' với filter
   // TODO: implement search

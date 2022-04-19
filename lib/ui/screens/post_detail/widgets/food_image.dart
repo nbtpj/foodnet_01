@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/components/post_detail/components/arrow_back.dart';
-import 'package:foodnet_01/ui/components/post_detail/components/favorite_food.dart';
+import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
+import 'package:foodnet_01/ui/screens/post_detail/components/react_food.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -21,7 +21,7 @@ class _FoodImageState extends State<FoodImage> {
       decoration: BoxDecoration(
         color: Colors.orangeAccent,
         image: DecorationImage(
-            image: AssetImage("${widget.food.outstandingIMGURL}"),
+            image: AssetImage(widget.food.outstandingIMGURL),
             fit: BoxFit.fitWidth
         ),
       ),
@@ -33,6 +33,7 @@ class _FoodImageState extends State<FoodImage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ArrowBack(),
+              // CommentFood(food: widget.food),
               FavoriteFood(food: widget.food),
             ],
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/components/post_detail/post_detail.dart';
+import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
