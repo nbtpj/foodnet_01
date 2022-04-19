@@ -30,11 +30,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     SizeConfig().init(context);
     final items = [
-      Icon(Icons.home, size: SizeConfig.screenHeight!/22.77),          /// 30.0
-      // Icon(Icons.search, size: SizeConfig.screenHeight!/22.77),
-      // Icon(Icons.shopping_cart, size: SizeConfig.screenHeight!/22.77),
-      // Icon(Icons.favorite, size: SizeConfig.screenHeight!/22.77),
-      Icon(Icons.people, size: SizeConfig.screenHeight!/22.77),
+      Icon(Icons.home, size: SizeConfig.screenHeight/22.77),          /// 30.0
+      // Icon(Icons.search, size: SizeConfig.screenHeight/22.77),
+      // Icon(Icons.shopping_cart, size: SizeConfig.screenHeight/22.77),
+      // Icon(Icons.favorite, size: SizeConfig.screenHeight/22.77),
+      Icon(Icons.people, size: SizeConfig.screenHeight/22.77),
     ];
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.black45,
               backgroundColor: Colors.transparent,
               buttonBackgroundColor: buttonColor,
-              height: SizeConfig.screenHeight!/11.39,               /// 60.0
+              height: SizeConfig.screenHeight/11.39,               /// 60.0
               animationCurve: Curves.easeInOut,
               animationDuration: Duration(milliseconds: 400),
               index: index,
