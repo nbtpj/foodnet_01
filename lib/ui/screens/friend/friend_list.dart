@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/data.dart';
+import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/navigate.dart';
 import '../../components/friend_item.dart';
-
-List friend1s = [
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-];
 
 class FriendList extends StatefulWidget {
   const FriendList({Key? key}) : super(key: key);
@@ -30,6 +21,10 @@ class _FriendListState extends State<FriendList> {
 
   @override
   Widget build(BuildContext context) {
+    Future<List<FriendData>> fetchRootFriend() async {
+      //todo: implement get root post (categorical post)
+      return get_friends(Filter(search_type: "friend_list")).toList();
+    }
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -106,24 +101,34 @@ class _FriendListState extends State<FriendList> {
               ),
             ),
 
-            ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-                itemCount: friend1s.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map friendItem = friend1s[index];
-                  return FriendListItem(
-                    userAsset: friendItem['userAsset'],
-                    name: friendItem['name'],
-                    mutual_friends: friendItem['mutualism'],
-                  );
-                }
-            ),
+            FutureBuilder<List<FriendData>>(
+                future: fetchRootFriend(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var friendList = snapshot.data ?? [];
+                    return ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemCount: friendList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var friendItem = friendList[index];
+                          return FriendListItem(
+                            userAsset: friendItem.userAsset,
+                            name: friendItem.name,
+                            mutual_friends: friendItem.mutualism!,
+                          );
+                        }
+                    );
+                  } else {
+                    return const Center();
+                  }
+                })
+
           ],
         ),
       ),

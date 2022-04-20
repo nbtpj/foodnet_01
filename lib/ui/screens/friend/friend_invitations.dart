@@ -2,18 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../util/data.dart';
+import '../../../util/entities.dart';
 import '../../components/friend_item.dart';
-
-List friends = [
-  {"name": "Luong Dat", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "time": "31H", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "time": "31M", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Luong Dat", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "time": "31H", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "time": "31W", "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "time": "31M", "userAsset": "assets/friend/tarek.jpg"},
-];
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -23,10 +14,16 @@ class Friends extends StatefulWidget {
 }
 
 class _FriendsState extends State<Friends> {
+  dynamic friendList;
   void _eraseFriendsList(int index) {
     setState(() {
-      friends.removeAt(index);
+      friendList.removeAt(index);
     });
+  }
+
+  Future<List<FriendData>> fetchRootFriend() async {
+    //todo: implement get root post (categorical post)
+    return get_friends(Filter(search_type: "friend_invitations")).toList();
   }
 
   @override
@@ -107,26 +104,36 @@ class _FriendsState extends State<Friends> {
                 ],
               ),
             ),
-            ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-                itemCount: friends.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map friendItem = friends[index];
-                  return FriendItem(
-                    userAsset: friendItem['userAsset'],
-                    name: friendItem['name'],
-                    time: friendItem['time'],
-                    eraseFriendsList: _eraseFriendsList,
-                    index: index,
-                  );
-                }
-            ),
+            FutureBuilder<List<FriendData>>(
+                future: fetchRootFriend(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    friendList = snapshot.data ?? [];
+                    return ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemCount: friendList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var friendItem = friendList[index];
+                          return FriendItem(
+                            userAsset: friendItem.userAsset,
+                            name: friendItem.name,
+                            time: friendItem.time!,
+                            eraseFriendsList: _eraseFriendsList,
+                            index: index,
+                          );
+                        }
+                    );
+                  } else {
+                    return const Center();
+                  }
+                }),
+
           ],
         ),
       ),

@@ -48,7 +48,21 @@ class BoxChatData implements LazyLoadData {
   }
 }
 
-class UserData implements LazyLoadData {
+class FriendData implements LazyLoadData {
+  String? id;
+  String name;
+  String? time;
+  String userAsset;
+  int? mutualism;
+
+  FriendData({
+    this.id,
+    required this.name,
+    this.time,
+    required this.userAsset,
+    this.mutualism,
+  });
+
   @override
   void loadMore() {
     // TODO: implement loadMore

@@ -103,17 +103,101 @@ Stream<PostData> get_posts(Filter filter) async* {
   // ver 1: giả dữ liệu local
 }
 
-Future<UserData?> get_user(String id) async {
+Future<FriendData?> get_friend(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
   return null;
 }
 
-Stream<UserData> get_users(Filter filter) async* {
+Stream<FriendData> get_friends(Filter filter) async* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users
-  yield UserData();
+  if (filter.search_type! == "friend_invitations") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+  }
+
+  if (filter.search_type! == "friend_list") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+  }
 }
 
 Stream<Tuple2<double, Object>?> search(Filter filter) async* {
