@@ -66,28 +66,64 @@ class _FriendListState extends State<FriendList> {
               height: 5,
             ),
 
-            Container(
+            /*Container(
               decoration: BoxDecoration(
                   color: Colors.grey[350],
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.only(top: 1, bottom: 10, left: 15, right: 15),
               padding: const EdgeInsets.only(left: 7),
               height: 30,
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              /*child: Row(
                 children: const [
                   Icon(Icons.search),
-                  /*TextField(
-                    decoration: InputDecoration(
-                      hintText: "Tìm kiếm bạn bè",
-                      fillColor: Colors.black,
-                    ),
-                  ),*/
-                  Text("Tìm kiếm bạn bè"),
+                  Flexible(
+                      child: TextField(
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          hintText: 'Tìm kiếm bạn bè',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                  )
                 ],
+              ),*/
+              child: const Directionality(
+                textDirection: TextDirection.ltr,
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Tìm kiếm bạn bè',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 2)
+                  ),
+                ),
+              )
+            ),*/
+            Container(
+              margin: const EdgeInsets.only(left: 15, right: 15),
+              child: TextField(
+                cursorColor: Colors.black,
+                decoration: InputDecoration(
+                  filled: true,
+
+                  fillColor: Colors.grey[350],
+                  hintText: 'Tìm kiếm bạn bè',
+                  contentPadding: const EdgeInsets.only(top: 14),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.black),
+                ),
               ),
             ),
+
+
 
             Container(
               margin: const EdgeInsets.only(left: 12, right: 12, top: 12),

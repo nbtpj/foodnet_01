@@ -162,7 +162,77 @@ class _FriendListItemState extends State<FriendListItem> {
     return ListTile(
       title: Text(widget.name),
       isThreeLine: false,
-      trailing: Icon(Icons.more_vert),
+      trailing: IconButton(
+        icon: Icon(Icons.more_vert),
+        onPressed: (){
+          showModalBottomSheet(
+              context: context,
+              builder: (builder) {
+                return Container(
+                  height: 230,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      ListTile(
+                        title: Text(widget.name),
+                        isThreeLine: false,
+                        leading: CircleAvatar(
+                          radius: 30,
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundImage: AssetImage(widget.userAsset),
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        thickness: 0.4,
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          SizedBox(width: 15),
+                          CircleAvatar(
+                            backgroundColor: Colors.grey[350],
+                            child: Icon(IconData(0xe153, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Nhắn tin cho " + widget.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          SizedBox(width: 15),
+                          CircleAvatar(
+                            backgroundColor: Colors.grey[350],
+                            child: Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Huỷ kết bạn với " + widget.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+          );
+        },
+      ),
       leading: CircleAvatar(
         radius: 30,
         child: CircleAvatar(
