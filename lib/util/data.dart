@@ -204,6 +204,49 @@ Stream<FriendData> get_friends(Filter filter) async* {
         mutualism: 10);
 
   }
+
+  if (filter.search_type! == "friend_suggestions") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+  }
 }
 
 Stream<Tuple2<double, Object>?> search(Filter filter) async* {

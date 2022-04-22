@@ -265,3 +265,146 @@ class _FriendListItemState extends State<FriendListItem> {
     );
   }
 }
+
+class FriendSuggestionItem extends StatefulWidget {
+  final String userAsset;
+  final String name;
+  final int mutualism;
+  final String index;
+  //final void Function(int) eraseFriendsList;
+  const FriendSuggestionItem({
+    Key? key,
+    required this.userAsset,
+    required this.name,
+    required this.mutualism,
+    required this.index,
+    //required this.eraseFriendsList,
+  }) : super(key: key);
+
+  @override
+  _FriendSuggestionItemState createState() => _FriendSuggestionItemState();
+}
+
+class _FriendSuggestionItemState extends State<FriendSuggestionItem> {
+  bool _confirm = false;
+
+  void _updateConfirm() {
+    setState(() {
+      _confirm = true;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        widget.name,
+        style: TextStyle(
+            fontWeight: FontWeight.w600
+        ),
+      ),
+      isThreeLine: false,
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundImage: AssetImage(widget.userAsset),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.mutualism.toString() + " bạn chung"),
+          (_confirm
+              ? Confirmed1()
+              : UnConfirm1(updateConfirm: _updateConfirm,
+              /*eraseFriendsList: widget.eraseFriendsList,*/ index: widget.index
+          )
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class UnConfirm1 extends StatelessWidget {
+  final void Function() updateConfirm;
+  //final void Function(int) eraseFriendsList;
+  final String index;
+  const UnConfirm1 ({
+    Key? key,
+    required this.updateConfirm,
+    //required this.eraseFriendsList,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            updateConfirm();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(4),
+            width: 120,
+            height: 30,
+            alignment: Alignment.center,
+            child: const Text(
+              "Thêm bạn bè",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            //eraseFriendsList(index);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(4),
+            width: 100,
+            height: 30,
+            alignment: Alignment.center,
+            child: const Text(
+              "Xoá",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class Confirmed1 extends StatelessWidget {
+  const Confirmed1 ({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(4),
+            width: 150,
+            height: 30,
+            alignment: Alignment.center,
+            child: Text(
+              "Đã gửi yêu cầu",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+        ),
+      ],
+    );
+  }
+}

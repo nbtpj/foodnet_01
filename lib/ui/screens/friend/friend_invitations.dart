@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
+import 'package:foodnet_01/ui/screens/friend/friend_suggestions.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
 import '../../../util/data.dart';
@@ -60,21 +61,27 @@ class _FriendsState extends State<Friends> {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey[350],
-                              borderRadius: BorderRadius.circular(20)),
-                          margin: const EdgeInsets.all(10),
-                          width: 70,
-                          height: 30,
-                          alignment: Alignment.center,
-                          child: const Text(
+                        GestureDetector(
+                          onTap: () {
+                            Navigate.pushPage(context, const FriendSuggestion());
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[350],
+                                borderRadius: BorderRadius.circular(20)),
+                            margin: const EdgeInsets.all(10),
+                            width: 70,
+                            height: 30,
+                            alignment: Alignment.center,
+                            child: const Text(
                               "Gợi ý",
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                               ),
+                            ),
                           ),
                         ),
+
                         GestureDetector(
                           onTap: () {
                             Navigate.pushPage(context, const FriendList());
