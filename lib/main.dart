@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/AuthWrapperHome.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:foodnet_01/AuthWrapperHome.dart';
+import 'package:foodnet_01/ui/screens/friend/friend_invitations.dart';
+import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 
 import 'firebase_options.dart';
 
@@ -22,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthWrapperHome(),
+      home: const AuthWrapperHome()
+      // const Friends(),
     );
   }
 }

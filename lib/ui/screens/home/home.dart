@@ -21,19 +21,18 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Scaffold(
-      appBar:
-          AppBar(title: Text(name), automaticallyImplyLeading: false, actions: [
-        IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return const AuthWrapperHome();
-              }));
-            },
-            icon: const Icon(Icons.logout))
-      ]),
+      // appBar:
+      //     AppBar(title: Text(name), automaticallyImplyLeading: false, actions: [
+      //   IconButton(
+      //       onPressed: () async {
+      //         await FirebaseAuth.instance.signOut();
+      //         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      //           return const AuthWrapperHome();
+      //         }));
+      //       },
+      //       icon: const Icon(Icons.logout))
+      // ]),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
