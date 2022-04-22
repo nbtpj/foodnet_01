@@ -26,9 +26,7 @@ class _FriendListState extends State<FriendList> {
       return get_friends(Filter(search_type: "friend_list")).toList();
     }
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
+      body: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 40, bottom: 10),
@@ -66,38 +64,6 @@ class _FriendListState extends State<FriendList> {
               height: 5,
             ),
 
-            /*Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[350],
-                  borderRadius: BorderRadius.circular(10)),
-              margin: const EdgeInsets.only(top: 1, bottom: 10, left: 15, right: 15),
-              padding: const EdgeInsets.only(left: 7),
-              height: 30,
-              /*child: Row(
-                children: const [
-                  Icon(Icons.search),
-                  Flexible(
-                      child: TextField(
-                        textAlignVertical: TextAlignVertical.center,
-                        decoration: InputDecoration(
-                          hintText: 'Tìm kiếm bạn bè',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                  )
-                ],
-              ),*/
-              child: const Directionality(
-                textDirection: TextDirection.ltr,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Tìm kiếm bạn bè',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 2)
-                  ),
-                ),
-              )
-            ),*/
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15),
               child: TextField(
@@ -123,50 +89,59 @@ class _FriendListState extends State<FriendList> {
               ),
             ),
 
+            const SizedBox(height: 5,),
+            Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "710 người bạn",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-
-            Container(
-              margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
-              child: Row(
-                children: const [
-                  Text(
-                    "710 người bạn",
-                    style: TextStyle(fontSize: 25),
+                      FutureBuilder<List<FriendData>>(
+                          future: fetchRootFriend(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var friendList = snapshot.data ?? [];
+                              return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  separatorBuilder: (BuildContext context, int index) {
+                                    return const SizedBox(
+                                      height: 10,
+                                    );
+                                  },
+                                  itemCount: friendList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    var friendItem = friendList[index];
+                                    return FriendListItem(
+                                      userAsset: friendItem.userAsset,
+                                      name: friendItem.name,
+                                      mutual_friends: friendItem.mutualism!,
+                                    );
+                                  }
+                              );
+                            } else {
+                              return const Center();
+                            }
+                          })
+                    ],
                   ),
-                ],
-              ),
-            ),
-
-            FutureBuilder<List<FriendData>>(
-                future: fetchRootFriend(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var friendList = snapshot.data ?? [];
-                    return ListView.separated(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemCount: friendList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var friendItem = friendList[index];
-                          return FriendListItem(
-                            userAsset: friendItem.userAsset,
-                            name: friendItem.name,
-                            mutual_friends: friendItem.mutualism!,
-                          );
-                        }
-                    );
-                  } else {
-                    return const Center();
-                  }
-                })
+                )
+            )
 
           ],
-        ),
       ),
     );
   }

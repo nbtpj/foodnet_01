@@ -30,22 +30,30 @@ class _FriendItemState extends State<FriendItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(widget.name),
+      title: Text(
+          widget.name,
+          style: TextStyle(
+            fontWeight: FontWeight.w600
+          ),
+      ),
       isThreeLine: false,
       trailing: Text(widget.time),
       leading: CircleAvatar(
-        radius: 30,
-        child: CircleAvatar(
           radius: 30,
           backgroundImage: AssetImage(widget.userAsset),
-        ),
       ),
-      subtitle: (_confirm
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("10 bạn chung"),
+          (_confirm
               ? Confirmed()
               : UnConfirm(updateConfirm: _updateConfirm,
               eraseFriendsList: widget.eraseFriendsList, index: widget.index
-              )
-      )
+            )
+          )
+        ],
+      ),
     );
   }
 }
@@ -79,7 +87,10 @@ class UnConfirm extends StatelessWidget {
               alignment: Alignment.center,
               child: const Text(
                 "Xác nhận",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                ),
               ),
             ),
         ),
@@ -95,7 +106,12 @@ class UnConfirm extends StatelessWidget {
             width: 100,
             height: 30,
             alignment: Alignment.center,
-            child: const Text("Xoá"),
+            child: const Text(
+                "Xoá",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+            ),
           ),
         )
       ],
@@ -160,7 +176,12 @@ class _FriendListItemState extends State<FriendListItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(widget.name),
+      title: Text(
+          widget.name,
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+          ),
+      ),
       isThreeLine: false,
       trailing: IconButton(
         icon: Icon(Icons.more_vert),

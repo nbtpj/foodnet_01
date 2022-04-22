@@ -154,6 +154,11 @@ Stream<FriendData> get_friends(Filter filter) async* {
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         time: "3M");
+    yield FriendData(
+        id: '9',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
   }
 
   if (filter.search_type! == "friend_list") {
@@ -197,6 +202,7 @@ Stream<FriendData> get_friends(Filter filter) async* {
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
+
   }
 }
 
