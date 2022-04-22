@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/AuthWrapperHome.dart';
+import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
@@ -38,7 +39,25 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             // UserNameText(),
-            SearchFood(),
+             Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 7,
+                    child: SearchFood()
+                  ),
+                  Expanded(child: IconButton(
+                      onPressed: () async {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                          return Chat();
+                        }));
+                      },
+                      icon: const Icon(Icons.message),
+                      iconSize: 40,
+                    )
+                  )
+                ],
+            ),
             DiscountCard(),
             FoodPart(partName: "Categories"),
             CategoriesFood(),

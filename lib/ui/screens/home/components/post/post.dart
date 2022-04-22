@@ -17,7 +17,7 @@ class _PostView extends State<PostView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      margin: EdgeInsets.only(top: SizeConfig.screenHeight! * 0.35),
+      margin: EdgeInsets.only(top: SizeConfig.screenHeight * 0.35),
       width: double.infinity,
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -32,10 +32,10 @@ class _PostView extends State<PostView> {
         child: Column(
           children: [
             Container(
-              width: SizeConfig.screenWidth! / 3.43,
+              width: SizeConfig.screenWidth / 3.43,
 
               /// 120.0
-              height: SizeConfig.screenHeight! / 227.67,
+              height: SizeConfig.screenHeight / 227.67,
 
               /// 3.0
               decoration: BoxDecoration(
@@ -43,7 +43,7 @@ class _PostView extends State<PostView> {
                   color: Colors.black12),
             ),
             SizedBox(
-              height: SizeConfig.screenHeight! / 34.15,
+              height: SizeConfig.screenHeight / 34.15,
             ),
 
           ],
