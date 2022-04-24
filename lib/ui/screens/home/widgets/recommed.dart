@@ -14,7 +14,7 @@ class RecommedFoods extends StatefulWidget {
 class _RecommedFoodsState extends State<RecommedFoods> {
   Future<List<PostData>> fetchRecommendPost() async {
     //todo: implement get popular post (categorical post)
-    return get_posts(Filter(search_type: 'food')).toList();
+    return getPosts(Filter(search_type: 'food')).toList();
   }
 
   @override

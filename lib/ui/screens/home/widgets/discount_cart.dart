@@ -19,7 +19,7 @@ class _DiscountCardState extends State<DiscountCard> {
   ];
   Future<List<PostData>> fetchDiscountGood() async{
     //todo: implement get discount post (categorical post)
-    return get_posts(Filter(search_type: 'food')).toList();
+    return getPosts(Filter(search_type: 'food')).toList();
   }
 
   @override

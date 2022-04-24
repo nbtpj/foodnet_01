@@ -1,16 +1,30 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tuple/tuple.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entities.dart';
 
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
 
-PostData? get_post(String id) {
+Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
   // TODO: implement get_post
-  return null;
+  CollectionReference<PostData> postsRef = FirebaseFirestore.instance.collection('posts')
+    .withConverter<PostData>(
+      fromFirestore: (snapshot, _) {
+        var data = snapshot.data()!;
+        data["id"] = snapshot.id;
+        return PostData.fromJson(data);
+      },
+      toFirestore: (postData, _) => postData.toJson()
+  );
+  final foodsRef = FirebaseStorage.instance.ref().child("food");
+  PostData postData = await postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
+  postData.outstandingIMGURL = await foodsRef.child("$id.jpg").getDownloadURL();
+  return postData;
 }
 
-Iterable<PostData> get_posts(Filter filter) sync* {
+Iterable<PostData> getPosts(Filter filter) sync* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_posts
@@ -103,13 +117,13 @@ Iterable<PostData> get_posts(Filter filter) sync* {
   // ver 1: giả dữ liệu local
 }
 
-UserData? get_user(String id)  {
+UserData? getUser(String id)  {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
   return null;
 }
 
-Iterable<UserData> get_users(Filter filter) sync* {
+Iterable<UserData> getUsers(Filter filter) sync* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users

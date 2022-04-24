@@ -13,7 +13,7 @@ class CategoriesFood extends StatefulWidget {
 class _CategoriesFoodState extends State<CategoriesFood> {
   Future<List<PostData>> fetchRootPost() async {
     //todo: implement get root post (categorical post)
-    return get_posts(Filter(search_type: 'category')).toList();
+    return getPosts(Filter(search_type: 'category')).toList();
   }
 
   @override

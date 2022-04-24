@@ -35,7 +35,7 @@ class PostData implements LazyLoadData {
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
-  int react = randomNumberGenerator.nextInt(2)-1;
+  int react;
   late List<String> cateList; // chứa string ID của các post category
   PostData({
     this.id,
@@ -55,6 +55,7 @@ class PostData implements LazyLoadData {
     this.price,
     this.isGood = true,
     this.cateList = const [],
+    this.react = 1,
   });
 
   @override
@@ -93,6 +94,25 @@ class PostData implements LazyLoadData {
   int get_upvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
 
   int get_downvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+
+  PostData.fromJson(Map<String, Object?> json) : this(
+    id: json['id']! as String,
+    description: json['description']! as String,
+    // cateList: json['cateList']! as List<dynamic>,
+    price: json['price']! as int,
+    isGood: json['isGood']! as bool,
+    react: json['react']! as int
+  );
+
+  Map<String, Object?> toJson() {
+    return {
+      "description": description,
+      "cateList": cateList,
+      "price": price,
+      "isGood": isGood,
+      "react": react
+    };
+  }
 }
 
 

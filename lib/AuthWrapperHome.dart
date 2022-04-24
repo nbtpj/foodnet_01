@@ -18,7 +18,7 @@ class AuthWrapperHome extends StatelessWidget {
           if (u == null) {
             return const Login();
           } else {
-            return MyHomePage();
+            return const Home();
           }
         } else {
           return const Scaffold(
