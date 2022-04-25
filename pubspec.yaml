@@ -49,7 +49,6 @@ dependencies:
   custom_info_window: ^1.0.1
   geolocator: ^8.2.0
   location: ^4.3.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -84,6 +83,7 @@ flutter:
     - assets/friend/
     - assets/images/
     - assets/markers/
+    - assets/profile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

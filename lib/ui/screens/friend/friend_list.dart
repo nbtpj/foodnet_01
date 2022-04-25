@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/data.dart';
+import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/navigate.dart';
 import '../../components/friend_item.dart';
-
-List friend1s = [
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Luong Dat", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Minh Quang", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Dao Tuan", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-  {"name": "Pham Trong", "mutualism": 10, "userAsset": "assets/friend/tarek.jpg"},
-];
 
 class FriendList extends StatefulWidget {
   const FriendList({Key? key}) : super(key: key);
@@ -30,10 +21,12 @@ class _FriendListState extends State<FriendList> {
 
   @override
   Widget build(BuildContext context) {
+    Future<List<FriendData>> fetchRootFriend() async {
+      //todo: implement get root post (categorical post)
+      return get_friends(Filter(search_type: "friend_list")).toList();
+    }
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
+      body: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 40, bottom: 10),
@@ -72,60 +65,83 @@ class _FriendListState extends State<FriendList> {
             ),
 
             Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[350],
-                  borderRadius: BorderRadius.circular(10)),
-              margin: const EdgeInsets.only(top: 1, bottom: 10, left: 15, right: 15),
-              padding: const EdgeInsets.only(left: 7),
-              height: 30,
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Icon(Icons.search),
-                  /*TextField(
-                    decoration: InputDecoration(
-                      hintText: "Tìm kiếm bạn bè",
-                      fillColor: Colors.black,
-                    ),
-                  ),*/
-                  Text("Tìm kiếm bạn bè"),
-                ],
-              ),
-            ),
+              margin: const EdgeInsets.only(left: 15, right: 15),
+              child: TextField(
+                cursorColor: Colors.black,
+                decoration: InputDecoration(
+                  filled: true,
 
-            Container(
-              margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
-              child: Row(
-                children: const [
-                  Text(
-                    "710 người bạn",
-                    style: TextStyle(fontSize: 25),
+                  fillColor: Colors.grey[350],
+                  hintText: 'Tìm kiếm bạn bè',
+                  contentPadding: const EdgeInsets.only(top: 14),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ],
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.black),
+                ),
               ),
             ),
 
-            ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-                itemCount: friend1s.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map friendItem = friend1s[index];
-                  return FriendListItem(
-                    userAsset: friendItem['userAsset'],
-                    name: friendItem['name'],
-                    mutual_friends: friendItem['mutualism'],
-                  );
-                }
-            ),
+            const SizedBox(height: 5,),
+            Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "710 người bạn",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      FutureBuilder<List<FriendData>>(
+                          future: fetchRootFriend(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var friendList = snapshot.data ?? [];
+                              return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  separatorBuilder: (BuildContext context, int index) {
+                                    return const SizedBox(
+                                      height: 10,
+                                    );
+                                  },
+                                  itemCount: friendList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    var friendItem = friendList[index];
+                                    return FriendListItem(
+                                      userAsset: friendItem.userAsset,
+                                      name: friendItem.name,
+                                      mutual_friends: friendItem.mutualism!,
+                                    );
+                                  }
+                              );
+                            } else {
+                              return const Center();
+                            }
+                          })
+                    ],
+                  ),
+                )
+            )
+
           ],
-        ),
       ),
     );
   }

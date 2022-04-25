@@ -132,11 +132,60 @@ class BoxChatData implements LazyLoadData {
   }
 }
 
-class UserData implements LazyLoadData {
+class FriendData implements LazyLoadData {
+  String? id;
+  String name;
+  String? time;
+  String userAsset;
+  int? mutualism;
+
+  FriendData({
+    this.id,
+    required this.name,
+    this.time,
+    required this.userAsset,
+    this.mutualism,
+  });
+
   @override
   void loadMore() {
     // TODO: implement loadMore
   }
+}
+
+class ProfileData {
+  String? id;
+  String name;
+  String userAsset;
+  String wallAsset;
+  int? mutualism;
+  int? friendsNumber;
+  String? dayOfBirth;
+  String? gender;
+  String? location;
+  List<String>? works;
+  List<String>? schools;
+  List<String>? favorites;
+
+  ProfileData({
+    this.id,
+    required this.name,
+    required this.userAsset,
+    required this.wallAsset,
+    this.mutualism,
+    this.friendsNumber,
+    this.dayOfBirth,
+    this.gender,
+    this.location,
+    List<String>? works,
+    List<String>? schools,
+    List<String>? favorites,
+  }) {
+    this.schools = schools ?? [];
+    this.works = works ?? [];
+    this.favorites = favorites ?? [];
+  }
+
 }
 
 class Filter {
