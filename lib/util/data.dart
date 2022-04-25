@@ -249,6 +249,36 @@ Stream<FriendData> get_friends(Filter filter) async* {
   }
 }
 
+Future<ProfileData>? getProfile(String id) async {
+  /// hàm lấy một đối tượng Profile Data dựa trên id
+  if (id == "1") {
+    return ProfileData(
+        id: "1",
+        name: "Lương Đạt",
+        userAsset: "assets/profile/dhia.jpg",
+        wallAsset: "assets/profile/first.png",
+        friendsNumber: 777,
+        works: ["Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"],
+        schools: ["Trường ĐH Công Nghệ - ĐHQGHN", "THPT Chuyên Đại học Sư Phạm"],
+        dayOfBirth: "11/10/2001",
+        gender: "Nam",
+        location: "Hà Nội",
+        favorites: ["Bóng đá", "Tình nguyện"]
+    );
+  } else {
+    return ProfileData(
+        id: "2",
+        name: "Minh Quang",
+        userAsset: "assets/profile/dhia.jpg",
+        wallAsset: "assets/profile/first.png",
+        mutualism: 25,
+        location: "Hải Dương",
+        gender: "Nam",
+        schools: ["Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU", "THPT Thanh Hà, Thanh Hà, Hải Dương"]
+    );
+  }
+}
+
 Stream<Tuple2<double, Object>?> search(Filter filter) async* {
   /// hàm tìm kiếm một tập các Object theo filter và trả về 1 stream các object tìm kiếm được
   /// cùng với một số double thể hiện độ 'matching' với filter

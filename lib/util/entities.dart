@@ -69,6 +69,41 @@ class FriendData implements LazyLoadData {
   }
 }
 
+class ProfileData {
+  String? id;
+  String name;
+  String userAsset;
+  String wallAsset;
+  int? mutualism;
+  int? friendsNumber;
+  String? dayOfBirth;
+  String? gender;
+  String? location;
+  List<String>? works;
+  List<String>? schools;
+  List<String>? favorites;
+
+  ProfileData({
+    this.id,
+    required this.name,
+    required this.userAsset,
+    required this.wallAsset,
+    this.mutualism,
+    this.friendsNumber,
+    this.dayOfBirth,
+    this.gender,
+    this.location,
+    List<String>? works,
+    List<String>? schools,
+    List<String>? favorites,
+  }) {
+    this.schools = schools ?? [];
+    this.works = works ?? [];
+    this.favorites = favorites ?? [];
+  }
+
+}
+
 class Filter {
   /// lớp đại diện cho các điều kiện lọc cho tìm kiếm
   late String? search_type;
