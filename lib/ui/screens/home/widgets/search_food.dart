@@ -16,7 +16,7 @@ class _SearchFoodState extends State<SearchFood> {
         padding: EdgeInsets.fromLTRB(
             SizeConfig.screenWidth/20.55,                /// 20.0
             SizeConfig.screenHeight/85.375,              /// 8.0
-            SizeConfig.screenWidth/20.55,                /// 20.0
+            SizeConfig.screenWidth/85.375,                /// 20.0
             SizeConfig.screenHeight/85.375,              /// 8.0
         ),
         child: InkWell(

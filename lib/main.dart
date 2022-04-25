@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: /*const AuthWrapperHome()*/const ProfilePage(type: "me", id: "1",)
+      home: const AuthWrapperHome(),
       // const Friends(),
     );
   }

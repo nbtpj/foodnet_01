@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_invitations.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -18,11 +19,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final screen = [
     Home(),
     Discovery(),
+
     // SearchPageView(),
     // CartView(),
     // FavoritePageView(),
     // ProfilePageView(),
     Friends(),
+    ProfilePage(type: "me", id: "1"),
   ];
 
   @override
@@ -37,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Icon(Icons.shopping_cart, size: SizeConfig.screenHeight/22.77),
       // Icon(Icons.favorite, size: SizeConfig.screenHeight/22.77),
       Icon(Icons.people, size: SizeConfig.screenHeight / 22.77),
+      Icon(Icons.person, size: SizeConfig.screenHeight / 22.77),
     ];
     Size size = MediaQuery.of(context).size;
     return Container(

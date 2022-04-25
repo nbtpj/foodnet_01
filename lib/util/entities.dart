@@ -131,7 +131,12 @@ class BoxChatData implements LazyLoadData {
     // TODO: implement loadMore
   }
 }
-
+class UserData implements LazyLoadData {
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }
+}
 class FriendData implements LazyLoadData {
   String? id;
   String name;
