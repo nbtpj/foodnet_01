@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
-import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
-import 'package:foodnet_01/ui/screens/home/home.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/detail_widget.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/food_image.dart';
 import 'package:foodnet_01/util/entities.dart';
-import 'package:foodnet_01/util/global.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentFood extends StatefulWidget {
@@ -25,7 +20,7 @@ class _CommentFoodState extends State<CommentFood> {
       // appBar: header(context, titleText: "Comments"),
       body: Column(
         children: <Widget>[
-          ArrowBack(),
+          const ArrowBack(),
           Expanded(
               child: ListView.builder(
             reverse: true,
@@ -40,23 +35,23 @@ class _CommentFoodState extends State<CommentFood> {
                     ),
                     subtitle: Text(timeago.format(data.timestamp)),
                   ),
-                  Divider(),
+                  const Divider(),
                 ],
               );
             },
           )),
-          Divider(),
+          const Divider(),
           ListTile(
             title: TextFormField(
               controller: editor,
-              decoration: InputDecoration(labelText: "Write a comment..."),
+              decoration: const InputDecoration(labelText: "Write a comment..."),
             ),
-            trailing: OutlineButton(
+            trailing: OutlinedButton(
               onPressed: () {
                 editor.clear();
               },
-              borderSide: BorderSide.none,
-              child: Text("Post"),
+              // borderSide: BorderSide.none,
+              child: const Text("Post"),
             ),
           ),
         ],
