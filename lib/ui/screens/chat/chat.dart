@@ -28,9 +28,9 @@ class _ChatScreenState extends State<Chat> {
         title:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children:const[
-            Text("Chatting App",
+            Text("FoodNet",
               style: TextStyle(
-                  fontSize: 19.0,
+                  fontSize: 30.0,
                   fontWeight: FontWeight.bold
               ),  ),
           ],
