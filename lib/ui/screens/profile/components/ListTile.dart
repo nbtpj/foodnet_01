@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 
 class ProfileTitle extends StatefulWidget {
   final String? asset;
@@ -60,7 +61,7 @@ class _ProfileTitleState extends State<ProfileTitle> {
         child: Icon(
           IconData(int.parse(widget.asset!), fontFamily: 'MaterialIcons'),
           size: 30,
-          color: Colors.blue,
+          color: buttonColor,
         ),
       ) : const SizedBox(height: 0, width: 0,),
       trailing: widget.type == "me"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 
 class InputField extends StatefulWidget {
   final String? icon;
@@ -41,12 +42,11 @@ class _InputFieldState extends State<InputField>{
           ),
 
           suffixIcon: InkWell(
-            focusColor: Colors.green,
             child: Container(
               width: 60,
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-              color: Colors.blue,
+              color: buttonColor,
               child: Text(
                 widget.setonEdit != null ? "Lưu" :
                 "Thêm",
@@ -65,7 +65,7 @@ class _InputFieldState extends State<InputField>{
 
           hintText: widget.hintText,
           hintStyle: const TextStyle(
-            color: Colors.blue,
+            color: Colors.orange,
           ),
           contentPadding: const EdgeInsets.only(left: 50, top: 13),
         ),

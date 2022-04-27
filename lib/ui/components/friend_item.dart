@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 
 class FriendItem extends StatefulWidget {
   final String userAsset;
@@ -79,7 +80,7 @@ class UnConfirm extends StatelessWidget {
           },
           child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: buttonColor,
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.all(4),
               width: 100,
@@ -344,7 +345,7 @@ class UnConfirm1 extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.blue,
+                color: buttonColor,
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(4),
             width: 120,
