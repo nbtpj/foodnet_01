@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -9,10 +10,12 @@ import 'components/friend.dart';
 class ProfilePage extends StatefulWidget {
   final String type;
   final String id;
+  final String? arriveType;
   const ProfilePage({
     Key? key,
     required this.type,
     required this.id,
+    this.arriveType,
   }) : super(key: key);
 
   @override
@@ -41,9 +44,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigate.popPage(context);
+                          if (widget.arriveType == null) {
+                            Navigate.popPage(context);
+                          }
                         },
-                        icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
+                        icon: widget.arriveType == null ? const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')) : SizedBox(width: 10,),
                         color: Colors.black,
                         iconSize: 25,
                       ),
@@ -250,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Row(
                                     children: [
                                       const Icon(
-                                        IconData(0xe6f2, fontFamily: 'MaterialIcons'),
+                                          IconData(0xe6f2, fontFamily: 'MaterialIcons'),
                                         size: 25,
                                         color: Color(0xff80889b),
                                       ),
@@ -429,42 +434,48 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ) : const SizedBox(width: 0, height: 0,),
 
-                          Container(
-                            padding: const EdgeInsets.only(left: 7, top: 7, bottom: 7),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.more_horiz, size: 25,),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    text: TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text:  "Xem thông tin giới thiệu của ",
-                                            style: TextStyle(
+                          InkWell(
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 7, top: 7, bottom: 7),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.more_horiz, size: 25,),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    child: RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text:  "Xem thông tin giới thiệu của ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: profile.name,
+                                              style: const TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.black
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: profile.name,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                        ]
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black,
+                                              ),
+                                            )
+                                          ]
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
+                            onTap: () {
+                              Navigate.pushPage(context, DetailProfile(profile: profile, type: widget.type,));
+                            },
                           ),
+
 
                           const Divider(color: Colors.grey,),
 
