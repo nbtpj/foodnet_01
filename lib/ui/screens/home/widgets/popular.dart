@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -13,7 +14,6 @@ class PopularFoods extends StatefulWidget {
 
 class _PopularFoodsState extends State<PopularFoods> {
   Future<List<PostData>> fetchPopularPost() async{
-
     //todo: implement get popular post (categorical post)
     return get_posts(Filter(search_type: 'food')).toList();
   }
@@ -33,7 +33,7 @@ class _PopularFoodsState extends State<PopularFoods> {
                 var food = foodList[index];
                 return GestureDetector(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => PostDetailView(data: food)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PostDetailView(food: food)));
                     },
                     child: Stack(
                       children: [

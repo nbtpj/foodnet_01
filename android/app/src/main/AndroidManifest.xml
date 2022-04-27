@@ -1,9 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tuanganh.foodnet_01">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
         android:label="foodnet_01"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+<!--       cái key này đang dùng chùa các anh ạ :>-->
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCfXnfJAD4JnbM5JjF8zRD4HxW_0cc1MLU"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

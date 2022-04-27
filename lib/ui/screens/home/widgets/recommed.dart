@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -22,7 +23,7 @@ class _RecommedFoodsState extends State<RecommedFoods> {
       future: fetchRecommendPost(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var foodList = snapshot.data??[];
+          var foodList = snapshot.data ?? [];
           return SizedBox(
             height: SizeConfig.screenHeight / 2.58,
 
@@ -33,106 +34,114 @@ class _RecommedFoodsState extends State<RecommedFoods> {
               itemBuilder: (context, index) {
                 var food = foodList[index];
                 return Column(
-                  children: [
+                    children: [
                     GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(
-                          SizeConfig.screenWidth / 34.25,
+                    onTap: ()
+                {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => PostDetailView(food: food)));
+                },
+                child: Container(
+                margin: EdgeInsets.fromLTRB(
+                SizeConfig.screenWidth / 34.25,
 
-                          /// 12.0
-                          SizeConfig.screenHeight / 170.75,
+                /// 12.0
+                SizeConfig.screenHeight / 170.75,
 
-                          /// 4.0
-                          SizeConfig.screenWidth / 41.1,
+                /// 4.0
+                SizeConfig.screenWidth / 41.1,
 
-                          /// 10.0
-                          SizeConfig.screenHeight / 170.75,
+                /// 10.0
+                SizeConfig.screenHeight / 170.75,
 
-                          /// 4.0
-                        ),
-                        height: SizeConfig.screenHeight / 2.73,
+                /// 4.0
+                ),
+                height: SizeConfig.screenHeight / 2.73,
 
-                        /// 250.0
-                        width: SizeConfig.screenWidth / 2.055,
+                /// 250.0
+                width: SizeConfig.screenWidth / 2.055,
 
-                        /// 200.0
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(4, 6),
-                                blurRadius: 4,
-                                color: Colors.black.withOpacity(0.3),
-                              )
-                            ]),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("${food.outstandingIMGURL}"),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            Positioned(
-                                left: SizeConfig.screenWidth / 34.25,
+                /// 200.0
+                decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                BoxShadow(
+                offset: Offset(4, 6),
+                blurRadius: 4,
+                color: Colors.black.withOpacity(0.3),
+                )
+                ]),
+                child: Stack(
+                fit: StackFit.expand,
+                children: [
+                Container(
+                decoration: BoxDecoration(
+                image: DecorationImage(
+                image: AssetImage(food.outstandingIMGURL),
+                fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                ),
+                ),
+                Container(
+                decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(20),
+                ),
+                ),
+                Positioned(
+                left: SizeConfig.screenWidth / 34.25,
 
-                                /// 12.0
-                                bottom: SizeConfig.screenHeight / 45.54,
+                /// 12.0
+                bottom: SizeConfig.screenHeight / 45.54,
 
-                                /// 15.0
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("${food.title}",
-                                        style: TextStyle(
-                                            fontSize: SizeConfig.screenHeight /
-                                                34.15,
-                                            color: Colors.white)),
+                /// 15.0
+                child: Column(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text(food.title,
+                style: TextStyle(
+                fontSize: SizeConfig.screenHeight /
+                34.15,
+                color: Colors.white)),
 
-                                    /// 20
-                                    Text("${food.cateList.join(', ')}",
-                                        style: TextStyle(
-                                            fontSize: SizeConfig.screenHeight /
-                                                48.79,
-                                            color: Colors.white)),
+                /// 20
+                Text(food.cateList.join(', '),
+                style: TextStyle(
+                fontSize: SizeConfig.screenHeight /
+                48.79,
+                color: Colors.white)),
 
-                                    /// 14
-                                    Text("\$${food.price}",
-                                        style: TextStyle(
-                                            fontSize: SizeConfig.screenHeight /
-                                                37.95,
-                                            color: Colors.white))
+                /// 14
+                Text("\$${food.price}",
+                style: TextStyle(
+                fontSize: SizeConfig.screenHeight /
+                37.95,
+                color: Colors.white))
 
-                                    /// 18
-                                  ],
-                                )),
-                            Positioned(
-                                top: SizeConfig.screenHeight / 68.3,
+                /// 18
+                ],
+                )),
+                Positioned(
+                top: SizeConfig.screenHeight / 68.3,
 
-                                /// 10.0
-                                right: SizeConfig.screenWidth / 41.1,
+                /// 10.0
+                right: SizeConfig.screenWidth / 41.1,
 
-                                /// 10.0
-                                child:
-                                    Icon(Icons.favorite, color: Colors.white))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                /// 10.0
+                child: food.get_react() == 1
+                ? const Icon(Icons.favorite, color: Colors.white)
+                    : food.get_react() == 0 ? const Icon(
+                Icons.favorite_outline, color: Colors.white) :
+                const Icon(Icons.heart_broken, color: Colors.white)
+                )
+                ],
+                ),
+                ),
+                ),
+                ],
                 );
               },
             ),

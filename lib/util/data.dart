@@ -109,11 +109,180 @@ Future<UserData?> get_user(String id) async {
   return null;
 }
 
-Stream<UserData> get_users(Filter filter) async* {
+Iterable<UserData> get_users(Filter filter) sync* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users
   yield UserData();
+}
+Stream<FriendData> get_friends(Filter filter) async* {
+  /// lấy 1 danh sách user theo điều kiệu lọc
+  /// trả về dạng stream
+  // TODO: implement get_users
+  if (filter.search_type! == "friend_invitations") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "31W");
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+    yield FriendData(
+        id: '9',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        time: "3M");
+  }
+
+  if (filter.search_type! == "friend_list") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+
+  }
+
+  if (filter.search_type! == "friend_suggestions") {
+    yield FriendData(
+        id: '1',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '2',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '3',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '4',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '5',
+        name: "Luong Dat",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '6',
+        name: "Minh Quang",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '7',
+        name: "Dao Tuan",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '8',
+        name: "Pham Trong",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+  }
+}
+
+Future<ProfileData>? getProfile(String id) async {
+  /// hàm lấy một đối tượng Profile Data dựa trên id
+  if (id == "1") {
+    return ProfileData(
+        id: "1",
+        name: "Lương Đạt",
+        userAsset: "assets/profile/dhia.jpg",
+        wallAsset: "assets/profile/first.png",
+        friendsNumber: 777,
+        works: ["Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"],
+        schools: ["Trường ĐH Công Nghệ - ĐHQGHN", "THPT Chuyên Đại học Sư Phạm"],
+        dayOfBirth: "11/10/2001",
+        gender: "Nam",
+        location: "Hà Nội",
+        favorites: ["Bóng đá", "Tình nguyện"]
+    );
+  } else {
+    return ProfileData(
+        id: "2",
+        name: "Minh Quang",
+        userAsset: "assets/profile/dhia.jpg",
+        wallAsset: "assets/profile/first.png",
+        mutualism: 25,
+        location: "Hải Dương",
+        gender: "Nam",
+        schools: ["Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU", "THPT Thanh Hà, Thanh Hà, Hải Dương"]
+    );
+  }
 }
 
 Stream<Tuple2<double, Object>?> search(Filter filter) async* {
