@@ -171,6 +171,7 @@ class ProfileData {
   List<String>? works;
   List<String>? schools;
   List<String>? favorites;
+  List<FriendData>? friends;
 
   ProfileData({
     this.id,
@@ -185,10 +186,12 @@ class ProfileData {
     List<String>? works,
     List<String>? schools,
     List<String>? favorites,
+    List<FriendData> ? friends,
   }) {
     this.schools = schools ?? [];
     this.works = works ?? [];
     this.favorites = favorites ?? [];
+    this.friends = friends ?? [];
   }
 
 }

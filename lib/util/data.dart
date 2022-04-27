@@ -269,7 +269,28 @@ Future<ProfileData>? getProfile(String id) async {
         dayOfBirth: "11/10/2001",
         gender: "Nam",
         location: "Hà Nội",
-        favorites: ["Bóng đá", "Tình nguyện"]
+        favorites: ["Bóng đá", "Tình nguyện"],
+        friends: [
+          FriendData(
+            name: "Tarek Loukil",
+            userAsset: "assets/profile/tarek.jpg",
+          ),
+
+          FriendData(
+            name: "Ghassen Boughzala",
+            userAsset: "assets/profile/ghassen.jpg",
+          ),
+
+          FriendData(
+            name: "Hassen Chouaddah",
+            userAsset: "assets/profile/hassen.jpg",
+          ),
+
+          FriendData(
+            name: "Aziz Ammar",
+            userAsset: "assets/profile/aziz.jpg",
+          ),
+        ]
     );
   } else {
     return ProfileData(
