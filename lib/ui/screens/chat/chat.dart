@@ -47,28 +47,7 @@ class _ChatScreenState extends State<Chat> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          const  CategorySelector(),
-          Expanded(
-            child: Container(
-              decoration:const BoxDecoration(
-                color: Color(0xFFFDF8E9),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0)
-                ),
-              ),
-              child: Column(
-                children:  <Widget>[
-                  FavoriteContacts(),
-                  RecentChats(),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: const  CategorySelector()
     );
   }
 }

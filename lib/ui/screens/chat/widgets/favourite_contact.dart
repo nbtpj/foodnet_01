@@ -26,7 +26,8 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.blueGrey
-                ),),
+                    ),
+                ),
                 IconButton(onPressed: (){}, icon:const Icon(
                   Icons.more_horiz,
                   size: 29.0,
