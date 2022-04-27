@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // FavoritePageView(),
     // ProfilePageView(),
     Friends(),
-    ProfilePage(type: "me", id: "1"),
+    ProfilePage(type: "me", id: "1" , arriveType: "navbar",),
   ];
 
   @override
