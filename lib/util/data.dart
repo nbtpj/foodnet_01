@@ -255,6 +255,51 @@ Stream<FriendData> get_friends(Filter filter) async* {
   }
 }
 
+Stream<SearchData> getSearchData(Filter filter) async*{
+  if (filter.search_type == "recentUser") {
+    yield SearchData(
+        id: "1",
+        name: "Luong Dat",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "2",
+        name: "Minh Quang",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "3",
+        name: "Pham Trong",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "4",
+        name: "Dao Tuan",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "5",
+        name: "Luong Dat",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "6",
+        name: "Minh Quang",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "7",
+        name: "Pham Trong",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "8",
+        name: "Dao Tuan",
+        asset: "assets/friend/tarek.jpg"
+    );
+  }
+}
+
 Future<ProfileData>? getProfile(String id) async {
   /// hàm lấy một đối tượng Profile Data dựa trên id
   if (id == "1") {

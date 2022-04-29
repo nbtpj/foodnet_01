@@ -196,6 +196,22 @@ class ProfileData {
 
 }
 
+class SearchData implements LazyLoadData {
+  String? id;
+  String? asset;
+  String name;
+
+  SearchData({
+    this.id,
+    this.asset,
+    required this.name,
+  });
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }}
+
 class Filter {
   /// lớp đại diện cho các điều kiện lọc cho tìm kiếm
   late String? search_type;

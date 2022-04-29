@@ -4,6 +4,7 @@ import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/navigate.dart';
 import '../../components/friend_item.dart';
+import '../search/search.dart';
 
 class FriendList extends StatefulWidget {
   const FriendList({Key? key}) : super(key: key);
@@ -47,7 +48,9 @@ class _FriendListState extends State<FriendList> {
                         fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigate.pushPage(context, const SearchPage(type: "user",));
+                    },
                     icon: const Icon(Icons.search),
                     color: Colors.black,
                     iconSize: 30,
@@ -71,7 +74,7 @@ class _FriendListState extends State<FriendList> {
                 decoration: InputDecoration(
                   filled: true,
 
-                  fillColor: Colors.grey[350],
+                  fillColor: Colors.grey[300],
                   hintText: 'Tìm kiếm bạn bè',
                   contentPadding: const EdgeInsets.only(top: 14),
                   focusedBorder: OutlineInputBorder(

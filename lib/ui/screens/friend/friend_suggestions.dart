@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/search/search.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -47,7 +48,9 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                       fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigate.pushPage(context, const SearchPage(type: "user",));
+                  },
                   icon: const Icon(Icons.search),
                   color: Colors.black,
                   iconSize: 30,

@@ -6,6 +6,7 @@ import 'package:foodnet_01/util/navigate.dart';
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
 import '../../components/friend_item.dart';
+import '../search/search.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -45,7 +46,9 @@ class _FriendsState extends State<Friends> {
                 CircleAvatar(
                   backgroundColor: Colors.grey[300],
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigate.pushPage(context, const SearchPage(type: "user",));
+                    },
                     icon: const Icon(Icons.search),
                     color: Colors.black,
                     iconSize: 30,
