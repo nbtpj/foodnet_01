@@ -297,6 +297,27 @@ Stream<SearchData> getSearchData(Filter filter) async*{
         name: "Dao Tuan",
         asset: "assets/friend/tarek.jpg"
     );
+  } if (filter.search_type == "user" && filter.keyword == "a") {
+    yield SearchData(
+        id: "1",
+        name: "Luong Dat",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+      id: "2",
+      name: "Minh Quang",
+      asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "3",
+        name: "Pham Trong",
+        asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "4",
+        name: "Dao Tuan",
+        asset: "assets/friend/tarek.jpg"
+    );
   }
 }
 

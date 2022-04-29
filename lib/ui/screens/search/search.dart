@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
-import 'components/RecentSearch.dart';
+import 'components/SearchList.dart';
 
 class SearchPage extends StatefulWidget {
   final String type;
@@ -18,13 +19,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool isTextFieldEmpty = true;
+  String keyword = "";
 
   @override
   Widget build(BuildContext context) {
-    bool isTextFieldEmpty = true;
 
-    Future<List<SearchData>> fetchData(String type) {
-      return getSearchData(Filter(search_type: type)).toList();
+    Future<List<SearchData>> fetchData(String type, String keyword) {
+      return getSearchData(Filter(search_type: type, keyword: keyword)).toList();
     }
 
     return Scaffold(
@@ -56,12 +58,15 @@ class _SearchPageState extends State<SearchPage> {
                           : widget.type == "chat" ? "Tìm kiếm cuộc trò chuyện" : "Bạn muốn ăn gì?"
                   ),
                   onChanged: (text) {
+                    keyword = text;
                     if (text == "") {
                       setState(() {
                         isTextFieldEmpty = true;
                       });
                     } else {
-                      isTextFieldEmpty = false;
+                      setState(() {
+                        isTextFieldEmpty = false;
+                      });
                     }
                   },
                 ),
@@ -70,16 +75,19 @@ class _SearchPageState extends State<SearchPage> {
           ),
 
           FutureBuilder <List<SearchData>>(
-              future: fetchData(isTextFieldEmpty && widget.type == "user" ? "recentUser" : ""),
+              future: fetchData((isTextFieldEmpty && widget.type == "user") ? "recentUser" : widget.type,
+                  keyword),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var searchList = snapshot.data ?? [];
-                  return RecentSearch(searchList: searchList,);
+                  return isTextFieldEmpty ? SearchList(searchList: searchList, type: "recentSearch",)
+                      : SearchList(searchList: searchList, type: widget.type, keyword: keyword,);
                 } else {
                   return const SizedBox(width: 0, height: 0,);
                 }
               }
-          )
+          ),
+
         ],
       ),
     );
