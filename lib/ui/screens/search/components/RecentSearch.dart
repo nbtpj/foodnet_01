@@ -21,7 +21,8 @@ class _RecentSearchState extends State<RecentSearch> {
     return InkWell(
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: CircleAvatar(
+        leading: asset == "icon" ? const Icon(Icons.access_time, size: 40,)
+        : CircleAvatar(
           radius: 20,
           backgroundImage: AssetImage(asset),
         ),
@@ -55,7 +56,7 @@ class _RecentSearchState extends State<RecentSearch> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.searchList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return buildRecentItem(widget.searchList[index].asset!, widget.searchList[index].name);
+                      return buildRecentItem(widget.searchList[index].asset == null ? "icon" : widget.searchList[index].asset!, widget.searchList[index].name);
                     },
                 ),
               ],

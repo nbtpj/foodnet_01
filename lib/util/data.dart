@@ -265,7 +265,7 @@ Stream<SearchData> getSearchData(Filter filter) async*{
     yield SearchData(
         id: "2",
         name: "Minh Quang",
-        asset: "assets/friend/tarek.jpg"
+        //asset: "assets/friend/tarek.jpg"
     );
     yield SearchData(
         id: "3",

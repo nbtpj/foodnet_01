@@ -138,7 +138,8 @@ class _FriendListState extends State<FriendList> {
                             } else {
                               return const Center();
                             }
-                          })
+                          },
+                      )
                     ],
                   ),
                 )
