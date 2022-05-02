@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/post_detail/edit/edit_food.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment_food.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
@@ -22,7 +23,12 @@ class _FavoriteFoodState extends State<FavoriteFood> {
       children: [
         IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CommentFood(food: widget.food,)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CommentFood(
+                          food: widget.food,
+                        )));
           },
           icon: const Icon(Icons.comment, color: Colors.white),
           color: Colors.white,
@@ -36,12 +42,27 @@ class _FavoriteFoodState extends State<FavoriteFood> {
           },
           icon: widget.food.get_react() == 1
               ? const Icon(Icons.favorite, color: Colors.white)
-              : widget.food.get_react() == 0 ? const Icon(
-              Icons.favorite_outline, color: Colors.white) :
-          const Icon(Icons.heart_broken, color: Colors.white),
+              : widget.food.get_react() == 0
+                  ? const Icon(Icons.favorite_outline, color: Colors.white)
+                  : const Icon(Icons.heart_broken, color: Colors.white),
           color: Colors.white,
           iconSize: SizeConfig.screenHeight / 22.77,
-        )
+        ),
+        widget.food.isEditable()
+            ? IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditFood(
+                                food: widget.food,
+                              )));
+                },
+                icon: const Icon(Icons.edit, color: Colors.white),
+                color: Colors.white,
+                iconSize: SizeConfig.screenHeight / 22.77,
+              )
+            : const SizedBox.shrink()
       ],
     );
   }

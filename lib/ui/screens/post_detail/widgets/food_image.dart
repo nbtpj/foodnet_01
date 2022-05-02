@@ -6,7 +6,8 @@ import 'package:foodnet_01/util/global.dart';
 
 class FoodImage extends StatefulWidget {
   PostData food;
-  FoodImage({required this.food});
+  late bool is_editting;
+  FoodImage({required this.food, this.is_editting=false});
 
   @override
   _FoodImageState createState() => _FoodImageState();

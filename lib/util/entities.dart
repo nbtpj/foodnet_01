@@ -27,13 +27,23 @@ class CommentData {
   late String avatarUrl;
   late String comment;
   late DateTime timestamp;
+  late List<String> mediaUrls;
 
   CommentData({
     this.username = "Tuan",
     this.avatarUrl = "assets/friend/tarek.jpg",
     this.comment = "nice",
+    this.mediaUrls = const ["assets/food/HeavenlyPizza.jpg",'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'],
     required this.timestamp,
   });
+
+  Future<bool> post() async{
+    return true;
+  }
+  bool isEmpty(){
+    return comment.isEmpty && mediaUrls.isEmpty;
+  }
+
 }
 
 
@@ -45,27 +55,31 @@ class PostData implements LazyLoadData {
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
+  DateTime datetime=DateTime.now();
   int react = randomNumberGenerator.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
   PostData({
     this.id,
-    this.title = "",
+    required this.title,
     this.description =
     "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "Lorem ipsum dolor sit amet, consectetur adipiscing"
     ,
-    this.mediaUrls = const [],
+    this.mediaUrls = const ["assets/food/HeavenlyPizza.jpg",'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'],
     this.outstandingIMGURL = '',
     this.price,
     this.isGood = true,
     this.cateList = const [],
   });
+  bool isEditable(){
+    return true;
+  }
 
   int i = 0;
 

@@ -115,11 +115,11 @@ class _RecommedFoodsState extends State<RecommedFoods> {
                 color: Colors.white)),
 
                 /// 14
-                Text("\$${food.price}",
+                food.isGood ? Text("\$${food.price}",
                 style: TextStyle(
                 fontSize: SizeConfig.screenHeight /
                 37.95,
-                color: Colors.white))
+                color: Colors.white)):SizedBox.shrink(),
 
                 /// 18
                 ],

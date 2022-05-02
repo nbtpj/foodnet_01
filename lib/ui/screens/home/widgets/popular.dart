@@ -51,7 +51,7 @@ class _PopularFoodsState extends State<PopularFoods> {
                                 borderRadius: BorderRadius.circular(30.0),
                                 boxShadow: [
                                   BoxShadow(
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                     blurRadius: 6,
                                     color: Colors.black.withOpacity(0.3),
                                   )
@@ -70,9 +70,9 @@ class _PopularFoodsState extends State<PopularFoods> {
                                               "${food.outstandingIMGURL}"),
                                           fit: BoxFit.cover,
                                         ),
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0)),
+                                            topRight: const Radius.circular(30.0)),
                                       ),
                                     ),
                                     Padding(
@@ -98,20 +98,20 @@ class _PopularFoodsState extends State<PopularFoods> {
                                           Padding(
                                             padding:
                                                 EdgeInsets.only(top: SizeConfig.screenHeight/136.6),   /// 5.0
-                                            child: Text(
+                                            child: food.isGood ? Text(
                                               "\$${food.price}",
                                               style: TextStyle(
                                                   color: buttonColor,
                                                   fontSize: SizeConfig.screenHeight/37.95,    /// 18
                                                   fontWeight: FontWeight.bold),
-                                            ),
+                                            ):const SizedBox.shrink(),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                Positioned(
+                                food.isGood ? Positioned(
                                   bottom: 0,
                                   right: 0,
                                   child: Container(
@@ -119,17 +119,17 @@ class _PopularFoodsState extends State<PopularFoods> {
                                     width: SizeConfig.screenWidth/8.22,             /// 50.0
                                     decoration: BoxDecoration(
                                         color: buttonColor,
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(30.0),
-                                            topLeft: Radius.circular(30.0),
+                                        borderRadius: const BorderRadius.only(
+                                            bottomRight: const Radius.circular(30.0),
+                                            topLeft: const Radius.circular(30.0),
                                         )
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.shopping_cart_rounded,
                                       color: Colors.white,
                                     ),
                                   ),
-                                ),
+                                ):const SizedBox.shrink(),
                               ],
                             ),
                         ),
@@ -141,7 +141,7 @@ class _PopularFoodsState extends State<PopularFoods> {
           );
         }
         else{
-          return Center();
+          return const Center();
         }
       },
     );

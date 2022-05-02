@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Discovery extends StatefulWidget {
   const Discovery({Key? key}) : super(key: key);
@@ -125,7 +126,8 @@ class _DiscoveryState extends State<Discovery> {
       GoogleMap(
         initialCameraPosition: _kGooglePlex,
         markers: _markers,
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
           controller.setMapStyle(MapStyle().aubergine);
@@ -175,22 +177,16 @@ class _DiscoveryState extends State<Discovery> {
               },
             )),
       ),
-      // FloatingActionButton(
-      //   child: const Icon(
-      //     Icons.location_searching,
-      //     color: Colors.white,
-      //   ),
-      //   onPressed: () {
-      //     curr();
-      //   },
-      // ),
+
       FloatingActionButton(
-        child: const Icon(
-          Icons.nordic_walking,
+        child: Icon(
+          following ? Icons.share_location: Icons.not_listed_location ,
           color: Colors.white,
         ),
         onPressed: () {
-          following ? following=false:following=true;
+            setState(() {
+              following ? following=false:following=true;
+            });
         },
       )
     ]));
@@ -207,7 +203,7 @@ class _DiscoveryState extends State<Discovery> {
             .then((value) => value),
         infoWindow: InfoWindow(
           title: contact['name'],
-          snippet: 'Street 6 . 2min ago',
+          snippet: timeago.format(contact.timestamp),
         ),
       );
 

@@ -11,7 +11,7 @@ import 'food_name.dart';
 class DetailWidget extends StatefulWidget {
   PostData food;
 
-  DetailWidget({required this.food});
+  DetailWidget({Key? key, required this.food}) : super(key: key);
 
   @override
   _DetailWidgetState createState() => _DetailWidgetState();
@@ -35,30 +35,53 @@ class _DetailWidgetState extends State<DetailWidget> {
       child: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Column(
-          children: [
-            Container(
-              width: SizeConfig.screenWidth / 3.43,
+          children: widget.food.isGood
+              ? [
+                  Container(
+                    width: SizeConfig.screenWidth / 3.43,
 
-              /// 120.0
-              height: SizeConfig.screenHeight / 227.67,
+                    /// 120.0
+                    height: SizeConfig.screenHeight / 227.67,
 
-              /// 3.0
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black12),
-            ),
-            SizedBox(
-              height: SizeConfig.screenHeight / 34.15,
-            ),
+                    /// 3.0
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black12),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight / 34.15,
+                  ),
 
-            /// 20.0
-            FoodName(food: widget.food),
-            ReviewStars(food: widget.food),
-            FeaturesFood(food: widget.food),
-            FoodDescription(food: widget.food),
-            IncreaseDecrease(food: widget.food),
-            AddToCartButton(food: widget.food),
-          ],
+                  /// 20.0
+                  FoodName(food: widget.food),
+                  ReviewStars(food: widget.food),
+                  FeaturesFood(food: widget.food),
+                  FoodDescription(food: widget.food),
+                  IncreaseDecrease(food: widget.food),
+                  AddToCartButton(food: widget.food)
+                ]
+              : [
+                  Container(
+                    width: SizeConfig.screenWidth / 3.43,
+
+                    /// 120.0
+                    height: SizeConfig.screenHeight / 227.67,
+
+                    /// 3.0
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black12),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight / 34.15,
+                  ),
+
+                  /// 20.0
+                  FoodName(food: widget.food),
+                  ReviewStars(food: widget.food),
+                  FeaturesFood(food: widget.food),
+                  FoodDescription(food: widget.food),
+                ],
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:foodnet_01/util/global.dart';
 
 class PostDetailView extends StatefulWidget {
   PostData food;
+  bool is_editting = false;
   PostDetailView({required this.food});
 
   @override
