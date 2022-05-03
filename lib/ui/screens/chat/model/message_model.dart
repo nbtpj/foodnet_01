@@ -1,4 +1,5 @@
 import 'package:foodnet_01/ui/screens/chat/model/user_model.dart';
+import 'package:foodnet_01/util/entities.dart';
 
 class Message {
   final User sender;

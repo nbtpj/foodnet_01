@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/model/message_model.dart';
 import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
+import 'package:foodnet_01/util/entities.dart';
 
 class RecentChats extends StatelessWidget {
 

@@ -3,6 +3,9 @@ import 'package:tuple/tuple.dart';
 import 'dart:math';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../ui/screens/chat/model/message_model.dart';
+import '../ui/screens/chat/model/user_model.dart';
+
 List<LatLng> position_list = [const LatLng(37.42796133580664, -122.085749655962),
   const LatLng(37.42484642575639, -122.08309359848501),
   const LatLng(37.42381625902441, -122.0928531512618),
@@ -200,4 +203,19 @@ class Filter {
   late double? scoreThreshold;
 
   Filter({this.search_type, this.keyword, this.scoreThreshold});
+}
+
+class Chat implements LazyLoadData{
+  late User sender;
+  late List<Message>? chats;
+
+  Chat({
+    required this.sender,
+    this.chats
+  });
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }
 }

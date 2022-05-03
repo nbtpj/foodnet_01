@@ -1,4 +1,5 @@
 import 'package:tuple/tuple.dart';
+import '../ui/screens/chat/model/user_model.dart';
 import 'entities.dart';
 
 /// định nghĩa các API sử dụng
@@ -290,4 +291,48 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
   /// cùng với một số double thể hiện độ 'matching' với filter
   // TODO: implement search
   yield null;
+}
+
+Stream<User> getOnlineUsers() async* {
+  /// hàm tìm kiếm một tập các User đang online là friend của user hiện tại.
+  yield User(
+        id: 0,
+        name: "Foydalanuvchi",
+        imgURL: "assets/chat/me.png"
+  );
+  yield User(
+        id: 1,
+        name: "Abdulloh",
+        imgURL: "assets/chat/gerb.jpg"
+  );
+  yield User(
+        id: 2,
+        name: "Jobirhon",
+        imgURL: "assets/chat/magistrial.jpg"
+  );
+  yield User(
+        id: 3,
+        name: "Javohir",
+        imgURL: "assets/chat/nature.jpg"
+  );
+  yield User(
+        id: 4,
+        name: "Odilbek",
+        imgURL: "assets/chat/night.jpg"
+  );
+  yield User(
+        id: 5,
+        name: "Samandar",
+        imgURL: "assets/chat/night.jpg"
+  );
+  yield User(
+        id: 6,
+        name: "Boburjon",
+        imgURL: "assets/chat/me.png"
+  );
+  yield User(
+        id: 7,
+        name: "Sobirxon",
+        imgURL: "assets/chat/boys.jpg"
+  );
 }
