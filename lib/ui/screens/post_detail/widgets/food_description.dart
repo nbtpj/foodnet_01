@@ -5,8 +5,8 @@ import 'package:foodnet_01/util/global.dart';
 
 class FoodDescription extends StatelessWidget {
   PostData food;
-
-  FoodDescription({Key? key, required this.food}) : super(key: key);
+  bool is_editting;
+  FoodDescription({Key? key, required this.food, required this.is_editting}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

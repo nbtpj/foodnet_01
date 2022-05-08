@@ -1,18 +1,9 @@
+import 'package:flutter/widgets.dart';
+import 'package:foodnet_01/util/global.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
 import 'dart:math';
-import 'package:timeago/timeago.dart' as timeago;
 
-List<LatLng> position_list = [const LatLng(37.42796133580664, -122.085749655962),
-  const LatLng(37.42484642575639, -122.08309359848501),
-  const LatLng(37.42381625902441, -122.0928531512618),
-  const LatLng(37.41994095849639, -122.08159055560827),
-  const LatLng(37.413175077529935, -122.10101041942836),
-  const LatLng(37.419013242401576, -122.11134664714336),
-  const LatLng(37.40260962243491, -122.0976958796382),
-];
-
-final randomNumberGenerator = Random();
+final random = Random();
 
 /// định nghĩa các đối tượng dữ liệu
 
@@ -33,64 +24,67 @@ class CommentData {
     this.username = "Tuan",
     this.avatarUrl = "assets/friend/tarek.jpg",
     this.comment = "nice",
-    this.mediaUrls = const ["assets/food/HeavenlyPizza.jpg",'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'],
+    this.mediaUrls = const [
+      "assets/food/HeavenlyPizza.jpg",
+      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+    ],
     required this.timestamp,
   });
 
-  Future<bool> post() async{
+  Future<bool> post() async {
     return true;
   }
-  bool isEmpty(){
+
+  bool isEmpty() {
     return comment.isEmpty && mediaUrls.isEmpty;
   }
-
 }
 
-
 class PostData implements LazyLoadData {
-  String? id;
+  String id;
   late String title;
   late String description;
   late List<String> mediaUrls;
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
-  DateTime datetime=DateTime.now();
-  int react = randomNumberGenerator.nextInt(2) - 1;
+  DateTime datetime = DateTime.now();
+  LatLng? position;
+  int react = random.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
   PostData({
-    this.id,
+    this.id = "new",
     required this.title,
-    this.description =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    ,
-    this.mediaUrls = const ["assets/food/HeavenlyPizza.jpg",'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'],
+    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing"
+        "Lorem ipsum dolor sit amet, consectetur adipiscing",
+    this.mediaUrls = const [
+      "assets/food/HeavenlyPizza.jpg",
+      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+    ],
     this.outstandingIMGURL = '',
     this.price,
     this.isGood = true,
     this.cateList = const [],
   });
-  bool isEditable(){
+
+  bool isEditable() {
     return true;
   }
 
   int i = 0;
 
-  LatLng positions() {
-    i = ((i + 1) % position_list.length);
-    return position_list[i];
-  }
+
   @override
   void loadMore() {
     // TODO: implement loadMore
   }
+
   CommentData get_a_previous_comment() {
     return CommentData(timestamp: DateTime.now());
   }
@@ -111,7 +105,7 @@ class PostData implements LazyLoadData {
   }
 
   String get_location_name() {
-    return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";
+    return "Hà Nội, Mai Dịch";
   }
 
   int get_react() {
@@ -126,18 +120,13 @@ class PostData implements LazyLoadData {
   }
 
   int get_upvote_rate() {
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
+    return (random.nextDouble() * 1000).ceil();
   }
 
   int get_downvote_rate() {
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
+    return (random.nextDouble() * 1000).ceil();
   }
 }
-
-
-
-
-
 
 class BoxChatData implements LazyLoadData {
   @override
@@ -145,12 +134,14 @@ class BoxChatData implements LazyLoadData {
     // TODO: implement loadMore
   }
 }
+
 class UserData implements LazyLoadData {
   @override
   void loadMore() {
     // TODO: implement loadMore
   }
 }
+
 class FriendData implements LazyLoadData {
   String? id;
   String name;
@@ -204,7 +195,6 @@ class ProfileData {
     this.works = works ?? [];
     this.favorites = favorites ?? [];
   }
-
 }
 
 class Filter {
@@ -212,6 +202,11 @@ class Filter {
   late String? search_type;
   late String? keyword;
   late double? scoreThreshold;
+  LatLngBounds? vision_bounds;
 
-  Filter({this.search_type, this.keyword, this.scoreThreshold});
+  Filter(
+      {this.search_type,
+      this.keyword,
+      this.scoreThreshold,
+      LatLngBounds? this.vision_bounds});
 }

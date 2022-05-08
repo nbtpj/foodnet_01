@@ -1,6 +1,13 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/data.dart';
+import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,82 +23,208 @@ class Discovery extends StatefulWidget {
 }
 
 class _DiscoveryState extends State<Discovery> {
-  static CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(0.347596, 32.582520),
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng( 20.8861024, 106.4049451),
     zoom: 14.4746,
   );
 
   final Set<Marker> _markers = {};
   late GoogleMapController _controller;
-
-  final List<dynamic> _contacts = [
-    {
-      "name": "Me",
-      "position": const LatLng(37.42796133580664, -122.085749655962),
-      "marker": 'assets/markers/marker-1.png',
-      "image": 'assets/images/avatar-1.png',
-    },
-    {
-      "name": "Samantha",
-      "position": const LatLng(37.42484642575639, -122.08309359848501),
-      "marker": 'assets/markers/marker-2.png',
-      "image": 'assets/images/avatar-2.png',
-    },
-    {
-      "name": "Malte",
-      "position": const LatLng(37.42381625902441, -122.0928531512618),
-      "marker": 'assets/markers/marker-3.png',
-      "image": 'assets/images/avatar-3.png',
-    },
-    {
-      "name": "Julia",
-      "position": const LatLng(37.41994095849639, -122.08159055560827),
-      "marker": 'assets/markers/marker-4.png',
-      "image": 'assets/images/avatar-4.png',
-    },
-    {
-      "name": "Tim",
-      "position": const LatLng(37.413175077529935, -122.10101041942836),
-      "marker": 'assets/markers/marker-5.png',
-      "image": 'assets/images/avatar-5.png',
-    },
-    {
-      "name": "Sara",
-      "position": const LatLng(37.419013242401576, -122.11134664714336),
-      "marker": 'assets/markers/marker-6.png',
-      "image": 'assets/images/avatar-6.png',
-    },
-    {
-      "name": "Ronaldo",
-      "position": const LatLng(37.40260962243491, -122.0976958796382),
-      "marker": 'assets/markers/marker-7.png',
-      "image": 'assets/images/avatar-7.png',
-    },
-  ];
-  final Location location = Location();
-  bool _serviceEnabled = false;
   bool following = true;
-  PermissionStatus _permissionGranted = PermissionStatus.denied;
+  List<PostData> current_lists = [];
 
-  Future<bool> lp() async {
-    _serviceEnabled ? 1 : _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return false;
-      }
-    }
+  Future<List<PostData>> fetchFoodOnThisLocation() async {
+    var vision_bounds = await _controller.getVisibleRegion();
+    return get_posts(Filter(search_type: 'food', vision_bounds: vision_bounds))
+        .toList();
+  }
 
-    _permissionGranted == PermissionStatus.denied
-        ? 1
-        : _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return false;
-      }
-    }
-    return true;
+  Widget _buildFoodList(BuildContext context) {
+    return FutureBuilder<List<PostData>>(
+      future: fetchFoodOnThisLocation(),
+      builder: (context, snapshot) {
+        // debugPrint("this is a log " +snapshot.toString());
+        if (snapshot.hasData) {
+          var foodList = snapshot.data ?? [];
+          // debugPrint("this is a log " + foodList.toString());
+          for (var element in foodList) {
+            createMarker(context, element);
+          }
+          return SizedBox(
+            height: SizeConfig.screenHeight / 2.28,
+
+            /// 300.0
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: foodList.length,
+              itemBuilder: (context, index) {
+                var food = foodList[index];
+                return GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      following = false;
+                    });
+                    _controller.moveCamera(CameraUpdate.newLatLng(
+                        food.position ?? const LatLng(0.347596, 32.582520)));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PostDetailView(food: food)));
+                  },
+                  onDoubleTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PostDetailView(food: food)));
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            SizeConfig.screenWidth / 34.25,
+
+                            /// 12.0
+                            SizeConfig.screenHeight / 113.84,
+
+                            /// 6.0
+                            SizeConfig.screenWidth / 34.25,
+
+                            /// 12.0
+                            SizeConfig.screenHeight / 22.77
+
+                            /// 30.0
+                            ),
+                        height: SizeConfig.screenHeight / 3.105,
+
+                        /// 220.0
+                        width: SizeConfig.screenWidth / 2.74,
+
+                        /// 150.0
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30.0),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 3),
+                                blurRadius: 6,
+                                color: Colors.black.withOpacity(0.3),
+                              )
+                            ]),
+                        child: Stack(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: SizeConfig.screenHeight / 6.83,
+
+                                  /// 100.0
+                                  width: SizeConfig.screenWidth / 2.74,
+
+                                  /// 150.0
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "${food.outstandingIMGURL}"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: const Radius.circular(30.0)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${food.title}",
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize:
+                                                SizeConfig.screenHeight / 34.15,
+
+                                            /// 20
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      Text(
+                                        "${food.cateList.join(',')}",
+                                        style: TextStyle(
+                                            color: Colors.black38,
+                                            fontSize:
+                                                SizeConfig.screenHeight / 42.69,
+
+                                            /// 16
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: SizeConfig.screenHeight /
+                                                136.6),
+
+                                        /// 5.0
+                                        child: food.isGood
+                                            ? Text(
+                                                "\$${food.price}",
+                                                style: TextStyle(
+                                                    color: buttonColor,
+                                                    fontSize: SizeConfig
+                                                            .screenHeight /
+                                                        37.95,
+
+                                                    /// 18
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : const SizedBox.shrink(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            food.isGood
+                                ? Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                      height: SizeConfig.screenHeight / 13.66,
+
+                                      /// 50.0
+                                      width: SizeConfig.screenWidth / 8.22,
+
+                                      /// 50.0
+                                      decoration: BoxDecoration(
+                                          color: buttonColor,
+                                          borderRadius: const BorderRadius.only(
+                                            bottomRight:
+                                                const Radius.circular(30.0),
+                                            topLeft:
+                                                const Radius.circular(30.0),
+                                          )),
+                                      child: const Icon(
+                                        Icons.shopping_cart_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return const Center();
+        }
+      },
+    );
   }
 
   @override
@@ -99,27 +232,18 @@ class _DiscoveryState extends State<Discovery> {
     super.initState();
   }
 
-  void curr() async {
-    bool permit = await lp();
-    if (permit) {
-      location.getLocation().then((loc) {
-        print("hi, this is a log" + loc.toString());
-        _controller.moveCamera(CameraUpdate.newLatLng(
-            LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    createMarkers(context);
+    // createMarkers(context);
 
     location.onLocationChanged.listen((LocationData loc) {
       following
           ? _controller.moveCamera(CameraUpdate.newLatLng(
               LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)))
           : 1;
+      debugPrint("this is a log :current position is " +loc.toString());
     });
+
 
     return Scaffold(
         body: Stack(children: [
@@ -132,85 +256,97 @@ class _DiscoveryState extends State<Discovery> {
           _controller = controller;
           controller.setMapStyle(MapStyle().aubergine);
         },
+        onCameraIdle: () {
+          setState(() {});
+        },
       ),
       Positioned(
-        bottom: 50,
+        bottom: 20,
         left: 20,
         right: 20,
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 120,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _contacts.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    _controller.moveCamera(
-                        CameraUpdate.newLatLng(_contacts[index]["position"]));
-                  },
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          _contacts[index]['image'],
-                          width: 60,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          _contacts[index]["name"],
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            )),
+        child: _buildFoodList(context),
       ),
+      // Positioned(
+      //   bottom: 50,
+      //   left: 20,
+      //   right: 20,
+      //   child: Container(
+      //       width: MediaQuery.of(context).size.width,
+      //       height: 120,
+      //       decoration: BoxDecoration(
+      //           color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      //       child: ListView.builder(
+      //         scrollDirection: Axis.horizontal,
+      //         itemCount: _contacts.length,
+      //         itemBuilder: (context, index) {
+      //           return GestureDetector(
+      //             onTap: () {
+      //               _controller.moveCamera(
+      //                   CameraUpdate.newLatLng(_contacts[index]["position"]));
+      //             },
+      //             child: Container(
+      //               width: 100,
+      //               height: 100,
+      //               margin: const EdgeInsets.only(right: 10),
+      //               child: Column(
+      //                 mainAxisAlignment: MainAxisAlignment.center,
+      //                 children: [
+      //                   Image.asset(
+      //                     _contacts[index]['image'],
+      //                     width: 60,
+      //                   ),
+      //                   const SizedBox(
+      //                     height: 10,
+      //                   ),
+      //                   Text(
+      //                     _contacts[index]["name"],
+      //                     style: const TextStyle(
+      //                         color: Colors.black, fontWeight: FontWeight.w600),
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       )),
+      // ),
 
       FloatingActionButton(
         child: Icon(
-          following ? Icons.share_location: Icons.not_listed_location ,
+          following ? Icons.share_location : Icons.not_listed_location,
           color: Colors.white,
         ),
         onPressed: () {
-            setState(() {
-              following ? following=false:following=true;
-            });
+          setState(() {
+            following ? following = false : following = true;
+          });
         },
       )
     ]));
   }
 
-  createMarkers(BuildContext context) {
-    Marker marker;
-
-    _contacts.forEach((contact) async {
-      marker = Marker(
-        markerId: MarkerId(contact['name']),
-        position: contact['position'],
-        icon: await _getAssetIcon(context, contact['marker'])
+  createMarker(BuildContext context, PostData food) async {
+    // if (food.position != null) {
+      Marker marker = Marker(
+        markerId: MarkerId(food.id),
+        position: food.position ?? const LatLng(0.347596, 32.582520),
+        icon: await _getAssetIcon(context, food.outstandingIMGURL)
             .then((value) => value),
         infoWindow: InfoWindow(
-          title: contact['name'],
-          snippet: timeago.format(contact.timestamp),
+          title: food.title,
+          snippet: timeago.format(food.datetime),
         ),
+        onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostDetailView(food: food)));
+        }
       );
-
       setState(() {
         _markers.add(marker);
       });
-    });
+    // }
   }
 
   Future<BitmapDescriptor> _getAssetIcon(
@@ -220,9 +356,20 @@ class _DiscoveryState extends State<Discovery> {
     final ImageConfiguration config =
         createLocalImageConfiguration(context, size: const Size(5, 5));
 
-    AssetImage(icon)
-        .resolve(config)
-        .addListener(ImageStreamListener((ImageInfo image, bool sync) async {
+    ImageProvider img;
+
+    try {
+      img = AssetImage(icon);
+    } catch (e) {
+      try {
+        img = FileImage(File(icon));
+      } catch (e) {
+        img = NetworkImage(icon);
+      }
+    }
+    int icon_size = min(SizeConfig.screenWidth~/10,SizeConfig.screenHeight~/10);
+
+    ResizeImage(img, width: icon_size, height: icon_size, allowUpscaling: true).resolve(config).addListener(ImageStreamListener((ImageInfo image, bool sync) async {
       final ByteData? bytes =
           await image.image.toByteData(format: ImageByteFormat.png);
       final BitmapDescriptor bitmap =

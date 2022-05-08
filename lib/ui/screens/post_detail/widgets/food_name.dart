@@ -4,7 +4,8 @@ import 'package:foodnet_01/util/global.dart';
 
 class FoodName extends StatefulWidget {
   PostData food;
-  FoodName({required this.food});
+  bool is_editting;
+  FoodName({Key? key, required this.food, required this.is_editting}) : super(key: key);
 
   @override
   _FoodNameState createState() => _FoodNameState();

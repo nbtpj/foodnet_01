@@ -8,8 +8,9 @@ import 'package:foodnet_01/util/global.dart';
 
 class FavoriteFood extends StatefulWidget {
   PostData food;
+  bool is_edditing;
 
-  FavoriteFood({Key? key, required this.food}) : super(key: key);
+  FavoriteFood({Key? key, required this.food, required this.is_edditing}) : super(key: key);
 
   @override
   _FavoriteFoodState createState() => _FavoriteFoodState();

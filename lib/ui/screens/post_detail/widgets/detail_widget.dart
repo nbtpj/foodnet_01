@@ -10,8 +10,9 @@ import 'food_name.dart';
 
 class DetailWidget extends StatefulWidget {
   PostData food;
+  bool is_editting;
 
-  DetailWidget({Key? key, required this.food}) : super(key: key);
+  DetailWidget({Key? key, required this.food, required this.is_editting}) : super(key: key);
 
   @override
   _DetailWidgetState createState() => _DetailWidgetState();
@@ -53,12 +54,12 @@ class _DetailWidgetState extends State<DetailWidget> {
                   ),
 
                   /// 20.0
-                  FoodName(food: widget.food),
+                  FoodName(food: widget.food, is_editting:widget.is_editting),
                   ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food),
-                  FoodDescription(food: widget.food),
+                  FeaturesFood(food: widget.food, is_editting:widget.is_editting),
+                  FoodDescription(food: widget.food, is_editting:widget.is_editting),
                   IncreaseDecrease(food: widget.food),
-                  AddToCartButton(food: widget.food)
+                  // AddToCartButton(food: widget.food)
                 ]
               : [
                   Container(
@@ -77,10 +78,10 @@ class _DetailWidgetState extends State<DetailWidget> {
                   ),
 
                   /// 20.0
-                  FoodName(food: widget.food),
+                  FoodName(food: widget.food, is_editting:widget.is_editting),
                   ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food),
-                  FoodDescription(food: widget.food),
+                  FeaturesFood(food: widget.food, is_editting:widget.is_editting),
+                  FoodDescription(food: widget.food, is_editting:widget.is_editting),
                 ],
         ),
       ),
