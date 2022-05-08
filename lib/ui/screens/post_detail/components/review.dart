@@ -98,7 +98,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                         ),
                       ),
                       Text(
-                        widget.food.getLocationName(),
+                        widget.food.get_location_name(),
                         style: TextStyle(
                             color: freeDelivery,
                             fontWeight: FontWeight.bold,

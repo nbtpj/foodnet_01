@@ -133,10 +133,10 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                 right: SizeConfig.screenWidth / 41.1,
 
                                 /// 10.0
-                                child: food.getReact() == 1
+                                child: food.get_react() == 1
                                     ? const Icon(Icons.favorite,
                                         color: Colors.white)
-                                    : food.getReact() == 0
+                                    : food.get_react() == 0
                                         ? const Icon(Icons.favorite_outline,
                                             color: Colors.white)
                                         : const Icon(Icons.heart_broken,
