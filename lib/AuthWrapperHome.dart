@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/ui/screens/login.dart';
-import 'package:foodnet_01/ui/screens/home/home.dart';
 
 import 'ui/screens/nav_bar.dart';
 

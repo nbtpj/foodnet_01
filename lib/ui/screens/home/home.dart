@@ -6,7 +6,7 @@ import 'package:foodnet_01/util/global.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/popular.dart';
-import 'package:foodnet_01/ui/screens/home/widgets/recommed.dart';
+import 'package:foodnet_01/ui/screens/home/widgets/recommend.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/search_food.dart';
 import 'widgets/categories.dart';
 
@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
             FoodPart(partName: "Categories"),
             CategoriesFood(),
             FoodPart(partName: "Recommed"),
-            RecommedFoods(),
+            RecommendFoods(),
             FoodPart(partName: "Popular"),
             PopularFoods(),
           ],
