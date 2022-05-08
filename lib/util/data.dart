@@ -61,6 +61,7 @@ Stream<PostData> get_posts(Filter filter) async* {
         id: "1",
         title: "Chicken Curry Pasta",
         outstandingIMGURL: "assets/food/ChickenCurryPasta.jpg",
+        isGood: false,
         cateList: ["Chicken"],
         price: 22);
     yield PostData(
@@ -74,6 +75,7 @@ Stream<PostData> get_posts(Filter filter) async* {
         title: "Grilled Chicken",
         outstandingIMGURL: "assets/food/GrilledChicken.jpg",
         cateList: ["Chicken"],
+        isGood:false,
         price: 30);
     yield PostData(
         id: '4',
@@ -425,4 +427,9 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
   /// cùng với một số double thể hiện độ 'matching' với filter
   // TODO: implement search
   yield null;
+}
+
+String file_type(String url){
+  var fileName = (url.split('/').last);
+  return fileName.split('.').last.toLowerCase();
 }

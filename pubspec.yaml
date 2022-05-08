@@ -49,6 +49,9 @@ dependencies:
   custom_info_window: ^1.0.1
   geolocator: ^8.2.0
   location: ^4.3.0
+  video_player: ^2.4.0
+  visibility_detector: ^0.2.2
+  image_picker: ^0.8.5
   cloud_firestore: ^3.1.13
 dev_dependencies:
   flutter_test:
