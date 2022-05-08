@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/ui/screens/search/searchResult.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/navigate.dart';
@@ -67,6 +67,11 @@ class _SearchPageState extends State<SearchPage> {
                       setState(() {
                         isTextFieldEmpty = false;
                       });
+                    }
+                  },
+                  onSubmitted: (text) {
+                    if (text != "") {
+                      Navigate.pushPage(context, SearchResult(keyWord: text, type: widget.type));
                     }
                   },
                 ),

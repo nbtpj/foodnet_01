@@ -9,6 +9,7 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/navigate.dart';
+import '../search/search.dart';
 import 'components/friend.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -62,7 +63,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigate.pushPage(context, const SearchPage(type: "user",));
+                        },
                         icon: const Icon(Icons.search),
                         color: Colors.black,
                         iconSize: 25,
