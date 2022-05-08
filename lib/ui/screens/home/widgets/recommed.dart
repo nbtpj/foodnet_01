@@ -77,7 +77,7 @@ class _RecommedFoodsState extends State<RecommedFoods> {
                 Container(
                 decoration: BoxDecoration(
                 image: DecorationImage(
-                image: AssetImage(food.outstandingIMGURL),
+                image: NetworkImage(food.outstandingIMGURL),
                 fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(20),

@@ -1,7 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
 import 'dart:math';
-import 'package:timeago/timeago.dart' as timeago;
 
 List<LatLng> position_list = [const LatLng(37.42796133580664, -122.085749655962),
   const LatLng(37.42484642575639, -122.08309359848501),
@@ -27,6 +25,7 @@ class CommentData {
   late String avatarUrl;
   late String comment;
   late DateTime timestamp;
+  late List<String> mediaUrls;
 
   CommentData({
     this.username = "Tuan",
@@ -38,6 +37,7 @@ class CommentData {
     ],
     required this.timestamp,
   });
+
   Future<bool> post() async {
     return true;
   }
@@ -56,6 +56,8 @@ class PostData implements LazyLoadData {
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
+  LatLng? position;
+  DateTime datetime = DateTime.now();
   int react = randomNumberGenerator.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
   PostData({
@@ -75,10 +77,10 @@ class PostData implements LazyLoadData {
       "assets/food/HeavenlyPizza.jpg",
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
     ],
-    this.mediaUrls = const [],
     this.outstandingIMGURL = '',
     this.price,
     this.isGood = true,
+    this.react = 1,
     this.cateList = const [],
   });
 
@@ -87,6 +89,9 @@ class PostData implements LazyLoadData {
   LatLng positions() {
     i = ((i + 1) % position_list.length);
     return position_list[i];
+  }
+  bool isEditable() {
+    return true;
   }
   @override
   void loadMore() {

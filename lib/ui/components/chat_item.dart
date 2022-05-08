@@ -35,7 +35,7 @@ class _ChatItemState extends State<ChatItem> {
         leading: Stack(
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: AssetImage(
+              backgroundImage: NetworkImage(
                 widget.dp,
               ),
               radius: 25,

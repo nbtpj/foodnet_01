@@ -24,7 +24,7 @@ class _CommentComponent extends State<CommentComponent>{
                 //todo
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage(widget.comment.avatarUrl),
+                backgroundImage: NetworkImage(widget.comment.avatarUrl),
               )
           ),
           subtitle: Text(timeago.format(widget.comment.timestamp)),

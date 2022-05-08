@@ -124,7 +124,7 @@ class _DiscoveryState extends State<Discovery> {
                                   /// 150.0
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: AssetImage(
+                                      image: NetworkImage(
                                           "${food.outstandingIMGURL}"),
                                       fit: BoxFit.cover,
                                     ),

@@ -22,7 +22,7 @@ class _FoodImageState extends State<FoodImage> {
       decoration: BoxDecoration(
         color: Colors.orangeAccent,
         image: DecorationImage(
-            image: AssetImage(widget.food.outstandingIMGURL),
+            image: NetworkImage(widget.food.outstandingIMGURL),
             fit: BoxFit.fitWidth
         ),
       ),

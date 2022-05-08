@@ -36,7 +36,7 @@ class _EditFoodState extends State<EditFood> {
                               //todo
                             },
                             child:CircleAvatar(
-                              backgroundImage: AssetImage(data.avatarUrl),
+                              backgroundImage: NetworkImage(data.avatarUrl),
                             )
                         ),
                         subtitle: Text(timeago.format(data.timestamp)),
