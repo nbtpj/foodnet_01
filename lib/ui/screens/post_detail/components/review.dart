@@ -33,7 +33,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: textColor,
                   ),
                   Text(
-                    "${widget.food.get_upvote_rate()}",
+                    "${widget.food.getUpvoteRate()}",
                     style: TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,
@@ -59,7 +59,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: textColor,
                   ),
                   Text(
-                    "${widget.food.get_downvote_rate()}",
+                    "${widget.food.getDownvoteRate()}",
                     style: TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                         ),
                       ),
                       Text(
-                        widget.food.get_location_name(),
+                        widget.food.getLocationName(),
                         style: TextStyle(
                             color: freeDelivery,
                             fontWeight: FontWeight.bold,

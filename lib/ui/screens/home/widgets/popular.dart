@@ -51,7 +51,7 @@ class _PopularFoodsState extends State<PopularFoods> {
                                 borderRadius: BorderRadius.circular(30.0),
                                 boxShadow: [
                                   BoxShadow(
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                     blurRadius: 6,
                                     color: Colors.black.withOpacity(0.3),
                                   )
@@ -66,11 +66,11 @@ class _PopularFoodsState extends State<PopularFoods> {
                                       width: SizeConfig.screenWidth/2.74,           /// 150.0
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: AssetImage(
-                                              "${food.outstandingIMGURL}"),
+                                          image: NetworkImage(
+                                              food.outstandingIMGURL),
                                           fit: BoxFit.cover,
                                         ),
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(30.0),
                                             topRight: Radius.circular(30.0)),
                                       ),
@@ -82,14 +82,14 @@ class _PopularFoodsState extends State<PopularFoods> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${food.title}",
+                                            food.title,
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: SizeConfig.screenHeight/34.15,       /// 20
                                                 fontWeight: FontWeight.w700),
                                           ),
                                           Text(
-                                            "${food.cateList.join(',')}",
+                                            food.cateList.join(','),
                                             style: TextStyle(
                                                 color: Colors.black38,
                                                 fontSize: SizeConfig.screenHeight/42.69,      /// 16
@@ -119,12 +119,12 @@ class _PopularFoodsState extends State<PopularFoods> {
                                     width: SizeConfig.screenWidth/8.22,             /// 50.0
                                     decoration: BoxDecoration(
                                         color: buttonColor,
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             bottomRight: Radius.circular(30.0),
                                             topLeft: Radius.circular(30.0),
                                         )
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.shopping_cart_rounded,
                                       color: Colors.white,
                                     ),
@@ -141,7 +141,7 @@ class _PopularFoodsState extends State<PopularFoods> {
           );
         }
         else{
-          return Center();
+          return const Center();
         }
       },
     );

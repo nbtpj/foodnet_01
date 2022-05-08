@@ -31,12 +31,12 @@ class _FavoriteFoodState extends State<FavoriteFood> {
         IconButton(
           onPressed: () {
             setState(() {
-              widget.food.change_react();
+              widget.food.changeReact();
             });
           },
-          icon: widget.food.get_react() == 1
+          icon: widget.food.getReact() == 1
               ? const Icon(Icons.favorite, color: Colors.white)
-              : widget.food.get_react() == 0 ? const Icon(
+              : widget.food.getReact() == 0 ? const Icon(
               Icons.favorite_outline, color: Colors.white) :
           const Icon(Icons.heart_broken, color: Colors.white),
           color: Colors.white,

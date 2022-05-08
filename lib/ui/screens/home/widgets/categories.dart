@@ -20,9 +20,10 @@ class _CategoriesFoodState extends State<CategoriesFood> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<PostData>>(
       future: fetchRootPost(),
+      initialData: const [],
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var categoryList = snapshot.data ?? [];
+          var categoryList = snapshot.data!;
           return SizedBox(
             height: SizeConfig.screenHeight / 8.04,
 
@@ -30,8 +31,8 @@ class _CategoriesFoodState extends State<CategoriesFood> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categoryList.length,
-              itemBuilder: (context, indeks) {
-                var category = categoryList[indeks];
+              itemBuilder: (context, index) {
+                var category = categoryList[index];
                 return Column(
                   children: [
                     GestureDetector(
@@ -59,7 +60,7 @@ class _CategoriesFoodState extends State<CategoriesFood> {
                         /// 45.0
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage("${category.outstandingIMGURL}"),
+                            image: NetworkImage(category.outstandingIMGURL),
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -81,9 +82,9 @@ class _CategoriesFoodState extends State<CategoriesFood> {
             ),
           );
         } else {
-          return Center();
+          return const Center();
         }
-      },
+      }
     );
   }
 }

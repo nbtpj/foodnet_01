@@ -81,27 +81,34 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  String get_location_name() {return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";}
+  String getLocationName() {return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";}
 
-  int get_react() { return react;}
+  int getReact() { return react;}
 
-  void change_react() {
+  void changeReact() {
     react += 1;
     if(react>1){
       react = -1;
     }
   }
-  int get_upvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+  int getUpvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
 
-  int get_downvote_rate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+  int getDownvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
 
   PostData.fromJson(Map<String, Object?> json) : this(
     id: json['id']! as String,
     description: json['description']! as String,
-    // cateList: json['cateList']! as List<dynamic>,
+    cateList: (json['cateList'] as List).map((e) => e as String).toList(),
     price: json['price']! as int,
     isGood: json['isGood']! as bool,
-    react: json['react']! as int
+    react: json['react']! as int,
+    outstandingIMGURL: json['outstandingIMGURL']! as String
+  );
+
+  PostData.categoryFromJson(Map<String, Object?> json) : this(
+    id: json['id']! as String,
+    title: json['title']! as String,
+    outstandingIMGURL: json['outstandingIMGURL']! as String
   );
 
   Map<String, Object?> toJson() {
@@ -113,8 +120,14 @@ class PostData implements LazyLoadData {
       "react": react
     };
   }
-}
 
+  Map<String, Object?> categoryToJson() {
+    return {
+      "title" : title,
+      "outstandingIMGURL": outstandingIMGURL
+    };
+  }
+}
 
 class BoxChatData implements LazyLoadData {
   @override
