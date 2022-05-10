@@ -15,7 +15,7 @@ class PopularFoods extends StatefulWidget {
 class _PopularFoodsState extends State<PopularFoods> {
   Future<List<PostData>> fetchPopularPost() async{
     //todo: implement get popular post (categorical post)
-    return get_posts(Filter(search_type: 'food')).toList();
+    return getPosts(Filter(search_type: 'food')).toList();
   }
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class _PopularFoodsState extends State<PopularFoods> {
                                       width: SizeConfig.screenWidth/2.74,           /// 150.0
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: AssetImage(
+                                          image: NetworkImage(
                                               "${food.outstandingIMGURL}"),
                                           fit: BoxFit.cover,
                                         ),

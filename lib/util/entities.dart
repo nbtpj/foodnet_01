@@ -1,7 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
 import 'dart:math';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../ui/screens/chat/model/message_model.dart';
 import '../ui/screens/chat/model/user_model.dart';
@@ -30,28 +28,43 @@ class CommentData {
   late String avatarUrl;
   late String comment;
   late DateTime timestamp;
+  late List<String> mediaUrls;
 
   CommentData({
     this.username = "Tuan",
     this.avatarUrl = "assets/friend/tarek.jpg",
     this.comment = "nice",
+    this.mediaUrls = const [
+      "assets/food/HeavenlyPizza.jpg",
+      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+    ],
     required this.timestamp,
   });
+
+  Future<bool> post() async {
+    return true;
+  }
+
+  bool isEmpty() {
+    return comment.isEmpty && mediaUrls.isEmpty;
+  }
 }
 
 
 class PostData implements LazyLoadData {
-  String? id;
+  String id;
   late String title;
   late String description;
   late List<String> mediaUrls;
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
+  LatLng? position;
+  DateTime datetime = DateTime.now();
   int react = randomNumberGenerator.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
   PostData({
-    this.id,
+    this.id = "new",
     this.title = "",
     this.description =
     "Lorem ipsum dolor sit amet, consectetur adipiscing"
@@ -63,10 +76,14 @@ class PostData implements LazyLoadData {
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
     ,
-    this.mediaUrls = const [],
+    this.mediaUrls = const [
+      "assets/food/HeavenlyPizza.jpg",
+      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+    ],
     this.outstandingIMGURL = '',
     this.price,
     this.isGood = true,
+    this.react = 1,
     this.cateList = const [],
   });
 
@@ -75,6 +92,9 @@ class PostData implements LazyLoadData {
   LatLng positions() {
     i = ((i + 1) % position_list.length);
     return position_list[i];
+  }
+  bool isEditable() {
+    return true;
   }
   @override
   void loadMore() {
@@ -120,6 +140,42 @@ class PostData implements LazyLoadData {
 
   int get_downvote_rate() {
     return (randomNumberGenerator.nextDouble() * 1000).ceil();
+  }
+  int getUpvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+
+  int getDownvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+
+  PostData.fromJson(Map<String, Object?> json) : this(
+      id: json['id']! as String,
+      description: json['description']! as String,
+      cateList: (json['cateList'] as List).map((e) => e as String).toList(),
+      price: json['price']! as int,
+      isGood: json['isGood']! as bool,
+      react: json['react']! as int,
+      outstandingIMGURL: json['outstandingIMGURL']! as String
+  );
+
+  PostData.categoryFromJson(Map<String, Object?> json) : this(
+      id: json['id']! as String,
+      title: json['title']! as String,
+      outstandingIMGURL: json['outstandingIMGURL']! as String
+  );
+
+  Map<String, Object?> toJson() {
+    return {
+      "description": description,
+      "cateList": cateList,
+      "price": price,
+      "isGood": isGood,
+      "react": react
+    };
+  }
+
+  Map<String, Object?> categoryToJson() {
+    return {
+      "title" : title,
+      "outstandingIMGURL": outstandingIMGURL
+    };
   }
 }
 
@@ -174,6 +230,7 @@ class ProfileData {
   List<String>? works;
   List<String>? schools;
   List<String>? favorites;
+  List<FriendData>? friends;
 
   ProfileData({
     this.id,
@@ -188,21 +245,43 @@ class ProfileData {
     List<String>? works,
     List<String>? schools,
     List<String>? favorites,
+    List<FriendData> ? friends,
   }) {
     this.schools = schools ?? [];
     this.works = works ?? [];
     this.favorites = favorites ?? [];
+    this.friends = friends ?? [];
   }
 
 }
+class SearchData implements LazyLoadData {
+  String? id;
+  String? asset;
+  String name;
+
+  SearchData({
+    this.id,
+    this.asset,
+    required this.name,
+  });
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }}
 
 class Filter {
   /// lớp đại diện cho các điều kiện lọc cho tìm kiếm
   late String? search_type;
   late String? keyword;
   late double? scoreThreshold;
+  LatLngBounds? vision_bounds;
 
-  Filter({this.search_type, this.keyword, this.scoreThreshold});
+  Filter(
+      {this.search_type,
+        this.keyword,
+        this.scoreThreshold,
+        LatLngBounds? this.vision_bounds});
 }
 
 class Chat implements LazyLoadData{

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
@@ -25,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // FavoritePageView(),
     // ProfilePageView(),
     Friends(),
-    ProfilePage(type: "me", id: "1"),
+    ProfilePage(type: "me", id: "1" , arriveType: "navbar",),
   ];
 
   @override
@@ -59,11 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.black45,
               backgroundColor: Colors.transparent,
               buttonBackgroundColor: buttonColor,
-              height: SizeConfig.screenHeight / 11.39,
+              height: min(SizeConfig.screenHeight / 11.39, 60),
 
               /// 60.0
               animationCurve: Curves.easeInOut,
-              animationDuration: Duration(milliseconds: 400),
+              animationDuration: Duration(milliseconds: 100),
               index: index,
               items: items,
               onTap: (index) => setState(() => this.index = index),

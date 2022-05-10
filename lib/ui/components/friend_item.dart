@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
+import '../../../../util/navigate.dart';
+import '../screens/profile/profile.dart';
 
 class FriendItem extends StatefulWidget {
   final String userAsset;
@@ -29,31 +32,36 @@ class _FriendItemState extends State<FriendItem> {
   }
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
+    return InkWell(
+      child: ListTile(
+        title: Text(
           widget.name,
           style: TextStyle(
-            fontWeight: FontWeight.w600
+              fontWeight: FontWeight.w600
           ),
-      ),
-      isThreeLine: false,
-      trailing: Text(widget.time),
-      leading: CircleAvatar(
+        ),
+        isThreeLine: false,
+        trailing: Text(widget.time),
+        leading: CircleAvatar(
           radius: 30,
           backgroundImage: AssetImage(widget.userAsset),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("10 bạn chung"),
-          (_confirm
-              ? Confirmed()
-              : UnConfirm(updateConfirm: _updateConfirm,
-              eraseFriendsList: widget.eraseFriendsList, index: widget.index
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("10 bạn chung"),
+            (_confirm
+                ? Confirmed()
+                : UnConfirm(updateConfirm: _updateConfirm,
+                eraseFriendsList: widget.eraseFriendsList, index: widget.index
             )
-          )
-        ],
+            )
+          ],
+        ),
       ),
+      onTap: () {
+        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+      },
     );
   }
 }
@@ -79,7 +87,7 @@ class UnConfirm extends StatelessWidget {
           },
           child: Container(
               decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: buttonColor,
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.all(4),
               width: 100,
@@ -175,93 +183,98 @@ class FriendListItem extends StatefulWidget {
 class _FriendListItemState extends State<FriendListItem> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
+    return InkWell(
+      child: ListTile(
+        title: Text(
           widget.name,
           style: TextStyle(
-              fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w600,
           ),
-      ),
-      isThreeLine: false,
-      trailing: IconButton(
-        icon: Icon(Icons.more_vert),
-        onPressed: (){
-          showModalBottomSheet(
-              context: context,
-              builder: (builder) {
-                return Container(
-                  height: 230,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      ListTile(
-                        title: Text(widget.name),
-                        isThreeLine: false,
-                        leading: CircleAvatar(
-                          radius: 30,
-                          child: CircleAvatar(
+        ),
+        isThreeLine: false,
+        trailing: IconButton(
+          icon: Icon(Icons.more_vert),
+          onPressed: (){
+            showModalBottomSheet(
+                context: context,
+                builder: (builder) {
+                  return Container(
+                    height: 230,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        ListTile(
+                          title: Text(widget.name),
+                          isThreeLine: false,
+                          leading: CircleAvatar(
                             radius: 30,
-                            backgroundImage: AssetImage(widget.userAsset),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: AssetImage(widget.userAsset),
+                            ),
                           ),
                         ),
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 0.4,
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          SizedBox(width: 15),
-                          CircleAvatar(
-                            backgroundColor: Colors.grey[350],
-                            child: Icon(IconData(0xe153, fontFamily: 'MaterialIcons'), color: Colors.black,),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Nhắn tin cho " + widget.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                        Divider(
+                          color: Colors.black,
+                          thickness: 0.4,
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: [
+                            SizedBox(width: 15),
+                            CircleAvatar(
+                              backgroundColor: Colors.grey[350],
+                              child: Icon(IconData(0xe153, fontFamily: 'MaterialIcons'), color: Colors.black,),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          SizedBox(width: 15),
-                          CircleAvatar(
-                            backgroundColor: Colors.grey[350],
-                            child: Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Huỷ kết bạn với " + widget.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                            SizedBox(width: 10),
+                            Text(
+                              "Nhắn tin cho " + widget.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              }
-          );
-        },
-      ),
-      leading: CircleAvatar(
-        radius: 30,
-        child: CircleAvatar(
-          radius: 30,
-          backgroundImage: AssetImage(widget.userAsset),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: [
+                            SizedBox(width: 15),
+                            CircleAvatar(
+                              backgroundColor: Colors.grey[350],
+                              child: Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Huỷ kết bạn với " + widget.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }
+            );
+          },
         ),
+        leading: CircleAvatar(
+          radius: 30,
+          child: CircleAvatar(
+            radius: 30,
+            backgroundImage: AssetImage(widget.userAsset),
+          ),
+        ),
+        subtitle: Text(widget.mutual_friends.toString() + " bạn chung"),
       ),
-      subtitle: Text(widget.mutual_friends.toString() + " bạn chung"),
+      onTap: () {
+        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+      },
     );
   }
 }
@@ -295,30 +308,35 @@ class _FriendSuggestionItemState extends State<FriendSuggestionItem> {
   }
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        widget.name,
-        style: TextStyle(
-            fontWeight: FontWeight.w600
+    return InkWell(
+      child: ListTile(
+        title: Text(
+          widget.name,
+          style: TextStyle(
+              fontWeight: FontWeight.w600
+          ),
+        ),
+        isThreeLine: false,
+        leading: CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage(widget.userAsset),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.mutualism.toString() + " bạn chung"),
+            (_confirm
+                ? Confirmed1()
+                : UnConfirm1(updateConfirm: _updateConfirm,
+                /*eraseFriendsList: widget.eraseFriendsList,*/ index: widget.index
+            )
+            )
+          ],
         ),
       ),
-      isThreeLine: false,
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundImage: AssetImage(widget.userAsset),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.mutualism.toString() + " bạn chung"),
-          (_confirm
-              ? Confirmed1()
-              : UnConfirm1(updateConfirm: _updateConfirm,
-              /*eraseFriendsList: widget.eraseFriendsList,*/ index: widget.index
-          )
-          )
-        ],
-      ),
+      onTap: () {
+        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+      },
     );
   }
 }
@@ -344,7 +362,7 @@ class UnConfirm1 extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.blue,
+                color: buttonColor,
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(4),
             width: 120,

@@ -1,18 +1,26 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
+import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/navigate.dart';
+import '../search/search.dart';
 import 'components/friend.dart';
 
 class ProfilePage extends StatefulWidget {
   final String type;
   final String id;
+  final String? arriveType;
   const ProfilePage({
     Key? key,
     required this.type,
     required this.id,
+    this.arriveType,
   }) : super(key: key);
 
   @override
@@ -41,9 +49,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigate.popPage(context);
+                          if (widget.arriveType == null) {
+                            Navigate.popPage(context);
+                          }
                         },
-                        icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
+                        icon: widget.arriveType == null ? const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')) : const SizedBox(width: 10,),
                         color: Colors.black,
                         iconSize: 25,
                       ),
@@ -53,7 +63,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigate.pushPage(context, const SearchPage(type: "user",));
+                        },
                         icon: const Icon(Icons.search),
                         color: Colors.black,
                         iconSize: 25,
@@ -75,27 +87,138 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Positioned(
                                       left: 0,
                                       top: 0,
-                                      child: Container(
-                                        color: Colors.blue,
-                                        height: 180,
-                                        child: Image.asset(
-                                          profile.wallAsset,
-                                          height: 180,
-                                          width: MediaQuery.of(context).size.width,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )),
+                                      child: InkWell(
+                                          child: Container(
+                                            color: lightColor,
+                                            height: 180,
+                                            child: Image.asset(
+                                              profile.wallAsset,
+                                              height: 180,
+                                              width: MediaQuery.of(context).size.width,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          onTap: (){
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder: (builder) {
+                                                  return SizedBox(
+                                                    height: 140,
+                                                    child: Column(
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            const SizedBox(width: 15),
+                                                            CircleAvatar(
+                                                              backgroundColor: Colors.grey[350],
+                                                              child: const Icon(IconData(0xe498, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                            ),
+                                                            const SizedBox(width: 10),
+                                                            const Text(
+                                                              "Xem ảnh đại bìa",
+                                                              style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(height: 15),
+
+                                                        Row(
+                                                          children: [
+                                                            const SizedBox(width: 15),
+                                                            CircleAvatar(
+                                                              backgroundColor: Colors.grey[350],
+                                                              child: const Icon(IconData(0xf120, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                            ),
+                                                            const SizedBox(width: 10),
+                                                            const Text(
+                                                              "Chọn ảnh bìa",
+                                                              style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }
+                                            );
+                                          },
+                                      ),
+                                  ),
                                   Positioned(
                                       left: (MediaQuery.of(context).size.width / 2) - 60,
                                       top: 120,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(60),
-                                        child: Image.asset(
-                                          profile.userAsset,
-                                          height: 120,
-                                          width: 120,
+                                      child: InkWell(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(60),
+                                          child: Image.asset(
+                                            profile.userAsset,
+                                            height: 120,
+                                            width: 120,
+                                          ),
                                         ),
-                                      ))
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              builder: (builder) {
+                                                return SizedBox(
+                                                  height: 140,
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const SizedBox(width: 15),
+                                                          CircleAvatar(
+                                                            backgroundColor: Colors.grey[350],
+                                                            child: const Icon(IconData(0xe498, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                          ),
+                                                          const SizedBox(width: 10),
+                                                          const Text(
+                                                            "Xem ảnh đại diện",
+                                                            style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 15),
+                                                      Row(
+                                                        children: [
+                                                          const SizedBox(width: 15),
+                                                          CircleAvatar(
+                                                            backgroundColor: Colors.grey[350],
+                                                            child: const Icon(IconData(0xf120, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                          ),
+                                                          const SizedBox(width: 10),
+                                                          const Text(
+                                                            "Chọn ảnh đại diện",
+                                                            style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                          );
+                                        },
+                                      )
+                                  )
                                 ]
                             ),
                           ),
@@ -122,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: const Color(0xff2177ee),
+                                      color: buttonColor,
                                       borderRadius: BorderRadius.circular(18),
                                     ),
                                     width: 290,
@@ -165,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: widget.type == "other" ? const Color(0xff2177ee) : Colors.grey.shade300,
+                                    color: widget.type == "other" ? buttonColor : Colors.grey.shade300,
                                     borderRadius: BorderRadius.circular(18),
                                   ),
                                   width: 145,
@@ -194,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: widget.type == "other" ? Colors.grey.shade300 : const Color(0xff2177ee),
+                                    color: widget.type == "other" ? Colors.grey.shade300 : buttonColor,
                                     borderRadius: BorderRadius.circular(18),
                                   ),
                                   width: 145,
@@ -250,7 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Row(
                                     children: [
                                       const Icon(
-                                        IconData(0xe6f2, fontFamily: 'MaterialIcons'),
+                                          IconData(0xe6f2, fontFamily: 'MaterialIcons'),
                                         size: 25,
                                         color: Color(0xff80889b),
                                       ),
@@ -429,42 +552,48 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ) : const SizedBox(width: 0, height: 0,),
 
-                          Container(
-                            padding: const EdgeInsets.only(left: 7, top: 7, bottom: 7),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.more_horiz, size: 25,),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    text: TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text:  "Xem thông tin giới thiệu của ",
-                                            style: TextStyle(
+                          InkWell(
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 7, top: 7, bottom: 7),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.more_horiz, size: 25,),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    child: RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text:  "Xem thông tin giới thiệu của ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: profile.name,
+                                              style: const TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.black
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: profile.name,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                        ]
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black,
+                                              ),
+                                            )
+                                          ]
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
+                            onTap: () {
+                              Navigate.pushPage(context, DetailProfile(profile: profile, type: widget.type,));
+                            },
                           ),
+
 
                           const Divider(color: Colors.grey,),
 
@@ -493,76 +622,57 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xffeff0f1),
-                                        borderRadius: BorderRadius.circular(18),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: const Color(0xffeff0f1)
-                                                .withOpacity(.4),
-                                            blurRadius: 5.0,
-                                            offset: const Offset(0, 10),
-                                            // shadow direction: bottom right
-                                          )
-                                        ]),
-                                    width: (MediaQuery.of(context).size.width /
-                                        2) -
-                                        50,
-                                    height: 38,
-                                    child: const Center(
-                                      child: Text(
-                                        "Xem tất cả bạn bè",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
+                                  InkWell(
+                                    child: Container(
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xffeff0f1),
+                                                borderRadius: BorderRadius.circular(18),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: const Color(0xffeff0f1)
+                                                        .withOpacity(.4),
+                                                    blurRadius: 5.0,
+                                                    offset: const Offset(0, 10),
+                                                    // shadow direction: bottom right
+                                                  )
+                                                ]
+                                              ),
+                                              width: (MediaQuery.of(context).size.width / 2) - 50,
+                                              height: 38,
+                                              child: const Center(
+                                                child: Text(
+                                                  "Xem tất cả bạn bè",
+                                                  style: TextStyle(color: Colors.black),
+                                                ),
+                                              ),
                                     ),
+                                    onTap: () {
+                                      Navigate.pushPage(context, const FriendList());
+                                    },
                                   ),
                                 ],
                               )),
                           Container(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: const [
-                                  Friend(
-                                    firstName: "Tarek",
-                                    lastName: "Loukil",
-                                    userAsset: "assets/profile/tarek.jpg",
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Friend(
-                                    firstName: "Ghassen",
-                                    lastName: "Boughzala",
-                                    userAsset: "assets/profile/ghassen.jpg",
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Friend(
-                                    firstName: "Hassen",
-                                    lastName: "Chouaddah",
-                                    userAsset: "assets/profile/hassen.jpg",
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Friend(
-                                    firstName: "Aziz",
-                                    lastName: "Ammar",
-                                    userAsset: "assets/profile/aziz.jpg",
-                                  ),
-                                ],
-                              ),
+                            width: MediaQuery.of(context).size.width,
+                            height: 170,
+                            child: profile.friends!.isNotEmpty ? ListView.separated(
+                                shrinkWrap: true,
+                                //physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Friend(userAsset: profile.friends![index].userAsset, name: profile.friends![index].name);
+                                },
+                                separatorBuilder: (BuildContext context, int index) {
+                                  return const SizedBox(width: 5);
+                                },
+                                itemCount: min(4, profile.friends!.length)
+                            ) : const SizedBox(width: 0, height: 0)
                             ),
                         ],
                       ),
                     )
                 ),
-
-
               ],
             );
 

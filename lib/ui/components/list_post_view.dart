@@ -54,7 +54,7 @@ Widget buildlist(Future<List<PostData>> listpost,BuildContext context) {
                                 width: SizeConfig.screenWidth/2.74,           /// 150.0
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(
+                                    image: NetworkImage(
                                         "${food.outstandingIMGURL}"),
                                     fit: BoxFit.cover,
                                   ),

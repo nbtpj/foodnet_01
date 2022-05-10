@@ -5,6 +5,9 @@ import 'package:foodnet_01/ui/screens/chat/widgets/recent_chat.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
 import 'package:foodnet_01/ui/screens/nav_bar.dart';
 
+import '../../../util/navigate.dart';
+import '../search/search.dart';
+
 
 class Chat extends StatefulWidget {
   @override
@@ -42,7 +45,7 @@ class _ChatScreenState extends State<Chat> {
               Icons.search,
             ),
             onPressed: (){
-              // TODO: search user
+              Navigate.pushPage(context, const SearchPage(type: "chat",));
             },
           ),
         ],

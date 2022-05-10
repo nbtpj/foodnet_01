@@ -53,7 +53,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
                       child: Column(
                         children: <Widget>[
                           CircleAvatar( radius: 35.0,
-                            backgroundImage: AssetImage(favorites[index].imgURL),
+                            backgroundImage: NetworkImage(favorites[index].imgURL),
                           ),
                           Text(favorites[index].name, style:
                           const   TextStyle(

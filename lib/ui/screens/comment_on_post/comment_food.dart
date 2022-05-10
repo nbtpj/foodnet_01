@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/media_viewer.dart';
+import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
+import 'package:foodnet_01/ui/screens/comment_on_post/edit_area.dart';
 import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:image_picker/image_picker.dart';
+
 
 class CommentFood extends StatefulWidget {
   PostData food;
@@ -14,48 +21,24 @@ class CommentFood extends StatefulWidget {
 
 class _CommentFoodState extends State<CommentFood> {
   @override
-  Widget build(BuildContext context) {
-    final editor = TextEditingController();
-    return Scaffold(
-      // appBar: header(context, titleText: "Comments"),
-      body: Column(
-        children: <Widget>[
-          const ArrowBack(),
-          Expanded(
-              child: ListView.builder(
-            reverse: true,
-            itemBuilder: (context, index) {
-              CommentData data = widget.food.get_a_previous_comment();
-              return Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(data.comment),
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(data.avatarUrl),
-                    ),
-                    subtitle: Text(timeago.format(data.timestamp)),
-                  ),
-                  const Divider(),
-                ],
-              );
-            },
-          )),
-          const Divider(),
-          ListTile(
-            title: TextFormField(
-              controller: editor,
-              decoration: const InputDecoration(labelText: "Write a comment..."),
-            ),
-            trailing: OutlinedButton(
-              onPressed: () {
-                editor.clear();
-              },
-              // borderSide: BorderSide.none,
-              child: const Text("Post"),
-            ),
-          ),
-        ],
-      ),
+  Widget build(BuildContext context) {;
+    return  Scaffold(
+        body:
+        Column(
+          children: <Widget>[
+            ArrowBack(),
+            Expanded(
+                child: ListView.builder(
+                  reverse: true,
+                  itemBuilder: (context, index) {
+                    CommentData data = widget.food.get_a_previous_comment();
+                    return CommentComponent(comment: data,isNet: false,);
+                  },
+                )),
+            const Divider(),
+            EditComment(),
+          ]
+      )
     );
   }
 }
