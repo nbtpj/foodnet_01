@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ReviewStars extends StatefulWidget {
   PostData food;
@@ -39,16 +41,6 @@ class _ReviewStarsState extends State<ReviewStars> {
                         fontWeight: FontWeight.bold,
                         fontSize: SizeConfig.screenHeight / 45.54),
                   ),
-
-                  /// 15.0
-                  // Padding(
-                  //   padding:
-                  //       EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
-                  //
-                  //   /// 8.0
-                  //   child: Text("${widget.food.get_num_rate()} Reviews",
-                  //       style: TextStyle(color: Colors.black26)),
-                  // )
                 ],
               ),
               Row(
@@ -84,7 +76,19 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(10)),
               ),
-              Row(
+              widget.food.get_location_name() == null ?
+              SizedBox.shrink():
+              GestureDetector(
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Discovery(init_state: CameraPosition(
+                            target: widget.food.positions(),
+                            zoom: 16,
+                          ),)));
+                },
+                child: Row(
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
@@ -98,7 +102,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                         ),
                       ),
                       Text(
-                        widget.food.get_location_name(),
+                        widget.food.get_location_name()??"",
                         style: TextStyle(
                             color: freeDelivery,
                             fontWeight: FontWeight.bold,
@@ -108,7 +112,7 @@ class _ReviewStarsState extends State<ReviewStars> {
 
                       /// 16
                     ],
-                  )
+                  ))
             ],
           ),
         )

@@ -11,15 +11,15 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class MediaAsset extends StatefulWidget {
+class MediaWidget extends StatefulWidget {
   late String url;
   late bool isNet;
 
-  MediaAsset({Key? key, required this.url, this.isNet = true})
+  MediaWidget({Key? key, required this.url, this.isNet = true})
       : super(key: key);
 
   @override
-  State<MediaAsset> createState() {
+  State<MediaWidget> createState() {
     switch (file_type(url)) {
       case 'mp4':
         return _VideoState();
@@ -29,7 +29,7 @@ class MediaAsset extends StatefulWidget {
   }
 }
 
-class _ImgState extends State<MediaAsset> {
+class _ImgState extends State<MediaWidget> {
   static const String placeholder = 'assets/food/food.webp';
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _ImgState extends State<MediaAsset> {
   }
 }
 
-class _VideoState extends State<MediaAsset> {
+class _VideoState extends State<MediaWidget> {
   late VideoPlayerController _controller;
 
   @override

@@ -1,6 +1,7 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 
+
 List<LatLng> position_list = [const LatLng(37.42796133580664, -122.085749655962),
   const LatLng(37.42484642575639, -122.08309359848501),
   const LatLng(37.42381625902441, -122.0928531512618),
@@ -21,15 +22,13 @@ class LazyLoadData {
 }
 
 class CommentData {
-  late String username;
-  late String avatarUrl;
+  late String userID;
   late String comment;
   late DateTime timestamp;
   late List<String> mediaUrls;
 
   CommentData({
-    this.username = "Tuan",
-    this.avatarUrl = "assets/friend/tarek.jpg",
+    this.userID = "current_user",
     this.comment = "nice",
     this.mediaUrls = const [
       "assets/food/HeavenlyPizza.jpg",
@@ -37,8 +36,15 @@ class CommentData {
     ],
     required this.timestamp,
   });
+  String get username {
+    return "tuan";
+  }
+  String get avatarUrl {
+    return "assets/friend/tarek.jpg";
+  }
 
   Future<bool> post() async {
+    /// todo: hàm này cần gán thêm các username người comment vào, userID
     return true;
   }
 
@@ -49,6 +55,7 @@ class CommentData {
 
 
 class PostData implements LazyLoadData {
+  // static const DateTime adate = const DateTime(2021);
   String id;
   late String title;
   late String description;
@@ -56,9 +63,10 @@ class PostData implements LazyLoadData {
   late String outstandingIMGURL;
   int? price;
   late bool isGood;
+  late int n_upvote, n_downvote, n_rate, react;
+  String? add_name;
   LatLng? position;
-  DateTime datetime = DateTime.now();
-  int react = randomNumberGenerator.nextInt(2) - 1;
+  DateTime? datetime = DateTime(2021);
   late List<String> cateList; // chứa string ID của các post category
   PostData({
     this.id = "new",
@@ -82,6 +90,13 @@ class PostData implements LazyLoadData {
     this.isGood = true,
     this.react = 1,
     this.cateList = const [],
+    this.add_name,
+    this.n_downvote = 0,
+    this.n_upvote = 0,
+    this.n_rate = 0,
+    this.datetime,
+    this.position,
+
   });
 
   int i = 0;
@@ -97,9 +112,7 @@ class PostData implements LazyLoadData {
   void loadMore() {
     // TODO: implement loadMore
   }
-  CommentData get_a_previous_comment() {
-    return CommentData(timestamp: DateTime.now());
-  }
+
 
   int get_num_rate() {
     return 0;
@@ -116,8 +129,8 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  String get_location_name() {
-    return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";
+  String? get_location_name() {
+    return add_name;
   }
 
   int get_react() {
@@ -144,11 +157,16 @@ class PostData implements LazyLoadData {
 
   PostData.fromJson(Map<String, Object?> json) : this(
       id: json['id']! as String,
+      title: json['title'] as String,
       description: json['description']! as String,
       cateList: (json['cateList'] as List).map((e) => e as String).toList(),
       price: json['price']! as int,
       isGood: json['isGood']! as bool,
       react: json['react']! as int,
+      // n_downvote: json['n_downvote']! as int,
+      // n_rate: json['n_rate']! as int,
+      // n_upvote: json['n_upvote']! as int,
+      // datetime: json['datetime']! as DateTime,
       outstandingIMGURL: json['outstandingIMGURL']! as String
   );
 

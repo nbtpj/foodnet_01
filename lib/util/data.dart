@@ -2,26 +2,25 @@ import 'package:tuple/tuple.dart';
 import 'entities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
 CollectionReference<PostData> postsRef =
-FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
-    fromFirestore: (snapshot, _) {
-      var data = snapshot.data()!;
-      data["id"] = snapshot.id;
-      return PostData.fromJson(data);
-    },
-    toFirestore: (postData, _) => postData.toJson());
+    FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
+        fromFirestore: (snapshot, _) {
+          var data = snapshot.data()!;
+          data["id"] = snapshot.id;
+          return PostData.fromJson(data);
+        },
+        toFirestore: (postData, _) => postData.toJson());
 
 CollectionReference<PostData> categoriesRef =
-FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
-    fromFirestore: (snapshot, _) {
-      var data = snapshot.data()!;
-      data["id"] = snapshot.id;
-      return PostData.categoryFromJson(data);
-    },
-    toFirestore: (postData, _) => postData.categoryToJson());
+    FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
+        fromFirestore: (snapshot, _) {
+          var data = snapshot.data()!;
+          data["id"] = snapshot.id;
+          return PostData.categoryFromJson(data);
+        },
+        toFirestore: (postData, _) => postData.categoryToJson());
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -46,105 +45,17 @@ Stream<PostData> getPosts(Filter filter) async* {
     }
   }
 }
+
 Future<PostData?> get_post(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
   // TODO: implement get_post
   return null;
 }
 
-Stream<PostData> get_posts(Filter filter) async* {
-  /// lấy 1 danh sách post theo điều kiệu lọc
-  /// trả về dạng stream
-  // TODO: implement get_posts
-  if(filter.search_type! =="food") {
-    yield PostData(
-        id: "1",
-        title: "Chicken Curry Pasta",
-        outstandingIMGURL: "assets/food/ChickenCurryPasta.jpg",
-        isGood: false,
-        cateList: ["Chicken"],
-        price: 22);
-    yield PostData(
-        id: '2',
-        title: "Explosion Burger",
-        outstandingIMGURL: "assets/food/ExplosionBurger.jpg",
-        cateList: ["Fast Food"],
-        price: 15);
-    yield PostData(
-        id: '3',
-        title: "Grilled Chicken",
-        outstandingIMGURL: "assets/food/GrilledChicken.jpg",
-        cateList: ["Chicken"],
-        isGood:false,
-        price: 30);
-    yield PostData(
-        id: '4',
-        title: "Grilled Fish",
-        outstandingIMGURL: "assets/food/GrilledFish.jpg",
-        cateList: ["Fish"],
-        price: 27);
-    yield PostData(
-        id: "5",
-        title: "Heavenly Pizza",
-        outstandingIMGURL: "assets/food/HeavenlyPizza.jpg",
-        cateList: ["Fast Food"],
-        price: 24);
-    yield PostData(
-        id: '6',
-        title: "Mandarin Pancake",
-        outstandingIMGURL: "assets/food/MandarinPancake.jpg",
-        cateList: ["Bakery"],
-        price: 19);
-    yield PostData(
-        id: '7',
-        title: "Organic Mandarin",
-        outstandingIMGURL: "assets/food/OrganicMandarin.jpg",
-        cateList: ["Fruit"],
-        price: 15);
-    yield PostData(
-        id: '8',
-        title: "Organic Orange",
-        outstandingIMGURL: "assets/food/OrganicOrange.jpg",
-        cateList: ["Fruit"],
-        price: 12);
-    yield PostData(
-        id: '9',
-        title: "Raspberries Cake",
-        outstandingIMGURL: "assets/food/RaspberriesCake.jpg",
-        cateList: ["Bakery"],
-        price: 28);
+Stream<CommentData> fetch_comments(String post_id, int limit) async* {
+  for (var i = 0; i < limit+1; i++) {
+    yield CommentData(timestamp: DateTime.now());
   }
-  if(filter.search_type! =="category"){
-    yield PostData(
-        id: "1",
-        title: "Chicken",
-        outstandingIMGURL: "assets/category/chicken.png");
-    yield PostData(
-        id: '2',
-        title: "Bakery",
-        outstandingIMGURL: "assets/category/bakery.png");
-    yield PostData(
-        id: '3',
-        title: "Fast Food",
-        outstandingIMGURL: "assets/category/fastfood.png");
-    yield PostData(
-        id: '4',
-        title: "Fish",
-        outstandingIMGURL: "assets/category/fish.png");
-    yield PostData(
-        id: "5",
-        title: "Fruit",
-        outstandingIMGURL: "assets/category/fruit.png");
-    yield PostData(
-        id: '6',
-        title: "Soup",
-        outstandingIMGURL: "assets/category/soup.png");
-    yield PostData(
-        id: '7',
-        title: "Vegetable",
-        outstandingIMGURL: "assets/category/vegetable.png");
-  }
-  // ver 1: giả dữ liệu local
 }
 
 Future<FriendData?> get_friend(String id) async {
@@ -152,6 +63,7 @@ Future<FriendData?> get_friend(String id) async {
   // TODO: implement get_user
   return null;
 }
+
 Future<UserData?> get_user(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
@@ -164,6 +76,7 @@ Iterable<UserData> get_users(Filter filter) sync* {
   // TODO: implement get_users
   yield UserData();
 }
+
 Stream<FriendData> get_friends(Filter filter) async* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
@@ -257,7 +170,6 @@ Stream<FriendData> get_friends(Filter filter) async* {
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
-
   }
 
   if (filter.search_type! == "friend_suggestions") {
@@ -304,70 +216,37 @@ Stream<FriendData> get_friends(Filter filter) async* {
   }
 }
 
-
-Stream<SearchData> getSearchData(Filter filter) async*{
+Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {
     yield SearchData(
-        id: "1",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
     yield SearchData(
       id: "2",
       name: "Minh Quang",
       //asset: "assets/friend/tarek.jpg"
     );
     yield SearchData(
-        id: "3",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "4",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "5",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "6",
-        name: "Minh Quang",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "7",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "8",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
-  } if (filter.search_type == "user" && filter.keyword == "a") {
+        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+  }
+  if (filter.search_type == "user" && filter.keyword == "a") {
     yield SearchData(
-        id: "1",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "2",
-        name: "Minh Quang",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "3",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "4",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
   }
 }
 
@@ -380,8 +259,13 @@ Future<ProfileData>? getProfile(String id) async {
         userAsset: "assets/profile/dhia.jpg",
         wallAsset: "assets/profile/first.png",
         friendsNumber: 777,
-        works: ["Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"],
-        schools: ["Trường ĐH Công Nghệ - ĐHQGHN", "THPT Chuyên Đại học Sư Phạm"],
+        works: [
+          "Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"
+        ],
+        schools: [
+          "Trường ĐH Công Nghệ - ĐHQGHN",
+          "THPT Chuyên Đại học Sư Phạm"
+        ],
         dayOfBirth: "11/10/2001",
         gender: "Nam",
         location: "Hà Nội",
@@ -391,23 +275,19 @@ Future<ProfileData>? getProfile(String id) async {
             name: "Tarek Loukil",
             userAsset: "assets/profile/tarek.jpg",
           ),
-
           FriendData(
             name: "Ghassen Boughzala",
             userAsset: "assets/profile/ghassen.jpg",
           ),
-
           FriendData(
             name: "Hassen Chouaddah",
             userAsset: "assets/profile/hassen.jpg",
           ),
-
           FriendData(
             name: "Aziz Ammar",
             userAsset: "assets/profile/aziz.jpg",
           ),
-        ]
-    );
+        ]);
   } else {
     return ProfileData(
         id: "2",
@@ -417,8 +297,10 @@ Future<ProfileData>? getProfile(String id) async {
         mutualism: 25,
         location: "Hải Dương",
         gender: "Nam",
-        schools: ["Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU", "THPT Thanh Hà, Thanh Hà, Hải Dương"]
-    );
+        schools: [
+          "Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU",
+          "THPT Thanh Hà, Thanh Hà, Hải Dương"
+        ]);
   }
 }
 
@@ -429,7 +311,7 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
   yield null;
 }
 
-String file_type(String url){
+String file_type(String url) {
   var fileName = (url.split('/').last);
   return fileName.split('.').last.toLowerCase();
 }

@@ -16,7 +16,7 @@ class FoodDescription extends StatelessWidget {
         /// 15.0
         child: Column(
           children: [
-            for(String element in food.mediaUrls) MediaAsset(url: element,isNet: true,),
+            for(String element in food.mediaUrls) MediaWidget(url: element,isNet: true,),
             Text(
               food.description,
               style: const TextStyle(color: Colors.black38),

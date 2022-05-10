@@ -16,26 +16,28 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Discovery extends StatefulWidget {
-  const Discovery({Key? key}) : super(key: key);
+  late CameraPosition init_state;
+
+  Discovery(
+      {Key? key,
+      this.init_state = const CameraPosition(
+        target: LatLng(20.8861024, 106.4049451),
+        zoom: 14.4746,
+      )})
+      : super(key: key);
 
   @override
   _DiscoveryState createState() => _DiscoveryState();
 }
 
 class _DiscoveryState extends State<Discovery> {
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng( 20.8861024, 106.4049451),
-    zoom: 14.4746,
-  );
-
   final Set<Marker> _markers = {};
   late GoogleMapController _controller;
   bool following = true;
-  List<PostData> current_lists = [];
 
   Future<List<PostData>> fetchFoodOnThisLocation() async {
     var vision_bounds = await _controller.getVisibleRegion();
-    return get_posts(Filter(search_type: 'food', vision_bounds: vision_bounds))
+    return getPosts(Filter(search_type: 'food', vision_bounds: vision_bounds))
         .toList();
   }
 
@@ -43,10 +45,8 @@ class _DiscoveryState extends State<Discovery> {
     return FutureBuilder<List<PostData>>(
       future: fetchFoodOnThisLocation(),
       builder: (context, snapshot) {
-        // debugPrint("this is a log " +snapshot.toString());
         if (snapshot.hasData) {
           var foodList = snapshot.data ?? [];
-          // debugPrint("this is a log " + foodList.toString());
           for (var element in foodList) {
             createMarker(context, element);
           }
@@ -61,15 +61,13 @@ class _DiscoveryState extends State<Discovery> {
                 var food = foodList[index];
                 return GestureDetector(
                   onTap: () async {
-                    setState(() {
-                      following = false;
-                    });
-                    _controller.moveCamera(CameraUpdate.newLatLng(
-                        food.position ?? const LatLng(0.347596, 32.582520)));
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PostDetailView(food: food)));
+                    if (food.position != null){
+                      setState(() {
+                        following = false;
+                      });
+                      _controller.moveCamera(CameraUpdate.newLatLng(
+                          food.position ?? const LatLng(0.347596, 32.582520)));
+                    }
                   },
                   onDoubleTap: () {
                     Navigator.push(
@@ -124,8 +122,7 @@ class _DiscoveryState extends State<Discovery> {
                                   /// 150.0
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${food.outstandingIMGURL}"),
+                                      image: NetworkImage(food.outstandingIMGURL),
                                       fit: BoxFit.cover,
                                     ),
                                     borderRadius: const BorderRadius.only(
@@ -241,14 +238,13 @@ class _DiscoveryState extends State<Discovery> {
           ? _controller.moveCamera(CameraUpdate.newLatLng(
               LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)))
           : 1;
-      debugPrint("this is a log :current position is " +loc.toString());
+      debugPrint("this is a log :current position is " + loc.toString());
     });
-
 
     return Scaffold(
         body: Stack(children: [
       GoogleMap(
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: widget.init_state,
         markers: _markers,
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
@@ -266,51 +262,6 @@ class _DiscoveryState extends State<Discovery> {
         right: 20,
         child: _buildFoodList(context),
       ),
-      // Positioned(
-      //   bottom: 50,
-      //   left: 20,
-      //   right: 20,
-      //   child: Container(
-      //       width: MediaQuery.of(context).size.width,
-      //       height: 120,
-      //       decoration: BoxDecoration(
-      //           color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      //       child: ListView.builder(
-      //         scrollDirection: Axis.horizontal,
-      //         itemCount: _contacts.length,
-      //         itemBuilder: (context, index) {
-      //           return GestureDetector(
-      //             onTap: () {
-      //               _controller.moveCamera(
-      //                   CameraUpdate.newLatLng(_contacts[index]["position"]));
-      //             },
-      //             child: Container(
-      //               width: 100,
-      //               height: 100,
-      //               margin: const EdgeInsets.only(right: 10),
-      //               child: Column(
-      //                 mainAxisAlignment: MainAxisAlignment.center,
-      //                 children: [
-      //                   Image.asset(
-      //                     _contacts[index]['image'],
-      //                     width: 60,
-      //                   ),
-      //                   const SizedBox(
-      //                     height: 10,
-      //                   ),
-      //                   Text(
-      //                     _contacts[index]["name"],
-      //                     style: const TextStyle(
-      //                         color: Colors.black, fontWeight: FontWeight.w600),
-      //                   )
-      //                 ],
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //       )),
-      // ),
-
       FloatingActionButton(
         child: Icon(
           following ? Icons.share_location : Icons.not_listed_location,
@@ -327,25 +278,26 @@ class _DiscoveryState extends State<Discovery> {
 
   createMarker(BuildContext context, PostData food) async {
     // if (food.position != null) {
-      Marker marker = Marker(
+    Marker marker = Marker(
         markerId: MarkerId(food.id),
         position: food.position ?? const LatLng(0.347596, 32.582520),
         icon: await _getAssetIcon(context, food.outstandingIMGURL)
             .then((value) => value),
         infoWindow: InfoWindow(
           title: food.title,
-          snippet: timeago.format(food.datetime),
+          snippet: food.datetime != null
+              ? timeago.format(food.datetime ?? DateTime.now())
+              : "unknown",
         ),
-        onTap: (){
+        onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => PostDetailView(food: food)));
-        }
-      );
-      setState(() {
-        _markers.add(marker);
-      });
+        });
+    setState(() {
+      _markers.add(marker);
+    });
     // }
   }
 
@@ -367,9 +319,12 @@ class _DiscoveryState extends State<Discovery> {
         img = NetworkImage(icon);
       }
     }
-    int icon_size = min(SizeConfig.screenWidth~/10,SizeConfig.screenHeight~/10);
+    int icon_size =
+        min(SizeConfig.screenWidth ~/ 10, SizeConfig.screenHeight ~/ 10);
 
-    ResizeImage(img, width: icon_size, height: icon_size, allowUpscaling: true).resolve(config).addListener(ImageStreamListener((ImageInfo image, bool sync) async {
+    ResizeImage(img, width: icon_size, height: icon_size, allowUpscaling: true)
+        .resolve(config)
+        .addListener(ImageStreamListener((ImageInfo image, bool sync) async {
       final ByteData? bytes =
           await image.image.toByteData(format: ImageByteFormat.png);
       final BitmapDescriptor bitmap =

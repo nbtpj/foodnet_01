@@ -26,7 +26,7 @@ class _EditFoodState extends State<EditFood> {
               child: ListView.builder(
                 reverse: true,
                 itemBuilder: (context, index) {
-                  CommentData data = widget.food.get_a_previous_comment();
+                  CommentData data = CommentData(timestamp: DateTime.now());
                   return Column(
                     children: <Widget>[
                       ListTile(
@@ -41,7 +41,7 @@ class _EditFoodState extends State<EditFood> {
                         ),
                         subtitle: Text(timeago.format(data.timestamp)),
                       ),
-                      for(String element in data.mediaUrls) MediaAsset(url: element,),
+                      for(String element in data.mediaUrls) MediaWidget(url: element,),
                       const Divider(),
                     ],
                   );
