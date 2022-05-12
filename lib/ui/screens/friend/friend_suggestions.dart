@@ -24,7 +24,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
   Widget build(BuildContext context) {
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
-      return get_friends(Filter(search_type: "friend_suggestions")).toList();
+      return getFriends(Filter(search_type: "friend_suggestions"), getMyProfileId()).toList();
     }
     return Scaffold(
       body: Column(

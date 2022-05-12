@@ -35,7 +35,7 @@ class _DiscoveryState extends State<Discovery> {
 
   Future<List<PostData>> fetchFoodOnThisLocation() async {
     var vision_bounds = await _controller.getVisibleRegion();
-    return get_posts(Filter(search_type: 'food', vision_bounds: vision_bounds))
+    return getPosts(Filter(search_type: 'food', vision_bounds: vision_bounds))
         .toList();
   }
 

@@ -25,7 +25,9 @@ class _FriendsState extends State<Friends> {
 
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
-    return get_friends(Filter(search_type: "friend_invitations")).toList();
+    return getFriends(
+              Filter(search_type: "friend_invitations"), getMyProfileId()
+          ).toList();
   }
 
   @override

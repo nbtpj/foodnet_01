@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 
@@ -97,15 +99,15 @@ class PostData implements LazyLoadData {
   void loadMore() {
     // TODO: implement loadMore
   }
-  CommentData get_a_previous_comment() {
+  CommentData getPreviousComment() {
     return CommentData(timestamp: DateTime.now());
   }
 
-  int get_num_rate() {
+  int getNumRate() {
     return 0;
   }
 
-  List<List<String>> get_features() {
+  List<List<String>> getFeatures() {
     return [
       ["200+", "Calories"],
       ["%10", "Fat"],
@@ -116,28 +118,21 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  String get_location_name() {
+  String getLocationName() {
     return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";
   }
 
-  int get_react() {
+  int getReact() {
     return react;
   }
 
-  void change_react() {
+  void changeReact() {
     react += 1;
     if (react > 1) {
       react = -1;
     }
   }
 
-  int get_upvote_rate() {
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
-  }
-
-  int get_downvote_rate() {
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
-  }
   int getUpvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
 
   int getDownvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
@@ -149,7 +144,8 @@ class PostData implements LazyLoadData {
       price: json['price']! as int,
       isGood: json['isGood']! as bool,
       react: json['react']! as int,
-      outstandingIMGURL: json['outstandingIMGURL']! as String
+      outstandingIMGURL: json['outstandingIMGURL']! as String,
+      title: json['title']! as String
   );
 
   PostData.categoryFromJson(Map<String, Object?> json) : this(
@@ -212,6 +208,22 @@ class FriendData implements LazyLoadData {
   void loadMore() {
     // TODO: implement loadMore
   }
+
+  FriendData.fromJson(Map<String, Object?> json) : this(
+    id: json["id"]! as String,
+    name: json["name"]! as String,
+    userAsset: json["userAsset"] as String,
+    mutualism: 0
+  );
+
+  Map<String, Object?> toJson() {
+    return {
+      if (id != null) "id": id,
+      "name": name,
+      if (time != null) "time": time,
+      "userAsset": userAsset
+    };
+  }
 }
 
 class ProfileData {
@@ -220,14 +232,14 @@ class ProfileData {
   String userAsset;
   String wallAsset;
   int? mutualism;
-  int? friendsNumber;
+  int friendsNumber = 0;
   String? dayOfBirth;
   String? gender;
   String? location;
   List<String>? works;
   List<String>? schools;
   List<String>? favorites;
-  List<FriendData>? friends;
+  List<String>? friendReferences;
 
   ProfileData({
     this.id,
@@ -235,21 +247,54 @@ class ProfileData {
     required this.userAsset,
     required this.wallAsset,
     this.mutualism,
-    this.friendsNumber,
+    this.friendsNumber = 0,
     this.dayOfBirth,
     this.gender,
     this.location,
     List<String>? works,
     List<String>? schools,
     List<String>? favorites,
-    List<FriendData> ? friends,
+    List<String>? friendReferences,
   }) {
     this.schools = schools ?? [];
     this.works = works ?? [];
     this.favorites = favorites ?? [];
-    this.friends = friends ?? [];
+    this.friendReferences = friendReferences ?? [];
   }
 
+
+  ProfileData.fromJson(Map<String, Object?> json) : this(
+    id: json["id"]! as String,
+    name: json["name"]! as String,
+    userAsset: json["userAsset"]! as String,
+    wallAsset: json["wallAsset"]! as String,
+    dayOfBirth: (json["dob"]! as Timestamp).toDate().toString(),
+    gender: json["gender"]! as String,
+    location: json["location"] as String,
+    works: (json["works"] as List).map((e) => e as String).toList(),
+    schools: (json["schools"] as List).map((e) => e as String).toList(),
+    favorites: (json["favorites"] as List).map((e) => e as String).toList(),
+    friendReferences: (json["friends"]! as List).map((e) => e.path as String).toList(),
+    friendsNumber: (json["friends"] as List).length
+    // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
+  );
+
+  Map<String, Object?> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "userAsset": userAsset,
+      "wallAsset": wallAsset,
+      "dob": dayOfBirth,
+      "gender": gender,
+      "location": location,
+      "works": works,
+      "schools": schools,
+      "favorites": favorites,
+      "friends": friendReferences,
+      "friendsNumber": friendsNumber
+    };
+  }
 }
 class SearchData implements LazyLoadData {
   String? id;

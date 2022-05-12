@@ -31,7 +31,7 @@ class _CommentFoodState extends State<CommentFood> {
                 child: ListView.builder(
                   reverse: true,
                   itemBuilder: (context, index) {
-                    CommentData data = widget.food.get_a_previous_comment();
+                    CommentData data = widget.food.getPreviousComment();
                     return CommentComponent(comment: data,isNet: false,);
                   },
                 )),
