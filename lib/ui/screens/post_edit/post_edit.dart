@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/detail_widget.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/food_image.dart';
+import 'package:foodnet_01/ui/screens/post_edit/widgets/detail_widget.dart';
+import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
-class PostDetailView extends StatefulWidget {
+class PostEditView extends StatefulWidget {
   PostData food;
-  PostDetailView({required this.food});
+  PostEditView({required this.food});
 
   @override
-  _PostDetailView createState() => _PostDetailView();
+  _PostEditView createState() => _PostEditView();
 }
 
-class _PostDetailView extends State<PostDetailView> {
+class _PostEditView extends State<PostEditView> {
 
   @override
   Widget build(BuildContext context) {

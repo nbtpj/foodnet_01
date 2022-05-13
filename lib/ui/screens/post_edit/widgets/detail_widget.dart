@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/post_detail/components/features_food.dart';
-import 'package:foodnet_01/ui/screens/post_detail/components/review.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/addtocart_button.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/food_description.dart';
-import 'package:foodnet_01/ui/screens/post_detail/widgets/increase_decrease_button.dart';
+import 'package:foodnet_01/ui/screens/post_edit//components/features_food.dart';
+import 'package:foodnet_01/ui/screens/post_edit/widgets/food_description.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'food_name.dart';
@@ -54,10 +51,8 @@ class _DetailWidgetState extends State<DetailWidget> {
 
                   /// 20.0
                   FoodName(food: widget.food,),
-                  ReviewStars(food: widget.food),
                   FeaturesFood(food: widget.food,),
                   FoodDescription(food: widget.food,),
-                  IncreaseDecrease(food: widget.food),
                   // AddToCartButton(food: widget.food)
                 ]
               : [
@@ -78,7 +73,6 @@ class _DetailWidgetState extends State<DetailWidget> {
 
                   /// 20.0
                   FoodName(food: widget.food,),
-                  ReviewStars(food: widget.food),
                   FeaturesFood(food: widget.food,),
                   FoodDescription(food: widget.food,),
                 ],

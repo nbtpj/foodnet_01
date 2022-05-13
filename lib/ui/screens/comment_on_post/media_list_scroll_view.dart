@@ -1,10 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class MediaList extends StatefulWidget {
-  List<MediaWidget> children;
+  List<Widget> children;
   MediaList({Key? key, required this.children}) : super(key: key);
 
   @override

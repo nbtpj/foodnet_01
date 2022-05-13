@@ -13,7 +13,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class MediaWidget extends StatefulWidget {
   late String url;
-  late bool isNet;
+  bool? isNet;
 
   MediaWidget({Key? key, required this.url, this.isNet = true})
       : super(key: key);
@@ -31,29 +31,46 @@ class MediaWidget extends StatefulWidget {
 
 class _ImgState extends State<MediaWidget> {
   static const String placeholder = 'assets/food/food.webp';
+
   @override
   Widget build(BuildContext context) {
-    if(!widget.isNet){
-      try{
-         var m = File(widget.url);
-         return Image.file(
-           File(widget.url),
-           fit: BoxFit.cover,
-           errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-               Image.asset(placeholder),
-         );
-      }
-      catch (e){
+    if (widget.isNet == null) {
+      return Image.network(widget.url, fit: BoxFit.cover,
+          errorBuilder: (BuildContext a, Object b, StackTrace? c) {
+        try {
+          var m = File(widget.url);
+          return Image.file(
+            File(widget.url),
+            fit: BoxFit.cover,
+            errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
+                Image.asset(placeholder),
+          );
+        } catch (e) {
+          print("this is an exception ${e.toString()}");
+          return Image.asset(placeholder);
+        }
+      });
+    }
+    if (!widget.isNet!) {
+      try {
+        var m = File(widget.url);
+        return Image.file(
+          File(widget.url),
+          fit: BoxFit.cover,
+          errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
+              Image.asset(placeholder),
+        );
+      } catch (e) {
         print("this is an exception ${e.toString()}");
         return Image.asset(placeholder);
       }
     }
     return Image.network(
-            widget.url,
-            fit: BoxFit.cover,
-            errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-                Image.asset(placeholder),
-          );
+      widget.url,
+      fit: BoxFit.cover,
+      errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
+          Image.asset(placeholder),
+    );
   }
 }
 
@@ -63,11 +80,10 @@ class _VideoState extends State<MediaWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.isNet
+    _controller = widget.isNet!
         ? VideoPlayerController.network(
             widget.url,
             videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-
           )
         : VideoPlayerController.file(
             File(widget.url),
@@ -93,7 +109,7 @@ class _VideoState extends State<MediaWidget> {
     return VisibilityDetector(
         key: ObjectKey(_controller),
         onVisibilityChanged: (visibility) {
-          if (visibility.visibleFraction == 0 && this.mounted) {
+          if (visibility.visibleFraction == 0 && mounted) {
             _controller.pause(); //pausing  functionality
           }
         },

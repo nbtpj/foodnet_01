@@ -51,7 +51,7 @@ class _PopularFoodsState extends State<PopularFoods> {
                                 borderRadius: BorderRadius.circular(30.0),
                                 boxShadow: [
                                   BoxShadow(
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                     blurRadius: 6,
                                     color: Colors.black.withOpacity(0.3),
                                   )
@@ -67,12 +67,12 @@ class _PopularFoodsState extends State<PopularFoods> {
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
                                           image: NetworkImage(
-                                              "${food.outstandingIMGURL}"),
+                                              food.outstandingIMGURL),
                                           fit: BoxFit.cover,
                                         ),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0)),
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: const Radius.circular(30.0),
+                                            topRight: const Radius.circular(30.0)),
                                       ),
                                     ),
                                     Padding(
@@ -81,25 +81,36 @@ class _PopularFoodsState extends State<PopularFoods> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "${food.title}",
+                                        FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                            food.title,
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: SizeConfig.screenHeight/34.15,       /// 20
                                                 fontWeight: FontWeight.w700),
-                                          ),
-                                          Text(
-                                            "${food.cateList.join(',')}",
+                                          )),
+                                          FittedBox(
+                                              fit: BoxFit.fitWidth,
+                                              child: Text(food.getOwner(),
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: SizeConfig.screenHeight / 40,
+                                                      fontFamily: "Roboto"))),
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                            food.cateList.join(','),
                                             style: TextStyle(
                                                 color: Colors.black38,
                                                 fontSize: SizeConfig.screenHeight/42.69,      /// 16
                                                 fontWeight: FontWeight.w400),
-                                          ),
+                                          )),
                                           Padding(
                                             padding:
                                                 EdgeInsets.only(top: SizeConfig.screenHeight/136.6),   /// 5.0
                                             child: Text(
-                                              "\$${food.price}",
+                                              "${food.price}",
                                               style: TextStyle(
                                                   color: buttonColor,
                                                   fontSize: SizeConfig.screenHeight/37.95,    /// 18
@@ -119,12 +130,12 @@ class _PopularFoodsState extends State<PopularFoods> {
                                     width: SizeConfig.screenWidth/8.22,             /// 50.0
                                     decoration: BoxDecoration(
                                         color: buttonColor,
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             bottomRight: Radius.circular(30.0),
                                             topLeft: Radius.circular(30.0),
                                         )
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.shopping_cart_rounded,
                                       color: Colors.white,
                                     ),
@@ -141,7 +152,7 @@ class _PopularFoodsState extends State<PopularFoods> {
           );
         }
         else{
-          return Center();
+          return const Center();
         }
       },
     );

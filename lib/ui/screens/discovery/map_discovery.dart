@@ -136,18 +136,30 @@ class _DiscoveryState extends State<Discovery> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "${food.title}",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize:
+                                      FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            food.title,
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize:
                                                 SizeConfig.screenHeight / 34.15,
 
-                                            /// 20
-                                            fontWeight: FontWeight.w700),
+                                                /// 20
+                                                fontWeight: FontWeight.w700),
+                                          )
                                       ),
-                                      Text(
-                                        "${food.cateList.join(',')}",
+                                      FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(food.getOwner(),
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: SizeConfig.screenHeight / 40,
+                                                      fontFamily: "Roboto"))),
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child:Text(
+                                        food.cateList.join(','),
                                         style: TextStyle(
                                             color: Colors.black38,
                                             fontSize:
@@ -155,7 +167,7 @@ class _DiscoveryState extends State<Discovery> {
 
                                             /// 16
                                             fontWeight: FontWeight.w400),
-                                      ),
+                                      ),),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             top: SizeConfig.screenHeight /

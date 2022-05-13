@@ -192,6 +192,10 @@ class PostData implements LazyLoadData {
       "outstandingIMGURL": outstandingIMGURL
     };
   }
+
+  String getOwner() {
+    return "quang";
+  }
 }
 
 
