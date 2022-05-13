@@ -1,6 +1,8 @@
-import 'package:tuple/tuple.dart';
-import 'entities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tuple/tuple.dart';
+
+import 'entities.dart';
 
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
@@ -21,6 +23,30 @@ CollectionReference<PostData> categoriesRef =
           return PostData.categoryFromJson(data);
         },
         toFirestore: (postData, _) => postData.categoryToJson());
+
+CollectionReference<FriendData> friendsRef(String profileId) {
+  return FirebaseFirestore.instance
+      .collection('friends')
+      .doc(profileId)
+      .collection("profiles")
+      .withConverter(
+          fromFirestore: (snapshot, _) {
+            var data = snapshot.data()!;
+            data["id"] = snapshot.id;
+            return FriendData.fromJson(data);
+          },
+          toFirestore: (friendData, _) => friendData.toJson());
+}
+
+CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
+    .collection('profiles')
+    .withConverter<ProfileData>(
+        fromFirestore: (snapshot, _) {
+          var data = snapshot.data()!;
+          data["id"] = snapshot.id;
+          return ProfileData.fromJson(data);
+        },
+        toFirestore: (profileData, _) => profileData.toJson());
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -46,133 +72,65 @@ Stream<PostData> getPosts(Filter filter) async* {
   }
 }
 
-Future<PostData?> get_post(String id) async {
-  /// hàm lấy một đối tượng PostData dựa trên id
-  // TODO: implement get_post
-  return null;
+String? getMyProfileId() {
+  return FirebaseAuth.instance.currentUser?.uid;
 }
 
-Stream<CommentData> fetch_comments(String post_id, int limit) async* {
-  for (var i = 0; i < limit+1; i++) {
-    yield CommentData(timestamp: DateTime.now());
+Future<ProfileData> getProfile(String id) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  var res = profilesRef.doc(id).get().then((snapshot) {
+    print(snapshot.data()!.toJson());
+    return snapshot.data()!;
+  });
+  return res;
+}
+
+Stream<ProfileData> getProfiles(Filter filter) async* {
+  /// lấy 1 danh sách user theo điều kiệu lọc
+  /// trả về dạng stream
+  // TODO: implement get_users
+  var profileSnapshot = await profilesRef.get();
+  for (var doc in profileSnapshot.docs) {
+    yield doc.data();
   }
 }
 
-Future<FriendData?> get_friend(String id) async {
-  /// hàm lấy một đối tượng UserData dựa trên id
-  // TODO: implement get_user
-  return null;
+Stream<FriendData> getFriend(String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
+  final friendDocumentRef =
+      friendCollectionRef.where("type", isEqualTo: "friends");
+  final firstPage = friendDocumentRef.orderBy("time").limit(4);
+  final friendDocument = await firstPage.get();
+  for (var doc in friendDocument.docs) {
+    yield doc.data();
+  }
 }
 
-Future<UserData?> get_user(String id) async {
-  /// hàm lấy một đối tượng UserData dựa trên id
-  // TODO: implement get_user
-  return null;
-}
-
-Iterable<UserData> get_users(Filter filter) sync* {
-  /// lấy 1 danh sách user theo điều kiệu lọc
-  /// trả về dạng stream
-  // TODO: implement get_users
-  yield UserData();
-}
-
-Stream<FriendData> get_friends(Filter filter) async* {
-  /// lấy 1 danh sách user theo điều kiệu lọc
-  /// trả về dạng stream
-  // TODO: implement get_users
+Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
   if (filter.search_type! == "friend_invitations") {
-    yield FriendData(
-        id: '1',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '2',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '3',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '4',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '5',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '6',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '7',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '8',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '9',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-  }
-
-  if (filter.search_type! == "friend_list") {
-    yield FriendData(
-        id: '1',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '2',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '3',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '4',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '5',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '6',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '7',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '8',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-  }
-
-  if (filter.search_type! == "friend_suggestions") {
+    final invitationDocumentRef =
+        friendCollectionRef
+            .where("type", isEqualTo: "invitations")
+            .orderBy("time");
+    final invitationDocument = await invitationDocumentRef.get();
+    for (var doc in invitationDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_list") {
+    final friendCollectionRef = friendsRef(profileId);
+    final friendDocumentRef =
+      friendCollectionRef
+        .where("type", isEqualTo: "friends")
+        .orderBy("time");
+    final friendDocument = await friendDocumentRef.get();
+    for (var doc in friendDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_suggestions") {
     yield FriendData(
         id: '1',
         name: "Luong Dat",
@@ -247,60 +205,6 @@ Stream<SearchData> getSearchData(Filter filter) async* {
         id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
         id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-  }
-}
-
-Future<ProfileData>? getProfile(String id) async {
-  /// hàm lấy một đối tượng Profile Data dựa trên id
-  if (id == "1") {
-    return ProfileData(
-        id: "1",
-        name: "Lương Đạt",
-        userAsset: "assets/profile/dhia.jpg",
-        wallAsset: "assets/profile/first.png",
-        friendsNumber: 777,
-        works: [
-          "Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"
-        ],
-        schools: [
-          "Trường ĐH Công Nghệ - ĐHQGHN",
-          "THPT Chuyên Đại học Sư Phạm"
-        ],
-        dayOfBirth: "11/10/2001",
-        gender: "Nam",
-        location: "Hà Nội",
-        favorites: ["Bóng đá", "Tình nguyện"],
-        friends: [
-          FriendData(
-            name: "Tarek Loukil",
-            userAsset: "assets/profile/tarek.jpg",
-          ),
-          FriendData(
-            name: "Ghassen Boughzala",
-            userAsset: "assets/profile/ghassen.jpg",
-          ),
-          FriendData(
-            name: "Hassen Chouaddah",
-            userAsset: "assets/profile/hassen.jpg",
-          ),
-          FriendData(
-            name: "Aziz Ammar",
-            userAsset: "assets/profile/aziz.jpg",
-          ),
-        ]);
-  } else {
-    return ProfileData(
-        id: "2",
-        name: "Minh Quang",
-        userAsset: "assets/profile/dhia.jpg",
-        wallAsset: "assets/profile/first.png",
-        mutualism: 25,
-        location: "Hải Dương",
-        gender: "Nam",
-        schools: [
-          "Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU",
-          "THPT Thanh Hà, Thanh Hà, Hải Dương"
-        ]);
   }
 }
 

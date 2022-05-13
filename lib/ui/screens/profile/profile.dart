@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
         future: getProfile(widget.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            ProfileData? profile = snapshot.data;
+            ProfileData profile = snapshot.data!;
             /*if (profile?.schools != null) {
               print(profile?.schools?.length);
             }*/
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         iconSize: 25,
                       ),
                       Text(
-                          profile!.name,
+                          profile.name,
                           style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
@@ -606,16 +606,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
-                                    children: const [
-                                      Text(
+                                    children: [
+                                      const Text(
                                         "Bạn bè",
                                         style: TextStyle(
                                             fontSize: 26,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        "864 (3 bạn chung)",
-                                        style: TextStyle(
+                                        "${profile.friendsNumber} bạn bè",
+                                        style: const TextStyle(
                                           color: Color(0xffacacae),
                                           fontSize: 16,
                                         ),
@@ -652,23 +652,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ],
                               )),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            width: MediaQuery.of(context).size.width,
-                            height: 170,
-                            child: profile.friends!.isNotEmpty ? ListView.separated(
-                                shrinkWrap: true,
-                                //physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Friend(userAsset: profile.friends![index].userAsset, name: profile.friends![index].name);
-                                },
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return const SizedBox(width: 5);
-                                },
-                                itemCount: min(4, profile.friends!.length)
-                            ) : const SizedBox(width: 0, height: 0)
-                            ),
+                          FutureBuilder<List<FriendData>>(
+                              future: getFriend(profile.id!).toList(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  List<FriendData> friendShortList = snapshot.data!;
+                                  return Container(
+                                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 170,
+                                      child: friendShortList.isNotEmpty ? ListView.separated(
+                                          shrinkWrap: true,
+                                          //physics: const NeverScrollableScrollPhysics(),
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return Friend(userAsset: friendShortList[index].userAsset, name: friendShortList[index].name);
+                                          },
+                                          separatorBuilder: (BuildContext context, int index) {
+                                            return const SizedBox(width: 5);
+                                          },
+                                          itemCount: min(4, friendShortList.length)
+                                      ) : const SizedBox(width: 0, height: 0)
+                                  );
+                                } else {
+                                  return const Center();
+                                }
+                              }),
                         ],
                       ),
                     )

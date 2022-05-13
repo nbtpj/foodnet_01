@@ -19,7 +19,7 @@ class _FeaturesFoodState extends State<FeaturesFood> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            for (var feats in widget.food.get_features())
+            for (var feats in widget.food.getFeatures())
               ContainerFeatures(
                   percent_text: feats[0], features_text: feats[1]),
           ],
