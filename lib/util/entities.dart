@@ -47,6 +47,9 @@ class CommentData {
   bool isEmpty() {
     return comment.isEmpty && mediaUrls.isEmpty;
   }
+  String get userID {
+    return "1";
+  }
 }
 
 
@@ -170,6 +173,11 @@ class PostData implements LazyLoadData {
       "outstandingIMGURL": outstandingIMGURL
     };
   }
+
+  String getOwner() {
+    return "quang";
+  }
+
 }
 
 

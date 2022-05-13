@@ -4,7 +4,6 @@ import 'package:foodnet_01/ui/screens/comment_on_post/edit_area.dart';
 import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
-import 'package:foodnet_01/util/global.dart';
 
 class CommentFood extends StatefulWidget {
   PostData food;
@@ -28,7 +27,7 @@ class _CommentFoodState extends State<CommentFood> {
           ],),
       Expanded(
         child: FutureBuilder<List<CommentData>>(
-          future: fetch_comments(widget.food.id, 10).toList(),
+          future: fetch_comments(widget.food.id, 0,10).toList(),
           builder: (BuildContext context,
               AsyncSnapshot<List<CommentData>> snapshot) {
             var listCommend = snapshot.data ?? [];

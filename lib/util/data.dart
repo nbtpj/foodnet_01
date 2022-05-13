@@ -71,7 +71,11 @@ Stream<PostData> getPosts(Filter filter) async* {
     }
   }
 }
-
+Stream<CommentData> fetch_comments(String foodID, int from, int to) async*{
+  for (var i=from; i<to; i++){
+    yield CommentData(timestamp: DateTime.now());
+  }
+}
 String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }

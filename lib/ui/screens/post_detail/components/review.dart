@@ -64,7 +64,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
 
                     /// 8.0
-                    child: Text("${widget.food.get_num_rate()} Reviews",
+                    child: Text("${widget.food.getNumRate()} Reviews",
                         style: TextStyle(color: Colors.black26)),
                   )
                 ],
@@ -76,7 +76,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(10)),
               ),
-              widget.food.get_location_name() == null ?
+              widget.food.getLocationName() == null ?
               SizedBox.shrink():
               GestureDetector(
                 onTap: () async {
@@ -102,7 +102,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                         ),
                       ),
                       Text(
-                        widget.food.get_location_name()??"",
+                        widget.food.getLocationName(),
                         style: TextStyle(
                             color: freeDelivery,
                             fontWeight: FontWeight.bold,

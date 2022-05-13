@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -33,7 +34,7 @@ class Discovery extends StatefulWidget {
 class _DiscoveryState extends State<Discovery> {
   final Set<Marker> _markers = {};
   late GoogleMapController _controller;
-  bool following = true;
+  bool following = false;
 
   Future<List<PostData>> fetchFoodOnThisLocation() async {
     var vision_bounds = await _controller.getVisibleRegion();
@@ -61,7 +62,7 @@ class _DiscoveryState extends State<Discovery> {
                 var food = foodList[index];
                 return GestureDetector(
                   onTap: () async {
-                    if (food.position != null){
+                    if (food.position != null) {
                       setState(() {
                         following = false;
                       });
@@ -122,12 +123,13 @@ class _DiscoveryState extends State<Discovery> {
                                   /// 150.0
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(food.outstandingIMGURL),
+                                      image:
+                                          NetworkImage(food.outstandingIMGURL),
                                       fit: BoxFit.cover,
                                     ),
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(30.0),
-                                        topRight: const Radius.circular(30.0)),
+                                        topRight: Radius.circular(30.0)),
                                   ),
                                 ),
                                 Padding(
@@ -143,31 +145,35 @@ class _DiscoveryState extends State<Discovery> {
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize:
-                                                SizeConfig.screenHeight / 34.15,
+                                                    SizeConfig.screenHeight /
+                                                        34.15,
 
                                                 /// 20
                                                 fontWeight: FontWeight.w700),
-                                          )
-                                      ),
+                                          )),
                                       FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(food.getOwner(),
-                                                  style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontSize: SizeConfig.screenHeight / 40,
-                                                      fontFamily: "Roboto"))),
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize:
+                                                      SizeConfig.screenHeight /
+                                                          40,
+                                                  fontFamily: "Roboto"))),
                                       FittedBox(
                                         fit: BoxFit.fitWidth,
-                                        child:Text(
-                                        food.cateList.join(','),
-                                        style: TextStyle(
-                                            color: Colors.black38,
-                                            fontSize:
-                                                SizeConfig.screenHeight / 42.69,
+                                        child: Text(
+                                          food.cateList.join(','),
+                                          style: TextStyle(
+                                              color: Colors.black38,
+                                              fontSize:
+                                                  SizeConfig.screenHeight /
+                                                      42.69,
 
-                                            /// 16
-                                            fontWeight: FontWeight.w400),
-                                      ),),
+                                              /// 16
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             top: SizeConfig.screenHeight /
@@ -208,10 +214,8 @@ class _DiscoveryState extends State<Discovery> {
                                       decoration: BoxDecoration(
                                           color: buttonColor,
                                           borderRadius: const BorderRadius.only(
-                                            bottomRight:
-                                                const Radius.circular(30.0),
-                                            topLeft:
-                                                const Radius.circular(30.0),
+                                            bottomRight: Radius.circular(30.0),
+                                            topLeft: Radius.circular(30.0),
                                           )),
                                       child: const Icon(
                                         Icons.shopping_cart_rounded,
@@ -268,22 +272,26 @@ class _DiscoveryState extends State<Discovery> {
           setState(() {});
         },
       ),
+      Row(children: [
+        const ArrowBack(),
+        FloatingActionButton(
+          child: Icon(
+            following ? Icons.share_location : Icons.not_listed_location,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              following ? following = false : following = true;
+            });
+          },
+        )
+
+      ],),
       Positioned(
         bottom: 20,
         left: 20,
         right: 20,
         child: _buildFoodList(context),
-      ),
-      FloatingActionButton(
-        child: Icon(
-          following ? Icons.share_location : Icons.not_listed_location,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          setState(() {
-            following ? following = false : following = true;
-          });
-        },
       )
     ]));
   }
@@ -297,9 +305,8 @@ class _DiscoveryState extends State<Discovery> {
             .then((value) => value),
         infoWindow: InfoWindow(
           title: food.title,
-          snippet: food.datetime != null
-              ? timeago.format(food.datetime ?? DateTime.now())
-              : "unknown",
+          snippet:
+              food.datetime != null ? timeago.format(food.datetime) : "unknown",
         ),
         onTap: () {
           Navigator.push(
