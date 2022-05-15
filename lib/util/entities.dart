@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 
@@ -125,8 +125,14 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  String getLocationName() {
-    return "Hà Nội, Mai Dịch, Phạm Văn Đồng, Hà Nội, Mai Dịch, Phạm Văn Đồng";
+  Future<String?> getLocationName() async{
+    if(position==null){
+      return "None";
+    }
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position!.latitude, position!.longitude);
+    Placemark place = placemarks[0];
+    return place.locality;
   }
 
   int getReact() {

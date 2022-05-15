@@ -4,6 +4,7 @@ import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/post_edit/map_picker.dart';
 import 'package:foodnet_01/ui/screens/post_edit/widgets/detail_widget.dart';
 import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
@@ -234,6 +235,42 @@ class _PostEditForm extends State<PostEditForm> {
         ),
         for (int i = 0; i < 3; i++) _select_tags(widget.food, i),
         _select_medias(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: GestureDetector(
+            onTap: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LocationPicker(food: widget.food,)));
+            },
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.screenWidth / 51.38),
+
+                  /// 8.0
+                  child: Icon(
+                    Icons.location_pin,
+                    color: freeDelivery,
+                    size: SizeConfig.screenHeight / 22.77,
+                  ),
+                ),
+                FutureBuilder<String?>(
+                  future: widget.food.getLocationName(),
+                    builder: (context, snapshot) => Text(
+                  snapshot.hasData? snapshot.data??"None":"None",
+                  style: TextStyle(
+                      color: freeDelivery,
+                      fontWeight: FontWeight.bold,
+                      // overflow: TextOverflow.fade,
+                      fontSize: SizeConfig.screenHeight / 44.69),
+                ))
+
+                /// 16
+              ],
+            )),)
       ])),
     );
   }

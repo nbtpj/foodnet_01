@@ -61,7 +61,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                   /// 15.0
                   Padding(
                     padding:
-                    EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
+                        EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
 
                     /// 8.0
                     child: Text("${widget.food.getNumRate()} Reviews",
@@ -76,46 +76,52 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(10)),
               ),
-              widget.food.getLocationName() == null ?
-              SizedBox.shrink():
-              GestureDetector(
-                onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Discovery(init_state: CameraPosition(
-                            target: widget.food.positions(),
-                            zoom: 16,
-                          ),)));
-                },
-                child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: SizeConfig.screenWidth / 51.38),
+              widget.food.getLocationName() == null
+                  ? SizedBox.shrink()
+                  : GestureDetector(
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Discovery(
+                                      init_state: CameraPosition(
+                                        target: widget.food.positions(),
+                                        zoom: 16,
+                                      ),
+                                    )));
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.screenWidth / 51.38),
 
-                        /// 8.0
-                        child: Icon(
-                          Icons.location_pin,
-                          color: freeDelivery,
-                          size: SizeConfig.screenHeight / 22.77,
-                        ),
-                      ),
-                      Text(
-                        widget.food.getLocationName(),
-                        style: TextStyle(
-                            color: freeDelivery,
-                            fontWeight: FontWeight.bold,
-                            // overflow: TextOverflow.fade,
-                            fontSize: SizeConfig.screenHeight / 44.69),
-                      )
+                            /// 8.0
+                            child: Icon(
+                              Icons.location_pin,
+                              color: freeDelivery,
+                              size: SizeConfig.screenHeight / 22.77,
+                            ),
+                          ),
+                          FutureBuilder<String?>(
+                              future: widget.food.getLocationName(),
+                              builder: (context, snapshot) => Text(
+                                    snapshot.hasData
+                                        ? snapshot.data ?? "None"
+                                        : "None",
+                                    style: TextStyle(
+                                        color: freeDelivery,
+                                        fontWeight: FontWeight.bold,
+                                        // overflow: TextOverflow.fade,
+                                        fontSize:
+                                            SizeConfig.screenHeight / 44.69),
+                                  ))
 
-                      /// 16
-                    ],
-                  ))
+                          /// 16
+                        ],
+                      ))
             ],
           ),
-        )
-    );
+        ));
   }
 }
