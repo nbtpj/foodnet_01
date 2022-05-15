@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/AuthWrapperHome.dart';
 import 'package:foodnet_01/ui/screens/chat/chat.dart';
+import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
@@ -42,7 +43,7 @@ class _HomeState extends State<Home> {
              Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 7,
                     child: SearchFood()
                   ),
@@ -58,13 +59,15 @@ class _HomeState extends State<Home> {
                   )
                 ],
             ),
-            DiscountCard(),
+            const DiscountCard(),
             FoodPart(partName: "Categories"),
-            CategoriesFood(),
-            FoodPart(partName: "Recommed"),
-            RecommendFoods(),
+            const CategoriesFood(),
+            FoodPart(partName: "Recommend"),
+            const RecommendFoods(),
             FoodPart(partName: "Popular"),
-            PopularFoods(),
+            const PopularFoods(),
+            FoodPart(partName: "My Foods"),
+            const MyFoods(),
           ],
         ),
       ),

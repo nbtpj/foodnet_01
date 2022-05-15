@@ -57,7 +57,7 @@ Future<PostData?> getPost(String id) async {
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
-  // TODO: implement get_posts
+  // TODO: implement get_posts: có thể trả về với : Filter(search_type: 'popular_food') và Filter(search_type: 'my_food')
   if (filter.search_type! == "food") {
     var foodSnapshot = await postsRef.get();
     for (var doc in foodSnapshot.docs) {
