@@ -80,16 +80,29 @@ class _VideoState extends State<MediaWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.isNet!
-        ? VideoPlayerController.network(
-            widget.url,
-            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-          )
-        : VideoPlayerController.file(
-            File(widget.url),
-            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-          );
-
+    if (widget.isNet != null) {
+      _controller = widget.isNet!
+          ? VideoPlayerController.network(
+              widget.url,
+              videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+            )
+          : VideoPlayerController.file(
+              File(widget.url),
+              videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+            );
+    } else {
+      try {
+        _controller = VideoPlayerController.network(
+          widget.url,
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+      } catch (e) {
+        _controller = VideoPlayerController.file(
+          File(widget.url),
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+      }
+    }
     _controller.addListener(() {
       setState(() {});
     });

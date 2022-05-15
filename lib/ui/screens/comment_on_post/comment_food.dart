@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/edit_area.dart';
-import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
+import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 

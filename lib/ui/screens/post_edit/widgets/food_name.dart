@@ -39,11 +39,13 @@ class _FoodNameState extends State<FoodName> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   for (String cate in widget.food.cateList)
-                    FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Text(cate,
-                            style: const TextStyle(
-                                color: Colors.black45, fontSize: 18)))
+                    TextButton(
+                        onPressed: () {},
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(cate,
+                                style: const TextStyle(
+                                    color: Colors.black45, fontSize: 18))))
                 ],
               )),
         ],

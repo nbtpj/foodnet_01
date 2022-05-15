@@ -35,7 +35,7 @@ class _DetailWidgetState extends State<DetailWidget> {
       child: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Column(
-          children: widget.food.isGood
+          children: widget.food.price!=null
               ? [
                   Container(
                     width: SizeConfig.screenWidth / 3.43,
@@ -58,7 +58,8 @@ class _DetailWidgetState extends State<DetailWidget> {
                   FeaturesFood(food: widget.food,),
                   FoodDescription(food: widget.food,),
                   IncreaseDecrease(food: widget.food),
-                  // AddToCartButton(food: widget.food)
+                  widget.food.isGood?
+                  AddToCartButton(food: widget.food):SizedBox.shrink()
                 ]
               : [
                   Container(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/post_detail/widgets/addtocart_button.dart';
+import 'package:foodnet_01/ui/screens/post_detail/widgets/increase_decrease_button.dart';
 import 'package:foodnet_01/ui/screens/post_edit//components/features_food.dart';
 import 'package:foodnet_01/ui/screens/post_edit/widgets/food_description.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -32,7 +34,7 @@ class _DetailWidgetState extends State<DetailWidget> {
       child: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Column(
-          children: widget.food.isGood
+          children: widget.food.price!=null
               ? [
                   Container(
                     width: SizeConfig.screenWidth / 3.43,
@@ -53,7 +55,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                   FoodName(food: widget.food,),
                   FeaturesFood(food: widget.food,),
                   FoodDescription(food: widget.food,),
-                  // AddToCartButton(food: widget.food)
+                  IncreaseDecrease(food: widget.food),
                 ]
               : [
                   Container(

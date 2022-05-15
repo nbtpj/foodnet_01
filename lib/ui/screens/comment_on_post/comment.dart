@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
-import 'package:foodnet_01/ui/screens/comment_on_post/media_list_scroll_view.dart';
+import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';

@@ -4,7 +4,17 @@ import 'package:foodnet_01/util/global.dart';
 
 class MediaList extends StatefulWidget {
   List<Widget> children;
-  MediaList({Key? key, required this.children}) : super(key: key);
+  late bool nableInfiniteScroll;
+  late bool enlargeCenterPage;
+  late bool autoPlay;
+
+  MediaList(
+      {Key? key,
+      required this.children,
+      this.nableInfiniteScroll = false,
+      this.enlargeCenterPage = true,
+      this.autoPlay = true})
+      : super(key: key);
 
   @override
   _MediaListState createState() => _MediaListState();
@@ -30,9 +40,9 @@ class _MediaListState extends State<MediaList> {
             /// 411.0
             child: CarouselSlider(
               options: CarouselOptions(
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-                autoPlay: true,
+                enableInfiniteScroll: widget.enlargeCenterPage,
+                enlargeCenterPage: widget.enlargeCenterPage,
+                autoPlay: widget.autoPlay,
               ),
               items: widget.children
                   .map((e) => ClipRRect(

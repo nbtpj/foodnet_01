@@ -80,6 +80,8 @@ String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
 
+
+
 Future<ProfileData> getProfile(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user

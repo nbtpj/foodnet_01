@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
 
-List<LatLng> position_list = [const LatLng(37.42796133580664, -122.085749655962),
+List<LatLng> position_list = [
+  const LatLng(37.42796133580664, -122.085749655962),
   const LatLng(37.42484642575639, -122.08309359848501),
   const LatLng(37.42381625902441, -122.0928531512618),
   const LatLng(37.41994095849639, -122.08159055560827),
@@ -47,11 +48,11 @@ class CommentData {
   bool isEmpty() {
     return comment.isEmpty && mediaUrls.isEmpty;
   }
+
   String get userID {
     return "1";
   }
 }
-
 
 class PostData implements LazyLoadData {
   String id;
@@ -68,16 +69,14 @@ class PostData implements LazyLoadData {
   PostData({
     this.id = "new",
     this.title = "",
-    this.description =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
         "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    ,
+        "Lorem ipsum dolor sit amet, consectetur adipiscing",
     this.mediaUrls = const [
       "assets/food/HeavenlyPizza.jpg",
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
@@ -91,17 +90,22 @@ class PostData implements LazyLoadData {
 
   int i = 0;
 
+  int get numcite => 9999;
+
   LatLng positions() {
     i = ((i + 1) % position_list.length);
     return position_list[i];
   }
+
   bool isEditable() {
     return true;
   }
+
   @override
   void loadMore() {
     // TODO: implement loadMore
   }
+
   CommentData getPreviousComment() {
     return CommentData(timestamp: DateTime.now());
   }
@@ -136,26 +140,31 @@ class PostData implements LazyLoadData {
     }
   }
 
-  int getUpvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+  int getUpvoteRate() {
+    return (randomNumberGenerator.nextDouble() * 1000).ceil();
+  }
 
-  int getDownvoteRate() {return (randomNumberGenerator.nextDouble()*1000).ceil();}
+  int getDownvoteRate() {
+    return (randomNumberGenerator.nextDouble() * 1000).ceil();
+  }
 
-  PostData.fromJson(Map<String, Object?> json) : this(
-      id: json['id']! as String,
-      description: json['description']! as String,
-      cateList: (json['cateList'] as List).map((e) => e as String).toList(),
-      price: json['price']! as int,
-      isGood: json['isGood']! as bool,
-      react: json['react']! as int,
-      outstandingIMGURL: json['outstandingIMGURL']! as String,
-      title: json['title']! as String
-  );
+  PostData.fromJson(Map<String, Object?> json)
+      : this(
+            id: json['id']! as String,
+            description: json['description']! as String,
+            cateList:
+                (json['cateList'] as List).map((e) => e as String).toList(),
+            price: json['price']! as int,
+            isGood: json['isGood']! as bool,
+            react: json['react']! as int,
+            outstandingIMGURL: json['outstandingIMGURL']! as String,
+            title: json['title']! as String);
 
-  PostData.categoryFromJson(Map<String, Object?> json) : this(
-      id: json['id']! as String,
-      title: json['title']! as String,
-      outstandingIMGURL: json['outstandingIMGURL']! as String
-  );
+  PostData.categoryFromJson(Map<String, Object?> json)
+      : this(
+            id: json['id']! as String,
+            title: json['title']! as String,
+            outstandingIMGURL: json['outstandingIMGURL']! as String);
 
   Map<String, Object?> toJson() {
     return {
@@ -168,22 +177,32 @@ class PostData implements LazyLoadData {
   }
 
   Map<String, Object?> categoryToJson() {
-    return {
-      "title" : title,
-      "outstandingIMGURL": outstandingIMGURL
-    };
+    return {"title": title, "outstandingIMGURL": outstandingIMGURL};
   }
 
   String getOwner() {
     return "quang";
   }
 
+  Future<bool> commit_changes() async {
+    /// todo
+    return true;
+  }
+
+  PostData clone() {
+    return PostData(
+      id: id,
+      title: title,
+      description: description,
+      mediaUrls: mediaUrls,
+      outstandingIMGURL: outstandingIMGURL,
+      price: price,
+      isGood: isGood,
+      react: react,
+      cateList: cateList,
+    );
+  }
 }
-
-
-
-
-
 
 class BoxChatData implements LazyLoadData {
   @override
@@ -191,12 +210,14 @@ class BoxChatData implements LazyLoadData {
     // TODO: implement loadMore
   }
 }
+
 class UserData implements LazyLoadData {
   @override
   void loadMore() {
     // TODO: implement loadMore
   }
 }
+
 class FriendData implements LazyLoadData {
   String? id;
   String name;
@@ -217,12 +238,12 @@ class FriendData implements LazyLoadData {
     // TODO: implement loadMore
   }
 
-  FriendData.fromJson(Map<String, Object?> json) : this(
-    id: json["id"]! as String,
-    name: json["name"]! as String,
-    userAsset: json["userAsset"] as String,
-    mutualism: 0
-  );
+  FriendData.fromJson(Map<String, Object?> json)
+      : this(
+            id: json["id"]! as String,
+            name: json["name"]! as String,
+            userAsset: json["userAsset"] as String,
+            mutualism: 0);
 
   Map<String, Object?> toJson() {
     return {
@@ -270,22 +291,25 @@ class ProfileData {
     this.friendReferences = friendReferences ?? [];
   }
 
-
-  ProfileData.fromJson(Map<String, Object?> json) : this(
-    id: json["id"]! as String,
-    name: json["name"]! as String,
-    userAsset: json["userAsset"]! as String,
-    wallAsset: json["wallAsset"]! as String,
-    dayOfBirth: (json["dob"]! as Timestamp).toDate().toString(),
-    gender: json["gender"]! as String,
-    location: json["location"] as String,
-    works: (json["works"] as List).map((e) => e as String).toList(),
-    schools: (json["schools"] as List).map((e) => e as String).toList(),
-    favorites: (json["favorites"] as List).map((e) => e as String).toList(),
-    friendReferences: (json["friends"]! as List).map((e) => e.path as String).toList(),
-    friendsNumber: (json["friends"] as List).length
-    // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
-  );
+  ProfileData.fromJson(Map<String, Object?> json)
+      : this(
+            id: json["id"]! as String,
+            name: json["name"]! as String,
+            userAsset: json["userAsset"]! as String,
+            wallAsset: json["wallAsset"]! as String,
+            dayOfBirth: (json["dob"]! as Timestamp).toDate().toString(),
+            gender: json["gender"]! as String,
+            location: json["location"] as String,
+            works: (json["works"] as List).map((e) => e as String).toList(),
+            schools: (json["schools"] as List).map((e) => e as String).toList(),
+            favorites:
+                (json["favorites"] as List).map((e) => e as String).toList(),
+            friendReferences: (json["friends"]! as List)
+                .map((e) => e.path as String)
+                .toList(),
+            friendsNumber: (json["friends"] as List).length
+            // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
+            );
 
   Map<String, Object?> toJson() {
     return {
@@ -304,6 +328,7 @@ class ProfileData {
     };
   }
 }
+
 class SearchData implements LazyLoadData {
   String? id;
   String? asset;
@@ -318,7 +343,8 @@ class SearchData implements LazyLoadData {
   @override
   void loadMore() {
     // TODO: implement loadMore
-  }}
+  }
+}
 
 class Filter {
   /// lớp đại diện cho các điều kiện lọc cho tìm kiếm
@@ -329,7 +355,7 @@ class Filter {
 
   Filter(
       {this.search_type,
-        this.keyword,
-        this.scoreThreshold,
-        LatLngBounds? this.vision_bounds});
+      this.keyword,
+      this.scoreThreshold,
+      LatLngBounds? this.vision_bounds});
 }

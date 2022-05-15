@@ -14,7 +14,6 @@ class _FeaturesFoodState extends State<FeaturesFood> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

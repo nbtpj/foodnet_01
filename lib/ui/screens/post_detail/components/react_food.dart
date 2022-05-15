@@ -52,7 +52,7 @@ class _FavoriteFoodState extends State<FavoriteFood> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PostEditView(
+                          builder: (context) => PostEditForm(
                                 food: widget.food,
                               )));
                 },

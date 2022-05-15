@@ -43,9 +43,9 @@ class _FoodNameState extends State<FoodName> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   for (String cate in widget.food.cateList)
-                    GestureDetector(
-                        onTap: () {
-                          /// todo: điều hướng đến trang tìm kiếm = tag
+                    TextButton(
+                        onPressed: () {
+                          /// todo: dieu huong den tim kiem
                         },
                         child: FittedBox(
                             fit: BoxFit.fitWidth,

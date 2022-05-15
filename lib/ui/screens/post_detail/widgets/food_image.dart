@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/post_detail/components/arrow_back.dart';
+import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/post_detail/components/react_food.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -32,7 +32,7 @@ class _FoodImageState extends State<FoodImage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ArrowBack(),
+              const ArrowBack(),
               // CommentFood(food: widget.food),
               FavoriteFood(food: widget.food,),
             ],
