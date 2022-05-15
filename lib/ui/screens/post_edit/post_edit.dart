@@ -73,7 +73,7 @@ class _PostEditForm extends State<PostEditForm> {
                       width: SizeConfig.screenWidth / 10,
                     ),
                     const FittedBox(
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.fitHeight,
                         child: Text("None",
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 18)))
@@ -87,30 +87,37 @@ class _PostEditForm extends State<PostEditForm> {
             for (PostData tag in tags)
               DropdownMenuItem<String>(
                 child: SizedBox(
-                  height: SizeConfig.screenHeight / 20,
+                  height: SizeConfig.screenHeight / 16,
                   child: Row(
                     children: [
-                      FittedBox(
-                          fit: BoxFit.fitHeight,
-                          child: MediaWidget(url: tag.outstandingIMGURL)),
                       SizedBox(
+                        // height: SizeConfig.screenHeight / 16,
+                        child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: MediaWidget(url: tag.outstandingIMGURL)),
+                      ),
+                      SizedBox(
+                        height: SizeConfig.screenHeight / 16,
                         width: SizeConfig.screenWidth / 10,
                       ),
                       SizedBox(
-                        width: SizeConfig.screenWidth / 5,
+                        // width: SizeConfig.screenWidth / 5,
+                        // height: SizeConfig.screenHeight / 16,
                         child: FittedBox(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitHeight,
                             child: Text(tag.title,
                                 style: const TextStyle(
                                     color: Colors.orange, fontSize: 18))),
                       ),
                       SizedBox(
+                        height: SizeConfig.screenHeight / 16,
                         width: SizeConfig.screenWidth / 10,
                       ),
                       SizedBox(
-                          width: SizeConfig.screenWidth / 10,
+                          // height: SizeConfig.screenHeight / 16,
+                          // width: SizeConfig.screenWidth / 10,
                           child: FittedBox(
-                              fit: BoxFit.fill,
+                              fit: BoxFit.fitHeight,
                               child: Text("${tag.numcite}",
                                   style: const TextStyle(
                                       color: Colors.deepOrange,
@@ -127,12 +134,6 @@ class _PostEditForm extends State<PostEditForm> {
             icon: const Icon(Icons.arrow_downward),
             elevation: 16,
             style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            // name: "tags",
-            // options: builds,
             onChanged: (newValue) {
               setState(() {
                 if (newValue == "None") {

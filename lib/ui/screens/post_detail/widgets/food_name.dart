@@ -25,7 +25,8 @@ class _FoodNameState extends State<FoodName> {
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: SizeConfig.screenHeight / 22.77,
-                      fontFamily: "Roboto"))),
+                      fontFamily: "Roboto")
+              )),
           FittedBox(
               fit: BoxFit.fitWidth,
               child: GestureDetector(

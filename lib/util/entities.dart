@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
@@ -125,21 +126,28 @@ class PostData implements LazyLoadData {
     ];
   }
 
-  Future<String?> getLocationName() async{
-    if(position==null){
+  Future<String?> getLocationName() async {
+    if (position == null) {
       return "None";
     }
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position!.latitude, position!.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
     Placemark place = placemarks[0];
-    return place.locality;
+    String address = "${place.name}, ${place.street}, "
+        "${place.subLocality},"
+        " ${place.locality}, ${place.administrativeArea} "
+        "${place.postalCode}, ${place.country}";
+    debugPrint("current place is " + address);
+    return address;
   }
 
   int getReact() {
+    /// todo: cài đặt sử dụng truy vấn bảng reaction
     return react;
   }
 
   void changeReact() {
+    /// todo: thay đổi theo id người dùng hiện tại
     react += 1;
     if (react > 1) {
       react = -1;
@@ -147,14 +155,17 @@ class PostData implements LazyLoadData {
   }
 
   int getUpvoteRate() {
+    /// todo: cài đặt
     return (randomNumberGenerator.nextDouble() * 1000).ceil();
   }
 
   int getDownvoteRate() {
+    /// todo: cài đặt
     return (randomNumberGenerator.nextDouble() * 1000).ceil();
   }
 
   PostData.fromJson(Map<String, Object?> json)
+  /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
       : this(
             id: json['id']! as String,
             description: json['description']! as String,
@@ -187,11 +198,12 @@ class PostData implements LazyLoadData {
   }
 
   String getOwner() {
+    /// todo trả về tên người đăng bằng truy vấn cơ sở dữ liệu
     return "quang";
   }
 
   Future<bool> commit_changes() async {
-    /// todo
+    /// todo lưu lại toàn bộ thay đổi, return false nếu fail
     return true;
   }
 
