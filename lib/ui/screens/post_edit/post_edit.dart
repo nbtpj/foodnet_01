@@ -167,7 +167,7 @@ class _PostEditForm extends State<PostEditForm> {
 
   Widget _select_cover_post() {
     return SizedBox(
-      height: SizeConfig.screenHeight/5,
+      height: SizeConfig.screenHeight / 5,
       child: GestureDetector(
         child: MediaWidget(
           url: widget.food.outstandingIMGURL,
@@ -175,14 +175,13 @@ class _PostEditForm extends State<PostEditForm> {
         ),
         onTap: () async {
           final XFile? image =
-          await widget._picker.pickImage(source: ImageSource.gallery);
+              await widget._picker.pickImage(source: ImageSource.gallery);
           setState(() {
             widget.food.outstandingIMGURL =
-            image == null ? widget.food.outstandingIMGURL : image.path;
+                image == null ? widget.food.outstandingIMGURL : image.path;
           });
         },
       ),
-
     );
   }
 
@@ -265,6 +264,24 @@ class _PostEditForm extends State<PostEditForm> {
             widget.food.title = value ?? widget.food.title;
           },
         ),
+        // _build_feat_selector(context),
+        FormBuilderTextField(
+            name: "features",
+            decoration: const InputDecoration(
+              labelText: features_string,
+            ),
+            initialValue: [for (var i_feat in widget.food.getFeatures()) "${i_feat[1]}: ${i_feat[0]}"].join("; "),
+            onChanged: (value) {
+              List<String> feats = value!=null? value.replaceAll(" ", '').split(";"):[];
+              widget.food.features = [];
+              for(var feat in feats){
+                try{
+                  String a = feat.split(":")[0], b = feat.split(":")[1];
+
+                  widget.food.features.add([b,a]);
+                }catch(e){};
+              }
+            }),
         FormBuilderTextField(
             name: "description",
             initialValue: widget.food.description,

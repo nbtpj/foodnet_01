@@ -63,6 +63,7 @@ class PostData implements LazyLoadData {
   late List<String> mediaUrls;
   late String outstandingIMGURL;
   int? price;
+  late List<List<String>> features;
   late bool isGood;
   LatLng? position;
   DateTime datetime = DateTime.now();
@@ -88,6 +89,12 @@ class PostData implements LazyLoadData {
     this.isGood = true,
     this.react = 1,
     this.cateList = const [],
+    this.features = const [
+      ["200+", "Calories"],
+      ["%10", "Fat"],
+      ["%40", "Proteins"],
+      ["200+", "Calories"]
+    ]
   });
 
   int i = 0;
@@ -117,14 +124,7 @@ class PostData implements LazyLoadData {
   }
 
   List<List<String>> getFeatures() {
-    return [
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"],
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"]
-    ];
+    return features;
   }
 
   Future<String?> getLocationName() async {
@@ -209,6 +209,7 @@ class PostData implements LazyLoadData {
     /// upload các media này lên
     return true;
   }
+  /// todo: Khởi tạo thêm đặc tính features
 
   PostData clone() {
     return PostData(

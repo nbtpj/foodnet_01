@@ -75,6 +75,8 @@ Stream<PostData> getPosts(Filter filter) async* {
   }
 }
 Stream<CommentData> fetch_comments(String foodID, int from, int to) async*{
+  /// todo: lấy các comment của postdata có foodID, từ khoảng from đến to (lưu ý là ngược lại thứ tự thời gian,
+  /// có nghĩa là nếu from =0, thì comment tương ứng đó là comment cuối cùng theo thời gian)
   for (var i=from; i<to; i++){
     yield CommentData(timestamp: DateTime.now());
   }
@@ -82,8 +84,6 @@ Stream<CommentData> fetch_comments(String foodID, int from, int to) async*{
 String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
-
-
 
 Future<ProfileData> getProfile(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
