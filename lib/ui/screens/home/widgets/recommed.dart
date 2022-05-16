@@ -103,25 +103,34 @@ class _RecommedFoodsState extends State<RecommedFoods> {
                                       MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(food.title,
-                                        style: TextStyle(
-                                            fontSize:
-                                                SizeConfig.screenHeight / 34.15,
-                                            color: Colors.white)),
+                                    FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(food.title,
+                                            style: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.screenHeight /
+                                                        34.15,
+                                                color: Colors.white))),
 
                                     /// 20
-                                    Text(food.cateList.join(', '),
-                                        style: TextStyle(
-                                            fontSize:
-                                                SizeConfig.screenHeight / 48.79,
-                                            color: Colors.white)),
+                                    FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(food.cateList.join(', '),
+                                            style: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.screenHeight /
+                                                        48.79,
+                                                color: Colors.white))),
 
                                     /// 14
-                                    Text("\$${food.price}",
-                                        style: TextStyle(
-                                            fontSize:
-                                                SizeConfig.screenHeight / 37.95,
-                                            color: Colors.white))
+                                    FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text("${food.price}",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.screenHeight /
+                                                        37.95,
+                                                color: Colors.white)))
 
                                     /// 18
                                   ],

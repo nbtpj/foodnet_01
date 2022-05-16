@@ -57,7 +57,10 @@ Future<PostData?> getPost(String id) async {
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
-  // TODO: implement get_posts
+  // TODO: implement get_posts: có thể trả về với :
+  //  Filter(search_type: 'popular_food')
+  //  Filter(search_type: 'my_food')
+  //  Filter(search_type: 'recommend_food')
   if (filter.search_type! == "food") {
     var foodSnapshot = await postsRef.get();
     for (var doc in foodSnapshot.docs) {
@@ -71,7 +74,13 @@ Stream<PostData> getPosts(Filter filter) async* {
     }
   }
 }
-
+Stream<CommentData> fetch_comments(String foodID, int from, int to) async*{
+  /// todo: lấy các comment của postdata có foodID, từ khoảng from đến to (lưu ý là ngược lại thứ tự thời gian,
+  /// có nghĩa là nếu from =0, thì comment tương ứng đó là comment cuối cùng theo thời gian)
+  for (var i=from; i<to; i++){
+    yield CommentData(timestamp: DateTime.now());
+  }
+}
 String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }

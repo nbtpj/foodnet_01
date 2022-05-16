@@ -6,8 +6,7 @@ import 'package:foodnet_01/util/global.dart';
 
 class PostDetailView extends StatefulWidget {
   PostData food;
-  bool is_editting;
-  PostDetailView({required this.food, this.is_editting=false});
+  PostDetailView({required this.food});
 
   @override
   _PostDetailView createState() => _PostDetailView();
@@ -23,8 +22,8 @@ class _PostDetailView extends State<PostDetailView> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            FoodImage(food: widget.food, is_editting: widget.is_editting,),
-            DetailWidget(food: widget.food,is_editting: widget.is_editting,),
+            FoodImage(food: widget.food),
+            DetailWidget(food: widget.food),
           ],
         ),
       ),

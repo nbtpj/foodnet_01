@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -16,22 +17,24 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Discovery extends StatefulWidget {
-  const Discovery({Key? key}) : super(key: key);
+  late CameraPosition init_state;
+
+  Discovery(
+      {Key? key,
+      this.init_state = const CameraPosition(
+        target: LatLng(20.8861024, 106.4049451),
+        zoom: 14.4746,
+      )})
+      : super(key: key);
 
   @override
   _DiscoveryState createState() => _DiscoveryState();
 }
 
 class _DiscoveryState extends State<Discovery> {
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng( 20.8861024, 106.4049451),
-    zoom: 14.4746,
-  );
-
   final Set<Marker> _markers = {};
   late GoogleMapController _controller;
-  bool following = true;
-  List<PostData> current_lists = [];
+  bool following = false;
 
   Future<List<PostData>> fetchFoodOnThisLocation() async {
     var vision_bounds = await _controller.getVisibleRegion();
@@ -43,10 +46,8 @@ class _DiscoveryState extends State<Discovery> {
     return FutureBuilder<List<PostData>>(
       future: fetchFoodOnThisLocation(),
       builder: (context, snapshot) {
-        // debugPrint("this is a log " +snapshot.toString());
         if (snapshot.hasData) {
           var foodList = snapshot.data ?? [];
-          // debugPrint("this is a log " + foodList.toString());
           for (var element in foodList) {
             createMarker(context, element);
           }
@@ -60,16 +61,15 @@ class _DiscoveryState extends State<Discovery> {
               itemBuilder: (context, index) {
                 var food = foodList[index];
                 return GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      following = false;
-                    });
-                    _controller.moveCamera(CameraUpdate.newLatLng(
-                        food.position ?? const LatLng(0.347596, 32.582520)));
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PostDetailView(food: food)));
+                  onTap: () {
+                    if (food.position != null) {
+                      setState(() {
+                        following = false;
+                      });
+                      _controller.moveCamera(CameraUpdate.newLatLng(
+                          food.position ?? const LatLng(0.3, 32.0)));
+                      _controller.moveCamera(CameraUpdate.zoomBy(16));
+                    }
                   },
                   onDoubleTap: () {
                     Navigator.push(
@@ -124,13 +124,13 @@ class _DiscoveryState extends State<Discovery> {
                                   /// 150.0
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${food.outstandingIMGURL}"),
+                                      image:
+                                          NetworkImage(food.outstandingIMGURL),
                                       fit: BoxFit.cover,
                                     ),
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(30.0),
-                                        topRight: const Radius.circular(30.0)),
+                                        topRight: Radius.circular(30.0)),
                                   ),
                                 ),
                                 Padding(
@@ -139,25 +139,41 @@ class _DiscoveryState extends State<Discovery> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "${food.title}",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize:
-                                                SizeConfig.screenHeight / 34.15,
+                                      FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            food.title,
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize:
+                                                    SizeConfig.screenHeight /
+                                                        34.15,
 
-                                            /// 20
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      Text(
-                                        "${food.cateList.join(',')}",
-                                        style: TextStyle(
-                                            color: Colors.black38,
-                                            fontSize:
-                                                SizeConfig.screenHeight / 42.69,
+                                                /// 20
+                                                fontWeight: FontWeight.w700),
+                                          )),
+                                      FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(food.getOwner(),
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize:
+                                                      SizeConfig.screenHeight /
+                                                          40,
+                                                  fontFamily: "Roboto"))),
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          food.cateList.join(','),
+                                          style: TextStyle(
+                                              color: Colors.black38,
+                                              fontSize:
+                                                  SizeConfig.screenHeight /
+                                                      42.69,
 
-                                            /// 16
-                                            fontWeight: FontWeight.w400),
+                                              /// 16
+                                              fontWeight: FontWeight.w400),
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
@@ -199,10 +215,8 @@ class _DiscoveryState extends State<Discovery> {
                                       decoration: BoxDecoration(
                                           color: buttonColor,
                                           borderRadius: const BorderRadius.only(
-                                            bottomRight:
-                                                const Radius.circular(30.0),
-                                            topLeft:
-                                                const Radius.circular(30.0),
+                                            bottomRight: Radius.circular(30.0),
+                                            topLeft: Radius.circular(30.0),
                                           )),
                                       child: const Icon(
                                         Icons.shopping_cart_rounded,
@@ -241,14 +255,13 @@ class _DiscoveryState extends State<Discovery> {
           ? _controller.moveCamera(CameraUpdate.newLatLng(
               LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)))
           : 1;
-      debugPrint("this is a log :current position is " +loc.toString());
+      debugPrint("this is a log :current position is " + loc.toString());
     });
-
 
     return Scaffold(
         body: Stack(children: [
       GoogleMap(
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: widget.init_state,
         markers: _markers,
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
@@ -260,92 +273,51 @@ class _DiscoveryState extends State<Discovery> {
           setState(() {});
         },
       ),
+      Row(children: [
+        const ArrowBack(),
+        FloatingActionButton(
+          child: Icon(
+            following ? Icons.share_location : Icons.not_listed_location,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              following ? following = false : following = true;
+            });
+          },
+        )
+
+      ],),
       Positioned(
         bottom: 20,
         left: 20,
         right: 20,
         child: _buildFoodList(context),
-      ),
-      // Positioned(
-      //   bottom: 50,
-      //   left: 20,
-      //   right: 20,
-      //   child: Container(
-      //       width: MediaQuery.of(context).size.width,
-      //       height: 120,
-      //       decoration: BoxDecoration(
-      //           color: Colors.white, borderRadius: BorderRadius.circular(20)),
-      //       child: ListView.builder(
-      //         scrollDirection: Axis.horizontal,
-      //         itemCount: _contacts.length,
-      //         itemBuilder: (context, index) {
-      //           return GestureDetector(
-      //             onTap: () {
-      //               _controller.moveCamera(
-      //                   CameraUpdate.newLatLng(_contacts[index]["position"]));
-      //             },
-      //             child: Container(
-      //               width: 100,
-      //               height: 100,
-      //               margin: const EdgeInsets.only(right: 10),
-      //               child: Column(
-      //                 mainAxisAlignment: MainAxisAlignment.center,
-      //                 children: [
-      //                   Image.asset(
-      //                     _contacts[index]['image'],
-      //                     width: 60,
-      //                   ),
-      //                   const SizedBox(
-      //                     height: 10,
-      //                   ),
-      //                   Text(
-      //                     _contacts[index]["name"],
-      //                     style: const TextStyle(
-      //                         color: Colors.black, fontWeight: FontWeight.w600),
-      //                   )
-      //                 ],
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //       )),
-      // ),
-
-      FloatingActionButton(
-        child: Icon(
-          following ? Icons.share_location : Icons.not_listed_location,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          setState(() {
-            following ? following = false : following = true;
-          });
-        },
       )
     ]));
   }
 
   createMarker(BuildContext context, PostData food) async {
     // if (food.position != null) {
-      Marker marker = Marker(
+    Marker marker = Marker(
         markerId: MarkerId(food.id),
         position: food.position ?? const LatLng(0.347596, 32.582520),
         icon: await _getAssetIcon(context, food.outstandingIMGURL)
             .then((value) => value),
         infoWindow: InfoWindow(
           title: food.title,
-          snippet: timeago.format(food.datetime),
+          snippet:
+              food.datetime != null ? timeago.format(food.datetime) : "unknown",
         ),
-        onTap: (){
+        onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => PostDetailView(food: food)));
-        }
-      );
-      setState(() {
-        _markers.add(marker);
-      });
+        });
+    setState(() {
+      _markers.add(marker);
+    });
     // }
   }
 
@@ -367,9 +339,12 @@ class _DiscoveryState extends State<Discovery> {
         img = NetworkImage(icon);
       }
     }
-    int icon_size = min(SizeConfig.screenWidth~/10,SizeConfig.screenHeight~/10);
+    int icon_size =
+        min(SizeConfig.screenWidth ~/ 10, SizeConfig.screenHeight ~/ 10);
 
-    ResizeImage(img, width: icon_size, height: icon_size, allowUpscaling: true).resolve(config).addListener(ImageStreamListener((ImageInfo image, bool sync) async {
+    ResizeImage(img, width: icon_size, height: icon_size, allowUpscaling: true)
+        .resolve(config)
+        .addListener(ImageStreamListener((ImageInfo image, bool sync) async {
       final ByteData? bytes =
           await image.image.toByteData(format: ImageByteFormat.png);
       final BitmapDescriptor bitmap =

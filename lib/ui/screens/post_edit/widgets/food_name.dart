@@ -25,19 +25,14 @@ class _FoodNameState extends State<FoodName> {
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: SizeConfig.screenHeight / 22.77,
-                      fontFamily: "Roboto")
-              )),
+                      fontFamily: "Roboto"))),
           FittedBox(
               fit: BoxFit.fitWidth,
-              child: GestureDetector(
-                  onTap: () {
-                    /// todo: điều hướng đến trang người dùng
-                  },
-                  child: Text(widget.food.getOwner(),
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontSize: SizeConfig.screenHeight / 30,
-                          fontFamily: "Roboto")))),
+              child: Text(widget.food.getOwner(),
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: SizeConfig.screenHeight / 30,
+                      fontFamily: "Roboto"))),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -45,9 +40,7 @@ class _FoodNameState extends State<FoodName> {
                 children: <Widget>[
                   for (String cate in widget.food.cateList)
                     TextButton(
-                        onPressed: () {
-                          /// todo: dieu huong den tim kiem
-                        },
+                        onPressed: () {},
                         child: FittedBox(
                             fit: BoxFit.fitWidth,
                             child: Text(cate,
