@@ -65,7 +65,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                         EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
 
                     /// 8.0
-                    child: Text("${widget.food.getNumRate()} Reviews",
+                    child: Text("${widget.food.getNumRate()} ${reviews_string}",
                         style: TextStyle(color: Colors.black26)),
                   )
                 ],

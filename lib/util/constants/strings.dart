@@ -13,7 +13,7 @@ const String tag_string = lang=='en'? "Categories":"Các Tag";
 const String popular_string = lang=='en'? "Popular":"Phổ biến";
 const String my_post_string = lang=='en'? "My Post":"Bài đăng của tôi";
 const String recommend_string = lang=='en'? "Recommend":"Đề xuất bởi FoodNet";
-
+const String reviews_string = lang=='en'? "reviews":"đánh giá";
 
 
 
