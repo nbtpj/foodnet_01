@@ -1,10 +1,11 @@
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
+import 'package:foodnet_01/ui/screens/discovery//map_style.dart';
 import 'package:foodnet_01/ui/screens/post_edit/post_edit.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
-import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/discovery//map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPicker extends StatefulWidget {

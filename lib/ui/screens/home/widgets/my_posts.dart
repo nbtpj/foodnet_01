@@ -271,7 +271,7 @@ class _MyFoodsState extends State<MyFoods> {
                 if (index == 0) {
                   return _build_add_new(context);
                 } else {
-                  var food = foodList[index + 1];
+                  var food = foodList[index - 1];
                   return _build_food(context, food);
                 }
               },

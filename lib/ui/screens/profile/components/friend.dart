@@ -9,9 +9,11 @@ class Friend extends StatelessWidget {
   final String? firstName;
   final String? lastName;
   final String? name;
-  const Friend({
+  late String id;
+  Friend({
     Key? key,
     required this.userAsset,
+    required this.id,
     this.firstName,
     this.lastName,
     this.name,
@@ -80,7 +82,7 @@ class Friend extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigate.pushPage(context, const ProfilePage(type: "other", id: "2"));
+        Navigate.pushPage(context, ProfilePage(id:id));
       },
     );
   }

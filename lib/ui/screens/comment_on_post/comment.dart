@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
+import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -38,7 +38,7 @@ class _CommentComponent extends State<CommentComponent> {
           leading: GestureDetector(
               onTap: () {
                 Navigate.pushPage(context,
-                    ProfilePage(type: "other", id: widget.comment.userID));
+                    ProfilePage(id: widget.comment.userID));
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage(widget.comment.avatarUrl),

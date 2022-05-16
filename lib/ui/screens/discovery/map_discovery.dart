@@ -3,17 +3,18 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
+import 'package:foodnet_01/ui/screens/discovery/map_style.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
-import 'package:location/location.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:foodnet_01/ui/screens/discovery/map_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Discovery extends StatefulWidget {

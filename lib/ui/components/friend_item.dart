@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
-import '../../../../util/navigate.dart';
-import '../screens/profile/profile.dart';
 
 class FriendItem extends StatefulWidget {
   final String userAsset;
@@ -60,7 +58,7 @@ class _FriendItemState extends State<FriendItem> {
         ),
       ),
       onTap: () {
-        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+        // todo Navigate.pushPage(context, ProfilePage(id: "2"));
       },
     );
   }
@@ -273,7 +271,7 @@ class _FriendListItemState extends State<FriendListItem> {
         subtitle: Text(widget.mutual_friends.toString() + " bạn chung"),
       ),
       onTap: () {
-        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+        // todo: Navigate.pushPage(context, ProfilePage(id: "2"));
       },
     );
   }
@@ -335,7 +333,7 @@ class _FriendSuggestionItemState extends State<FriendSuggestionItem> {
         ),
       ),
       onTap: () {
-        Navigate.pushPage(context, ProfilePage(type: "other", id: "2"));
+        // todo: Navigate.pushPage(context, ProfilePage(id: "2"));
       },
     );
   }

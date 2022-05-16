@@ -6,6 +6,7 @@ import 'package:foodnet_01/ui/screens/post_detail/widgets/food_description.dart'
 import 'package:foodnet_01/ui/screens/post_detail/widgets/increase_decrease_button.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
+
 import 'food_name.dart';
 
 class DetailWidget extends StatefulWidget {

@@ -1,12 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
 import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
-import '../../../../util/navigate.dart';
 
 class SearchList extends StatefulWidget {
   final List<SearchData> searchList;
@@ -45,7 +43,7 @@ class _SearchListState extends State<SearchList> {
       ),
       onTap: () {
         if (widget.type == "user" || (widget.type == "recentSearch" && asset != "icon")) {
-          Navigate.pushPage(context, const ProfilePage(type: 'other', id: '1',));
+          // todo: Navigate.pushPage(context, ProfilePage(id: '1',));
         }
       },
     );

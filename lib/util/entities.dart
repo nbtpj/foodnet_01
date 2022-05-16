@@ -1,11 +1,11 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:math';
-
 import 'package:tuple/tuple.dart';
 
 List<LatLng> position_list = [
@@ -238,14 +238,14 @@ class UserData implements LazyLoadData {
 }
 
 class FriendData implements LazyLoadData {
-  String? id;
+  String id;
   String name;
   String? time;
   String userAsset;
   int? mutualism;
 
   FriendData({
-    this.id,
+    required this.id,
     required this.name,
     this.time,
     required this.userAsset,

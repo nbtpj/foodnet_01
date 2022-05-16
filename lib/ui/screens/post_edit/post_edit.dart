@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/ui/screens/post_edit/map_picker.dart';
 import 'package:foodnet_01/ui/screens/post_edit/widgets/detail_widget.dart';
-import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostEditPreView extends StatefulWidget {

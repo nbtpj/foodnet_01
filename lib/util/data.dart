@@ -64,7 +64,7 @@ Stream<PostData> getPosts(Filter filter) async* {
   //  Filter(search_type: 'popular_food')
   //  Filter(search_type: 'my_food')
   //  Filter(search_type: 'recommend_food')
-  if (filter.search_type! == "food") {
+  if (filter.search_type! != "category") {
     var foodSnapshot = await postsRef.get();
     for (var doc in foodSnapshot.docs) {
       yield doc.data();

@@ -109,7 +109,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                                     userAsset: friendItem.userAsset,
                                     name: friendItem.name,
                                     mutualism: friendItem.mutualism!,
-                                    index: friendItem.id!,
+                                    index: friendItem.id,
                                   );
                                 }
                             );

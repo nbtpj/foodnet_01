@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/components/image_provider.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
+import 'package:foodnet_01/ui/components/image_provider.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
 // import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/entities.dart';
