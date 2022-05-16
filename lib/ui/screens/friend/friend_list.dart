@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
+import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import '../../components/friend_item.dart';
 import '../search/search.dart';
@@ -22,6 +23,8 @@ class _FriendListState extends State<FriendList> {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
       return get_friends(Filter(search_type: "friend_list")).toList();
@@ -30,7 +33,7 @@ class _FriendListState extends State<FriendList> {
       body: Column(
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 10, right: 10, top: 40, bottom: 10),
+              margin: EdgeInsets.only(left: width / 41.1 , right: width / 41.1, top: height / 21.325, bottom: height / 85.3), ///(10, 10, 40, 10)
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -40,12 +43,12 @@ class _FriendListState extends State<FriendList> {
                     },
                     icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
                     color: Colors.black,
-                    iconSize: 30,
+                    iconSize: height / 28.43, ///30
                   ),
-                  const Text(
+                  Text(
                     "Bạn bè ",
                     style: TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.bold),
+                        fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
                   ),
                   IconButton(
                     onPressed: () {
@@ -53,7 +56,7 @@ class _FriendListState extends State<FriendList> {
                     },
                     icon: const Icon(Icons.search),
                     color: Colors.black,
-                    iconSize: 30,
+                    iconSize: height / 28.43, ///30
                     padding: const EdgeInsets.only(right: 0),
                   ),
                 ],
@@ -63,12 +66,12 @@ class _FriendListState extends State<FriendList> {
             const Divider(
               color: Colors.black54,
             ),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: height / 170.6, ///5
             ),
 
             Container(
-              margin: const EdgeInsets.only(left: 15, right: 15),
+              margin: EdgeInsets.only(left: width / 27.4, right: width / 27.4),
               child: TextField(
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
@@ -76,14 +79,14 @@ class _FriendListState extends State<FriendList> {
 
                   fillColor: Colors.grey[300],
                   hintText: 'Tìm kiếm bạn bè',
-                  contentPadding: const EdgeInsets.only(top: 14),
+                  contentPadding: EdgeInsets.only(top: height / 60.93), ///14
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(height / 85.3), ///10
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(height / 85.3), ///10
                   ),
                   prefixIcon: const Icon(
                     Icons.search,
@@ -92,19 +95,19 @@ class _FriendListState extends State<FriendList> {
               ),
             ),
 
-            const SizedBox(height: 5,),
+            SizedBox(height: height / 170.6,),
             Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                        margin: EdgeInsets.only(left: width / 34.25, right: width / 34.25, top: height / 71.08), ///(12, 12, 12)
                         child: Row(
-                          children: const [
+                          children: [
                             Text(
                               "710 người bạn",
                               style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: height / 34.12, ///25
                                   fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -121,8 +124,8 @@ class _FriendListState extends State<FriendList> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   separatorBuilder: (BuildContext context, int index) {
-                                    return const SizedBox(
-                                      height: 10,
+                                    return SizedBox(
+                                      height: height / 85.3, ///10
                                     );
                                   },
                                   itemCount: friendList.length,
