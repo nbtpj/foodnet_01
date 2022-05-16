@@ -61,13 +61,14 @@ class _DiscoveryState extends State<Discovery> {
               itemBuilder: (context, index) {
                 var food = foodList[index];
                 return GestureDetector(
-                  onTap: () async {
+                  onTap: () {
                     if (food.position != null) {
                       setState(() {
                         following = false;
                       });
                       _controller.moveCamera(CameraUpdate.newLatLng(
-                          food.position ?? const LatLng(0.347596, 32.582520)));
+                          food.position ?? const LatLng(0.3, 32.0)));
+                      _controller.moveCamera(CameraUpdate.zoomBy(16));
                     }
                   },
                   onDoubleTap: () {

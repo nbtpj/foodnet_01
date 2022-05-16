@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/ui/screens/post_edit/post_edit.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -24,7 +25,7 @@ class _MyFoodsState extends State<MyFoods> {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
             PostEditForm(food: PostData(
-                title: "Thêm tiêu đề", description: "Thêm mô tả", mediaUrls: []))));
+                title: add_title, description: add_description, ))));
       },
       child: Stack(
         children: [

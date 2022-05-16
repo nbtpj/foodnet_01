@@ -114,8 +114,6 @@ class _PostEditForm extends State<PostEditForm> {
                         width: SizeConfig.screenWidth / 10,
                       ),
                       SizedBox(
-                          // height: SizeConfig.screenHeight / 16,
-                          // width: SizeConfig.screenWidth / 10,
                           child: FittedBox(
                               fit: BoxFit.fitHeight,
                               child: Text("${tag.numcite}",
@@ -149,7 +147,6 @@ class _PostEditForm extends State<PostEditForm> {
                 }
               });
             },
-            // onSaved: (object) {},
           );
         });
   }
@@ -160,13 +157,19 @@ class _PostEditForm extends State<PostEditForm> {
             children: [
               for (String element in widget.food.mediaUrls)
                 GestureDetector(
-                  child: MediaWidget(
-                    url: element,
-                    isNet: null,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: MediaWidget(
+                      url: element,
+                      isNet: null,
+                    ),
                   ),
                   onLongPress: () {
                     setState(() {
-                      widget.food.mediaUrls.remove(element);
+                      List<String> temp = [];
+                      temp.addAll(widget.food.mediaUrls);
+                      temp.remove(element);
+                      widget.food.mediaUrls = temp;
                       Fluttertoast.showToast(
                           msg: delete_success,
                           gravity: ToastGravity.CENTER,
@@ -193,9 +196,28 @@ class _PostEditForm extends State<PostEditForm> {
                   )),
             ],
             autoPlay: false,
-            nableInfiniteScroll: true,
+            nableInfiniteScroll: false,
           )
-        : const SizedBox.shrink();
+        : MediaList(
+      children: [
+        IconButton(
+            onPressed: () async {
+              final List<XFile>? images =
+              await widget._picker.pickMultiImage();
+              setState(() {
+                widget.food.mediaUrls
+                    .addAll([for (var img in images!) img.path]);
+              });
+            },
+            icon: Icon(
+              Icons.add_a_photo,
+              size: SizeConfig.screenWidth / 5.0,
+              color: buttonColor,
+            )),
+      ],
+      autoPlay: false,
+      nableInfiniteScroll: false,
+    );
   }
 
   Widget _build_form() {
@@ -218,6 +240,13 @@ class _PostEditForm extends State<PostEditForm> {
             }),
         FormBuilderTextField(
             name: "price",
+            decoration: const InputDecoration(hintText: price_string),
+            autofillHints: const ["000 vnd", "500 vnd", ".99 \$"],
+            validator: (value){
+              if (value==null) return null;
+              value = value.replaceAll("[^\\d.]", "");
+              return value;
+            },
             initialValue: widget.food.price?.toString() ?? "null",
             onChanged: (value) {
               try {
@@ -227,51 +256,53 @@ class _PostEditForm extends State<PostEditForm> {
               } catch (e) {}
             }),
         FormBuilderSwitch(
-          name: "isGood",
-          initialValue: widget.food.isGood,
-          title: const Text("you want to sale this good?"),
+            name: "isGood",
+            initialValue: widget.food.isGood,
+            title: const Text(sale_this_thing),
             onChanged: (value) {
               widget.food.isGood = value!;
-            }
-        ),
+            }),
         for (int i = 0; i < 3; i++) _select_tags(widget.food, i),
         _select_medias(),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: GestureDetector(
-            onTap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LocationPicker(food: widget.food,)));
-            },
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: SizeConfig.screenWidth / 51.38),
+              onTap: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LocationPicker(
+                              food: widget.food,
+                            )));
+              },
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
 
-                  /// 8.0
-                  child: Icon(
-                    Icons.location_pin,
-                    color: freeDelivery,
-                    size: SizeConfig.screenHeight / 22.77,
-                  ),
-                ),
-                FutureBuilder<String?>(
-                  future: widget.food.getLocationName(),
-                    builder: (context, snapshot) => Text(
-                  snapshot.hasData? snapshot.data??"None":"None",
-                  style: TextStyle(
+                    /// 8.0
+                    child: Icon(
+                      Icons.location_pin,
                       color: freeDelivery,
-                      fontWeight: FontWeight.bold,
-                      // overflow: TextOverflow.fade,
-                      fontSize: SizeConfig.screenHeight / 44.69),
-                ))
+                      size: SizeConfig.screenHeight / 22.77,
+                    ),
+                  ),
+                  FutureBuilder<String?>(
+                      future: widget.food.getLocationName(),
+                      builder: (context, snapshot) => Text(
+                            snapshot.hasData ? snapshot.data ?? "None" : "None",
+                            style: TextStyle(
+                                color: freeDelivery,
+                                fontWeight: FontWeight.bold,
+                                // overflow: TextOverflow.fade,
+                                fontSize: SizeConfig.screenHeight / 44.69),
+                          ))
 
-                /// 16
-              ],
-            )),)
+                  /// 16
+                ],
+              )),
+        )
       ])),
     );
   }
