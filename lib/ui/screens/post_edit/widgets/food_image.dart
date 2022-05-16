@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/image_provider.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/nav_bar.dart';
 // import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -50,7 +51,7 @@ class _FoodImageState extends State<FoodImage> {
                         await widget.food.commit_changes()?
                         Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (context) => const Home()
+                                builder: (context) => MyHomePage()
                             )): Navigator.pop(context);
                       },
                       icon: const Icon(
