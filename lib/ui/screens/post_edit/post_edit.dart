@@ -62,106 +62,111 @@ class _PostEditForm extends State<PostEditForm> {
     return FutureBuilder<List<PostData>>(
         future: getPosts(Filter(search_type: 'category')).toList(),
         builder: (context, snapshot) {
-          List<PostData> tags = snapshot.data ?? [];
-          List<DropdownMenuItem<String>> builds = [
-            DropdownMenuItem<String>(
-              child: SizedBox(
-                height: SizeConfig.screenHeight / 20,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: SizeConfig.screenWidth / 10,
-                    ),
-                    const FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text(None,
-                            style:
-                                TextStyle(color: Colors.black45, fontSize: 18)))
-                  ],
-                ),
-              ),
-              value: None,
-            )
-          ];
-          builds.addAll([
-            for (PostData tag in tags)
+          if (snapshot.hasData){
+            List<PostData> tags = snapshot.data ?? [];
+            List<DropdownMenuItem<String>> builds = [
               DropdownMenuItem<String>(
                 child: SizedBox(
-                  height: SizeConfig.screenHeight / 16,
+                  height: SizeConfig.screenHeight / 20,
                   child: Row(
                     children: [
                       SizedBox(
-                        // height: SizeConfig.screenHeight / 16,
-                        child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: MediaWidget(url: tag.outstandingIMGURL)),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.screenHeight / 16,
                         width: SizeConfig.screenWidth / 10,
                       ),
-                      SizedBox(
-                        // width: SizeConfig.screenWidth / 5,
-                        // height: SizeConfig.screenHeight / 16,
-                        child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Text(tag.title,
-                                style: const TextStyle(
-                                    color: Colors.orange, fontSize: 18))),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.screenHeight / 16,
-                        width: SizeConfig.screenWidth / 10,
-                      ),
-                      SizedBox(
-                          child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text("${tag.numcite}",
-                                  style: const TextStyle(
-                                      color: Colors.deepOrange,
-                                      fontSize: 18)))),
+                      const FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Text(None,
+                              style:
+                              TextStyle(color: Colors.black45, fontSize: 18)))
                     ],
                   ),
                 ),
-                value: tag.title,
+                value: None,
               )
-          ]);
-          return DropdownButton<String>(
-            items: builds,
-            value: food.cateList.length > i ? food.cateList[i] : None,
-            icon: const Icon(Icons.arrow_downward),
-            elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            onChanged: (newValue) {
-              setState(() {
-                if (food.cateList.contains(newValue!)) {
-                  Fluttertoast.showToast(
-                      msg: already_chosen,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                  return;
-                }
-                if (newValue == None) {
-                  if (food.cateList.length > i) {
-                    food.cateList.removeAt(i);
-                  }
-                } else {
-                  if (food.cateList.isEmpty) {
-                    food.cateList = [newValue];
+            ];
+            builds.addAll([
+              for (PostData tag in tags)
+                DropdownMenuItem<String>(
+                  child: SizedBox(
+                    height: SizeConfig.screenHeight / 16,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          // height: SizeConfig.screenHeight / 16,
+                          child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: MediaWidget(url: tag.outstandingIMGURL)),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.screenHeight / 16,
+                          width: SizeConfig.screenWidth / 10,
+                        ),
+                        SizedBox(
+                          // width: SizeConfig.screenWidth / 5,
+                          // height: SizeConfig.screenHeight / 16,
+                          child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text(tag.title,
+                                  style: const TextStyle(
+                                      color: Colors.orange, fontSize: 18))),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.screenHeight / 16,
+                          width: SizeConfig.screenWidth / 10,
+                        ),
+                        SizedBox(
+                            child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text("${tag.numcite}",
+                                    style: const TextStyle(
+                                        color: Colors.deepOrange,
+                                        fontSize: 18)))),
+                      ],
+                    ),
+                  ),
+                  value: tag.title,
+                )
+            ]);
+            return DropdownButton<String>(
+              items: builds,
+              value: food.cateList.length > i ? food.cateList[i] : None,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              onChanged: (newValue) {
+                setState(() {
+                  if (food.cateList.contains(newValue!)) {
+                    Fluttertoast.showToast(
+                        msg: already_chosen,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                     return;
                   }
-                  if (food.cateList.length <= i) {
-                    food.cateList.addAll([newValue]);
+                  if (newValue == None) {
+                    if (food.cateList.length > i) {
+                      food.cateList.removeAt(i);
+                    }
                   } else {
-                    food.cateList[i] = newValue;
+                    if (food.cateList.isEmpty) {
+                      food.cateList = [newValue];
+                      return;
+                    }
+                    if (food.cateList.length <= i) {
+                      food.cateList.addAll([newValue]);
+                    } else {
+                      food.cateList[i] = newValue;
+                    }
                   }
-                }
-              });
-            },
-          );
+                });
+              },
+            );
+          }
+          else {
+            return SizedBox.shrink();
+          };
         });
   }
 
