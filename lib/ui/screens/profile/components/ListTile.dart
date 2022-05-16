@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
+import '../../../../util/global.dart';
+
 class ProfileTitle extends StatefulWidget {
   final String? asset;
   final String subText;
@@ -30,6 +32,7 @@ class _ProfileTitleState extends State<ProfileTitle> {
   }
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
     return onEdit
         ? InputField(icon: widget.asset, hintText: widget.mainText, setonEdit: setonEdit,)
         : ListTile(
@@ -40,17 +43,17 @@ class _ProfileTitleState extends State<ProfileTitle> {
             children: [
               TextSpan(
                 text: widget.subText,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.black,
-                    fontSize: 19
+                    fontSize: height / 44.895, ///19
                 ),
               ),
               TextSpan(
                   text: widget.mainText,
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 19
+                      fontSize: height / 44.895, ///19
                   )
               )
             ]
@@ -60,7 +63,7 @@ class _ProfileTitleState extends State<ProfileTitle> {
         backgroundColor: Colors.grey[300],
         child: Icon(
           IconData(int.parse(widget.asset!), fontFamily: 'MaterialIcons'),
-          size: 30,
+          size: height / 28.43, ///30
           color: buttonColor,
         ),
       ) : const SizedBox(height: 0, width: 0,),

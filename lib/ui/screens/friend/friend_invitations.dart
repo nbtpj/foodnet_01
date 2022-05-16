@@ -74,7 +74,7 @@ class _FriendsState extends State<Friends> {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.grey[350],
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(height / 42.65)), ///20
                             margin: EdgeInsets.all(height / 85.3),
                             width: width / 5.87, ///70
                             height: height / 28.43, ///30
@@ -95,7 +95,7 @@ class _FriendsState extends State<Friends> {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.grey[350],
-                                borderRadius: BorderRadius.circular(height / 42.65)),///20
+                                borderRadius: BorderRadius.circular(height / 42.65)), ///20
                             alignment: Alignment.center,
                             margin: EdgeInsets.all(height / 85.3), ///10
                             width: width / 5.87, ///70

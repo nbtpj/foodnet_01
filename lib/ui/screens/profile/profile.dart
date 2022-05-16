@@ -8,6 +8,7 @@ import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
+import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import '../search/search.dart';
 import 'components/friend.dart';
@@ -28,6 +29,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  double width = SizeConfig.screenWidth;
+  double height = SizeConfig.screenHeight;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(top: 40, bottom: 10),
+                  padding: EdgeInsets.only(top: height / 21.325, bottom: height / 85.3), ///(40, 10)
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -55,12 +58,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         icon: widget.arriveType == null ? const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')) : const SizedBox(width: 10,),
                         color: Colors.black,
-                        iconSize: 25,
+                        iconSize: height / 34.12, ///25
                       ),
                       Text(
                           profile!.name,
-                          style: const TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: height / 34.12, fontWeight: FontWeight.bold), ///25
                         ),
                       IconButton(
                         onPressed: () {
@@ -68,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         icon: const Icon(Icons.search),
                         color: Colors.black,
-                        iconSize: 25,
+                        iconSize: height / 34.12, ///25
                         padding: const EdgeInsets.only(right: 0),
                       ),
                     ],
@@ -80,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 250,
+                            height: height / 3.412, ///250
                             child: Stack(
                                 alignment: Alignment.centerLeft,
                                 children: <Widget>[
@@ -90,10 +93,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: InkWell(
                                           child: Container(
                                             color: lightColor,
-                                            height: 180,
+                                            height: height / 4.74, ///180
                                             child: Image.asset(
                                               profile.wallAsset,
-                                              height: 180,
+                                              height: height / 4.74, ///180
                                               width: MediaQuery.of(context).size.width,
                                               fit: BoxFit.cover,
                                             ),
@@ -103,44 +106,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 context: context,
                                                 builder: (builder) {
                                                   return SizedBox(
-                                                    height: 140,
+                                                    height: height / 6.09, ///140
                                                     child: Column(
                                                       children: [
-                                                        const SizedBox(
-                                                          height: 20,
+                                                        SizedBox(
+                                                          height: height / 42.65, ///20
                                                         ),
                                                         Row(
                                                           children: [
-                                                            const SizedBox(width: 15),
+                                                            SizedBox(width: width / 27.4), ///15
                                                             CircleAvatar(
                                                               backgroundColor: Colors.grey[350],
                                                               child: const Icon(IconData(0xe498, fontFamily: 'MaterialIcons'), color: Colors.black,),
                                                             ),
-                                                            const SizedBox(width: 10),
-                                                            const Text(
+                                                            SizedBox(width: width / 41.1), ///10
+                                                            Text(
                                                               "Xem ảnh đại bìa",
                                                               style: TextStyle(
                                                                 fontWeight: FontWeight.bold,
-                                                                fontSize: 15,
+                                                                fontSize: height / 56.87, ///15
                                                               ),
                                                             ),
                                                           ],
                                                         ),
-                                                        const SizedBox(height: 15),
+                                                        SizedBox(height: height / 56.87), ///15
 
                                                         Row(
                                                           children: [
-                                                            const SizedBox(width: 15),
+                                                            SizedBox(width: width / 27.4), ///15
                                                             CircleAvatar(
                                                               backgroundColor: Colors.grey[350],
                                                               child: const Icon(IconData(0xf120, fontFamily: 'MaterialIcons'), color: Colors.black,),
                                                             ),
-                                                            const SizedBox(width: 10),
-                                                            const Text(
+                                                            SizedBox(width: width / 41.1), ///10
+                                                            Text(
                                                               "Chọn ảnh bìa",
                                                               style: TextStyle(
                                                                 fontWeight: FontWeight.bold,
-                                                                fontSize: 15,
+                                                                fontSize: height / 56.87, ///15
                                                               ),
                                                             ),
                                                           ],
@@ -154,15 +157,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                   ),
                                   Positioned(
-                                      left: (MediaQuery.of(context).size.width / 2) - 60,
-                                      top: 120,
+                                      left: (MediaQuery.of(context).size.width / 2) - width / 6.85, ///60
+                                      top: height / 7.11, ///120
                                       child: InkWell(
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(60),
+                                          borderRadius: BorderRadius.circular(height / 14.22), ///60
                                           child: Image.asset(
                                             profile.userAsset,
-                                            height: 120,
-                                            width: 120,
+                                            height: height / 7.11, ///120
+                                            width: width / 3.425, ///120
                                           ),
                                         ),
                                         onTap: () {
@@ -170,43 +173,43 @@ class _ProfilePageState extends State<ProfilePage> {
                                               context: context,
                                               builder: (builder) {
                                                 return SizedBox(
-                                                  height: 140,
+                                                  height: height / 6.09, ///140
                                                   child: Column(
                                                     children: [
-                                                      const SizedBox(
-                                                        height: 20,
+                                                      SizedBox(
+                                                        height: height / 42.65, ///20
                                                       ),
                                                       Row(
                                                         children: [
-                                                          const SizedBox(width: 15),
+                                                          SizedBox(width: width / 27.4), ///15
                                                           CircleAvatar(
                                                             backgroundColor: Colors.grey[350],
                                                             child: const Icon(IconData(0xe498, fontFamily: 'MaterialIcons'), color: Colors.black,),
                                                           ),
-                                                          const SizedBox(width: 10),
-                                                          const Text(
+                                                          SizedBox(width: width / 41.1), ///10
+                                                          Text(
                                                             "Xem ảnh đại diện",
                                                             style: TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 15,
+                                                              fontSize: height / 56.87, ///15
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(height: 15),
+                                                      SizedBox(height: height / 56.87), ///15
                                                       Row(
                                                         children: [
-                                                          const SizedBox(width: 15),
+                                                          SizedBox(width: width / 27.4), ///15
                                                           CircleAvatar(
                                                             backgroundColor: Colors.grey[350],
                                                             child: const Icon(IconData(0xf120, fontFamily: 'MaterialIcons'), color: Colors.black,),
                                                           ),
-                                                          const SizedBox(width: 10),
-                                                          const Text(
+                                                          SizedBox(width: width / 41.1), ///10
+                                                          Text(
                                                             "Chọn ảnh đại diện",
                                                             style: TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 15,
+                                                              fontSize: height / 56.87, ///15
                                                             ),
                                                           ),
                                                         ],
@@ -228,14 +231,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.center,
                             child: Text(
                               profile.name,
-                              style: const TextStyle(
-                                  fontSize: 23,
+                              style: TextStyle(
+                                  fontSize: height / 37.09, ///23
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
 
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: height / 42.65, ///20
                           ),
 
                           widget.type == "me" ?
@@ -246,39 +249,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Container(
                                     decoration: BoxDecoration(
                                       color: buttonColor,
-                                      borderRadius: BorderRadius.circular(18),
+                                      borderRadius: BorderRadius.circular(height / 47.39), ///18
                                     ),
-                                    width: 290,
-                                    height: 38,
+                                    width: width / 1.42, ///290
+                                    height: height / 22.45, ///38
                                     child: Row(
                                       crossAxisAlignment:
                                       CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(
+                                      children: [
+                                        const Icon(
                                           Icons.create_sharp,
                                           color: Colors.white,
                                         ),
                                         SizedBox(
-                                          width: 3,
+                                          width: width / 137, ///3
                                         ),
-                                        Text(
+                                        const Text(
                                           "Chỉnh sửa trang cá nhân",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 8,
+                                  SizedBox(
+                                    width: width / 51.375, ///8
                                   ),
                                   Container(
                                       decoration: BoxDecoration(
                                           color: Colors.grey.shade300,
                                           borderRadius:
-                                          BorderRadius.circular(20)),
-                                      width: 56,
-                                      height: 38,
+                                          BorderRadius.circular(height / 42.65)), ///20
+                                      width: width / 7.34, ///56
+                                      height: height / 22.45, ///38
                                       child: const Icon(Icons.more_horiz)),
                                 ],
                               ) :
@@ -289,10 +292,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Container(
                                   decoration: BoxDecoration(
                                     color: widget.type == "other" ? buttonColor : Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(18),
+                                    borderRadius: BorderRadius.circular(height / 47.39), ///18
                                   ),
-                                  width: 145,
-                                  height: 38,
+                                  width: width / 2.834, ///145
+                                  height: height / 22.45, ///38
                                   child: Row(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.center,
@@ -302,8 +305,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         widget.type == "other" ? Icons.person_add_rounded : Icons.person,
                                         color: widget.type == "other" ? Colors.white : Colors.black,
                                       ),
-                                      const SizedBox(
-                                        width: 3,
+                                      SizedBox(
+                                        width: width / 137, ///3
                                       ),
                                       Text(
                                         widget.type == "other" ? "Thêm bạn bè" : "Bạn bè",
@@ -312,16 +315,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 8,
+                                SizedBox(
+                                  width: width / 51.375, ///8
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: widget.type == "other" ? Colors.grey.shade300 : buttonColor,
-                                    borderRadius: BorderRadius.circular(18),
+                                    borderRadius: BorderRadius.circular(height / 47.39), ///18
                                   ),
-                                  width: 145,
-                                  height: 38,
+                                  width: width / 2.834, ///145
+                                  height: height / 22.45, ///38
                                   child: Row(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.center,
@@ -331,8 +334,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         Icons.message,
                                         color: widget.type == "other" ? Colors.black : Colors.white,
                                       ),
-                                      const SizedBox(
-                                        width: 3,
+                                      SizedBox(
+                                        width: width / 137, ///3
                                       ),
                                       Text(
                                         "Nhắn tin",
@@ -341,44 +344,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 8,
+                                SizedBox(
+                                  width: width / 51.375, ///8
                                 ),
                                 Container(
                                     decoration: BoxDecoration(
                                         color: Colors.grey.shade300,
                                         borderRadius:
-                                        BorderRadius.circular(20)),
-                                    width: 56,
-                                    height: 38,
+                                        BorderRadius.circular(height / 42.65)), ///20
+                                    width: width / 7.34, ///56
+                                    height: height / 22.45, ///38
                                     child: const Icon(Icons.more_horiz)),
                               ]
                           ),
 
-                          const SizedBox(
-                            height: 15,
+                          SizedBox(
+                            height: height / 56.87, ///15
                           ),
 
                           const Divider(color: Colors.grey),
 
                           profile.works!.isNotEmpty ?
                           ListView.builder(
-                              padding: const EdgeInsets.only(left: 8),
+                              padding: EdgeInsets.only(left: width / 51.375), ///8
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: profile.works!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
-                                  padding: const EdgeInsets.only(top: 7, bottom: 7),
+                                  padding: EdgeInsets.only(top: height / 121.86, bottom: height / 121.86), ///(7, 7)
                                   child: Row(
                                     children: [
-                                      const Icon(
-                                          IconData(0xe6f2, fontFamily: 'MaterialIcons'),
-                                        size: 25,
-                                        color: Color(0xff80889b),
+                                      Icon(
+                                        const IconData(0xe6f2, fontFamily: 'MaterialIcons'),
+                                        size: height / 34.12, ///25
+                                        color: const Color(0xff80889b),
                                       ),
-                                      const SizedBox(
-                                        width: 10,
+                                      SizedBox(
+                                        width: width / 41.1, ///10
                                       ),
                                       Flexible(
                                         child: RichText(
@@ -386,17 +389,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                           maxLines: 2,
                                           text: TextSpan(
                                               children: [
-                                                const TextSpan(
+                                                TextSpan(
                                                   text:  "Làm việc tại ",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: height / 47.398, ///18
                                                       color: Colors.black
                                                   ),
                                                 ),
                                                 TextSpan(
                                                   text: profile.works![index],
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
+                                                  style: TextStyle(
+                                                    fontSize: height / 47.398, ///18
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black,
                                                   ),
@@ -414,22 +417,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           profile.schools!.isNotEmpty ?
                           ListView.builder(
-                              padding: const EdgeInsets.only(left: 8),
+                              padding: EdgeInsets.only(left: width / 51.375), ///8
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: profile.schools!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
-                                  margin : const EdgeInsets.only(top: 7, bottom: 7),
+                                  margin : EdgeInsets.only(top: height / 121.86, bottom: height / 121.86), ///(7, 7)
                                   child: Row(
                                     children: [
-                                      const Icon(
-                                        IconData(0xe559, fontFamily: 'MaterialIcons'),
-                                        size: 25,
-                                        color: Color(0xff80889b),
+                                      Icon(
+                                        const IconData(0xe559, fontFamily: 'MaterialIcons'),
+                                        size: height / 34.12, ///25
+                                        color: const Color(0xff80889b),
                                       ),
-                                      const SizedBox(
-                                        width: 10,
+                                      SizedBox(
+                                        width: width / 41.1, ///10
                                       ),
                                       Flexible(
                                         child: RichText(
@@ -437,17 +440,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                           maxLines: 2,
                                           text: TextSpan(
                                               children: [
-                                                const TextSpan(
+                                                TextSpan(
                                                   text:  "Học tại ",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: height / 47.398, ///18
                                                       color: Colors.black
                                                   ),
                                                 ),
                                                 TextSpan(
                                                   text: profile.schools![index],
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
+                                                  style: TextStyle(
+                                                    fontSize: height / 47.398, ///18
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black,
                                                   ),
@@ -465,22 +468,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           profile.favorites!.isNotEmpty ?
                           ListView.builder(
-                              padding: const EdgeInsets.only(left: 8),
+                              padding: EdgeInsets.only(left: width / 51.375), ///8
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: profile.favorites!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
-                                  margin : const EdgeInsets.only(top: 7, bottom: 7),
+                                  margin : EdgeInsets.only(top: height / 121.86, bottom: height / 121.86), ///(7, 7)
                                   child: Row(
                                     children: [
-                                      const Icon(
-                                        IconData(0xe25b, fontFamily: 'MaterialIcons'),
-                                        size: 25,
-                                        color: Color(0xff80889b),
+                                      Icon(
+                                        const IconData(0xe25b, fontFamily: 'MaterialIcons'),
+                                        size: height / 34.12, ///25
+                                        color: const Color(0xff80889b),
                                       ),
-                                      const SizedBox(
-                                        width: 10,
+                                      SizedBox(
+                                        width: width / 41.1, ///10
                                       ),
                                       Flexible(
                                         child: RichText(
@@ -488,17 +491,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                           maxLines: 2,
                                           text: TextSpan(
                                               children: [
-                                                const TextSpan(
+                                                TextSpan(
                                                   text:  "Sở thích ",
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: height / 47.398, ///18
                                                       color: Colors.black
                                                   ),
                                                 ),
                                                 TextSpan(
                                                   text: profile.favorites![index],
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
+                                                  style: TextStyle(
+                                                    fontSize: height / 47.398, ///18
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black,
                                                   ),
@@ -516,12 +519,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           profile.location != null ?
                           Container(
-                            padding: const EdgeInsets.only(left: 8, top: 7, bottom: 7),
+                            padding: EdgeInsets.only(left: width / 51.375, top: height / 121.86, bottom: height / 121.86), ///(8, 7, 7)
                             child: Row(
                               children: [
-                                const Icon(Icons.location_on, size: 25,),
-                                const SizedBox(
-                                  width: 10,
+                                Icon(Icons.location_on, size: height / 34.12,), ///25
+                                SizedBox(
+                                  width: width / 41.1, ///10
                                 ),
                                 Flexible(
                                   child: RichText(
@@ -529,17 +532,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                     maxLines: 2,
                                     text: TextSpan(
                                         children: [
-                                          const TextSpan(
+                                          TextSpan(
                                             text:  "Đến từ ",
                                             style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: height / 47.398, ///18
                                                 color: Colors.black
                                             ),
                                           ),
                                           TextSpan(
                                             text: profile.location,
-                                            style: const TextStyle(
-                                              fontSize: 18,
+                                            style: TextStyle(
+                                              fontSize: height / 47.398, ///18
                                               fontWeight: FontWeight.w500,
                                               color: Colors.black,
                                             ),
@@ -554,12 +557,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           InkWell(
                             child: Container(
-                              padding: const EdgeInsets.only(left: 7, top: 7, bottom: 7),
+                              padding: EdgeInsets.only(left: width / 58.714, top: height / 121.86, bottom: height / 121.86), ///(7, 7, 7)
                               child: Row(
                                 children: [
-                                  const Icon(Icons.more_horiz, size: 25,),
-                                  const SizedBox(
-                                    width: 10,
+                                  Icon(Icons.more_horiz, size: height / 34.12,), ///25
+                                  SizedBox(
+                                    width: width / 41.1, ///10
                                   ),
                                   Flexible(
                                     child: RichText(
@@ -567,17 +570,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                       maxLines: 2,
                                       text: TextSpan(
                                           children: [
-                                            const TextSpan(
+                                            TextSpan(
                                               text:  "Xem thông tin giới thiệu của ",
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: height / 47.398, ///18
                                                   color: Colors.black
                                               ),
                                             ),
                                             TextSpan(
                                               text: profile.name,
-                                              style: const TextStyle(
-                                                fontSize: 18,
+                                              style: TextStyle(
+                                                fontSize: height / 47.398, ///18
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.black,
                                               ),
@@ -598,7 +601,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const Divider(color: Colors.grey,),
 
                           Container(
-                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                              padding: EdgeInsets.fromLTRB(width / 27.4, height / 85.3, width / 27.4, 0), ///(15, 10, 15, 0)
                               child: Row(
                                 mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
@@ -606,18 +609,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Text(
                                         "Bạn bè",
                                         style: TextStyle(
-                                            fontSize: 26,
+                                            fontSize: height / 32.81, ///26
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
                                         "864 (3 bạn chung)",
                                         style: TextStyle(
-                                          color: Color(0xffacacae),
-                                          fontSize: 16,
+                                          color: const Color(0xffacacae),
+                                          fontSize: height / 53.3125, ///16
                                         ),
                                       ),
                                     ],
@@ -626,19 +629,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child: Container(
                                               decoration: BoxDecoration(
                                                 color: const Color(0xffeff0f1),
-                                                borderRadius: BorderRadius.circular(18),
+                                                borderRadius: BorderRadius.circular(height / 47.398), ///18
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: const Color(0xffeff0f1)
                                                         .withOpacity(.4),
-                                                    blurRadius: 5.0,
-                                                    offset: const Offset(0, 10),
+                                                    blurRadius: height / 170.6, ///5.0
+                                                    offset: Offset(0, height / 85.3), ///10
                                                     // shadow direction: bottom right
                                                   )
                                                 ]
                                               ),
-                                              width: (MediaQuery.of(context).size.width / 2) - 50,
-                                              height: 38,
+                                              width: (MediaQuery.of(context).size.width / 2) - width / 8.22, ///50
+                                              height: height / 22.45, ///38
                                               child: const Center(
                                                 child: Text(
                                                   "Xem tất cả bạn bè",
@@ -653,9 +656,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               )),
                           Container(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            padding: EdgeInsets.fromLTRB(0, height / 85.3, 0, 0), ///10
                             width: MediaQuery.of(context).size.width,
-                            height: 170,
+                            height: height / 5.018,
                             child: profile.friends!.isNotEmpty ? ListView.separated(
                                 shrinkWrap: true,
                                 //physics: const NeverScrollableScrollPhysics(),
@@ -664,7 +667,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   return Friend(userAsset: profile.friends![index].userAsset, name: profile.friends![index].name);
                                 },
                                 separatorBuilder: (BuildContext context, int index) {
-                                  return const SizedBox(width: 5);
+                                  return SizedBox(width: width / 82.2); ///5
                                 },
                                 itemCount: min(4, profile.friends!.length)
                             ) : const SizedBox(width: 0, height: 0)

@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/entities.dart';
 
+import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 
 class DetailProfile extends StatefulWidget {
@@ -22,25 +23,27 @@ class DetailProfile extends StatefulWidget {
 class _DetailProfileState extends State<DetailProfile> {
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        toolbarHeight: 70,
+        toolbarHeight: height / 12.186, ///70
         leading: IconButton(
           icon: const Icon(
               IconData(0xe094, fontFamily: 'MaterialIcons'),
           ),
           color: Colors.black,
-          iconSize: 30,
+          iconSize: height / 28.43, ///30
           onPressed: () {
             Navigate.popPage(context);
           },
         ),
-        title: const Center(
+        title: Center(
           child: Text(
             "Giới thiệu ",
             style: TextStyle(
-              fontSize: 28,
+              fontSize: height / 30.464, ///28
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -51,7 +54,7 @@ class _DetailProfileState extends State<DetailProfile> {
             onPressed: () {},
             icon: const Icon(Icons.search),
             color: Colors.black,
-            iconSize: 30,
+            iconSize: height / 28.43, ///30
             padding: const EdgeInsets.only(right: 0),
           ),
         ],
@@ -63,11 +66,11 @@ class _DetailProfileState extends State<DetailProfile> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top : 15, left: 10),
-              child: const Text(
+              margin: EdgeInsets.only(top : height / 56.87, left: width / 41.1), ///(15, 10)
+              child: Text(
                 "Công việc ",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: height / 30.464, ///28
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -94,11 +97,11 @@ class _DetailProfileState extends State<DetailProfile> {
 
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top : 15, left: 10),
-              child: const Text(
+              margin: EdgeInsets.only(top : height / 56.87, left: width / 41.1), ///(15, 10)
+              child: Text(
                 "Học vấn ",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: height / 30.464, ///28
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -125,11 +128,11 @@ class _DetailProfileState extends State<DetailProfile> {
 
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top : 15, left: 10),
-              child: const Text(
+              margin: EdgeInsets.only(top : height / 56.87, left: width / 41.1), ///(15, 10)
+              child: Text(
                 "Nơi sống ",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: height / 30.464, ///28
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -142,11 +145,11 @@ class _DetailProfileState extends State<DetailProfile> {
 
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top : 15, left: 10),
-              child: const Text(
+              margin: EdgeInsets.only(top : height / 56.87, left: width / 41.1), ///(15, 10)
+              child: Text(
                 "Thông tin cơ bản ",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: height / 30.464, ///28
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -163,11 +166,11 @@ class _DetailProfileState extends State<DetailProfile> {
 
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top : 15, left: 10),
-              child: const Text(
+              margin: EdgeInsets.only(top : height / 56.87, left: width / 41.1), ///(15, 10)
+              child: Text(
                 "Sở thích ",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: height / 30.464, ///28
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
