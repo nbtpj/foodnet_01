@@ -4,7 +4,6 @@
 package io.flutter.app;
 
 import android.content.Context;
-
 import androidx.annotation.CallSuper;
 import androidx.multidex.MultiDex;
 

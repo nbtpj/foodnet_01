@@ -22,7 +22,8 @@ class ProfilePage extends StatefulWidget {
     required this.id,
     this.arriveType,
   }) : super(key: key) {
-    this.type = id == getMyProfileId() ? "me" : "other";
+    this.type = id == "BLEoK5h0k1Pls86GrDogy5YfazJ2" ? "me" : "other";
+
   }
 
   @override
