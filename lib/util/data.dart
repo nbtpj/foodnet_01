@@ -142,41 +142,42 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   } else if (filter.search_type! == "friend_suggestions") {
     yield FriendData(
         id: '1',
+        time: DateTime.now(),
         name: "Luong Dat",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 8);
     yield FriendData(
-        id: '2',
+        id: '2',time: DateTime.now(),
         name: "Minh Quang",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 8);
     yield FriendData(
-        id: '3',
+        id: '3',time: DateTime.now(),
         name: "Dao Tuan",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '4',
+        id: '4',time: DateTime.now(),
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '5',
+        id: '5',time: DateTime.now(),
         name: "Luong Dat",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '6',
+        id: '6',time: DateTime.now(),
         name: "Minh Quang",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '7',
+        id: '7',time: DateTime.now(),
         name: "Dao Tuan",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '8',
+        id: '8',time: DateTime.now(),
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);

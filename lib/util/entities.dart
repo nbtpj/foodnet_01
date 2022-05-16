@@ -7,6 +7,8 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tuple/tuple.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 List<LatLng> position_list = [
   const LatLng(37.42796133580664, -122.085749655962),
@@ -240,14 +242,14 @@ class UserData implements LazyLoadData {
 class FriendData implements LazyLoadData {
   String id;
   String name;
-  String? time;
+  DateTime time;
   String userAsset;
   int? mutualism;
 
   FriendData({
     required this.id,
     required this.name,
-    this.time,
+    required this.time,
     required this.userAsset,
     this.mutualism,
   });
@@ -262,7 +264,9 @@ class FriendData implements LazyLoadData {
             id: json["id"]! as String,
             name: json["name"]! as String,
             userAsset: json["userAsset"] as String,
+            time: (json['time'] as Timestamp).toDate(),
             mutualism: 0);
+  String get time_string {return timeago.format(time);}
 
   Map<String, Object?> toJson() {
     return {

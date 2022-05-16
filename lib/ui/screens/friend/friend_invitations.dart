@@ -27,7 +27,7 @@ class _FriendsState extends State<Friends> {
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
     return getFriends(
-              Filter(search_type: "friend_invitations"), getMyProfileId()
+              Filter(search_type: "friend_invitations"), "BLEoK5h0k1Pls86GrDogy5YfazJ2"
           ).toList();
   }
 
@@ -139,6 +139,7 @@ class _FriendsState extends State<Friends> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
+                        print(friendList);
                         return SizedBox(
                           child: ListView.separated(
                               shrinkWrap: true,
@@ -150,11 +151,11 @@ class _FriendsState extends State<Friends> {
                               },
                               itemCount: friendList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                var friendItem = friendList[index];
+                                FriendData friendItem = friendList[index];
                                 return FriendItem(
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
-                                  time: friendItem.time!,
+                                  time: friendItem.time_string,
                                   eraseFriendsList: _eraseFriendsList,
                                   index: index,
                                 );
