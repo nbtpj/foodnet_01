@@ -7,22 +7,22 @@ import 'entities.dart';
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
 CollectionReference<PostData> postsRef =
-    FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["id"] = snapshot.id;
-          return PostData.fromJson(data);
-        },
-        toFirestore: (postData, _) => postData.toJson());
+FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return PostData.fromJson(data);
+    },
+    toFirestore: (postData, _) => postData.toJson());
 
 CollectionReference<PostData> categoriesRef =
-    FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["id"] = snapshot.id;
-          return PostData.categoryFromJson(data);
-        },
-        toFirestore: (postData, _) => postData.categoryToJson());
+FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return PostData.categoryFromJson(data);
+    },
+    toFirestore: (postData, _) => postData.categoryToJson());
 
 CollectionReference<FriendData> friendsRef(String profileId) {
   return FirebaseFirestore.instance
@@ -30,23 +30,26 @@ CollectionReference<FriendData> friendsRef(String profileId) {
       .doc(profileId)
       .collection("profiles")
       .withConverter(
-          fromFirestore: (snapshot, _) {
-            var data = snapshot.data()!;
-            data["id"] = snapshot.id;
-            return FriendData.fromJson(data);
-          },
-          toFirestore: (friendData, _) => friendData.toJson());
+      fromFirestore: (snapshot, _) {
+        var data = snapshot.data()!;
+        data["id"] = snapshot.id;
+        return FriendData.fromJson(data);
+      },
+      toFirestore: (friendData, _) => friendData.toJson());
 }
 
 CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     .collection('profiles')
     .withConverter<ProfileData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["id"] = snapshot.id;
-          return ProfileData.fromJson(data);
-        },
-        toFirestore: (profileData, _) => profileData.toJson());
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return ProfileData.fromJson(data);
+    },
+    toFirestore: (profileData, _) => profileData.toJson());
+
+CollectionReference postReactionRef =
+FirebaseFirestore.instance.collection("reactions-posts");
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -74,13 +77,13 @@ Stream<PostData> getPosts(Filter filter) async* {
     }
   }
 }
-Stream<CommentData> fetch_comments(String foodID, int from, int to) async*{
-  /// todo: lấy các comment của postdata có foodID, từ khoảng from đến to (lưu ý là ngược lại thứ tự thời gian,
-  /// có nghĩa là nếu from =0, thì comment tương ứng đó là comment cuối cùng theo thời gian)
-  for (var i=from; i<to; i++){
+
+Stream<CommentData> fetch_comments(String foodID, int from, int to) async* {
+  for (var i = from; i < to; i++) {
     yield CommentData(timestamp: DateTime.now());
   }
 }
+
 String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
@@ -109,7 +112,7 @@ Stream<FriendData> getFriend(String? profileId) async* {
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);
   final friendDocumentRef =
-      friendCollectionRef.where("type", isEqualTo: "friends");
+  friendCollectionRef.where("type", isEqualTo: "friends");
   final firstPage = friendDocumentRef.orderBy("time").limit(4);
   final friendDocument = await firstPage.get();
   for (var doc in friendDocument.docs) {
@@ -121,10 +124,9 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);
   if (filter.search_type! == "friend_invitations") {
-    final invitationDocumentRef =
-        friendCollectionRef
-            .where("type", isEqualTo: "invitations")
-            .orderBy("time");
+    final invitationDocumentRef = friendCollectionRef
+        .where("type", isEqualTo: "invitations")
+        .orderBy("time");
     final invitationDocument = await invitationDocumentRef.get();
     for (var doc in invitationDocument.docs) {
       yield doc.data();
@@ -132,9 +134,7 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   } else if (filter.search_type! == "friend_list") {
     final friendCollectionRef = friendsRef(profileId);
     final friendDocumentRef =
-      friendCollectionRef
-        .where("type", isEqualTo: "friends")
-        .orderBy("time");
+    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
     final friendDocument = await friendDocumentRef.get();
     for (var doc in friendDocument.docs) {
       yield doc.data();
@@ -225,6 +225,25 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
 }
 
 String file_type(String url) {
-  var fileName = (url.split('/').last);
-  return fileName.split('.').last.toLowerCase();
+  var fileName = (url
+      .split('/')
+      .last);
+  return fileName
+      .split('.')
+      .last
+      .toLowerCase();
+}
+
+Future<Tuple2<int, int>> getRateByPostId(String postId) async {
+  DocumentReference docRef = postReactionRef.doc(postId);
+  return docRef.get().then((snapshot) {
+    if (snapshot.exists) {
+      return Tuple2(
+          snapshot.get("upvote") as int,
+          snapshot.get("downvote") as int
+      );
+    } else {
+      return const Tuple2(0, 0);
+    }
+  });
 }

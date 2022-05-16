@@ -5,6 +5,7 @@ import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tuple/tuple.dart';
 
 class ReviewStars extends StatefulWidget {
   PostData food;
@@ -28,47 +29,62 @@ class _ReviewStarsState extends State<ReviewStars> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    color: textColor,
-                  ),
-                  Text(
-                    "${widget.food.getUpvoteRate()}",
-                    style: TextStyle(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.screenHeight / 45.54),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.heart_broken,
-                    color: textColor,
-                  ),
-                  Text(
-                    "${widget.food.getDownvoteRate()}",
-                    style: TextStyle(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.screenHeight / 45.54),
-                  ),
-
-                  /// 15.0
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
-
-                    /// 8.0
-                    child: Text("${widget.food.getNumRate()} ${reviews_string}",
-                        style: TextStyle(color: Colors.black26)),
-                  )
-                ],
+              FutureBuilder<Tuple2<int, int>>(
+                future: widget.food.getRate(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final upvoteRate = snapshot.data!.item1;
+                    final downvoteRate = snapshot.data!.item2;
+                    return Row(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.favorite,
+                              color: textColor,
+                            ),
+                            Text(
+                              "$upvoteRate",
+                              style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.screenHeight / 45.54
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.heart_broken,
+                              color: textColor,
+                            ),
+                            Text(
+                              "$downvoteRate",
+                              style: TextStyle(
+                                  color: textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: SizeConfig.screenHeight / 45.54
+                              ),
+                            ),
+                            /// 15.0
+                            Padding(
+                              padding:
+                              EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
+                              /// 8.0
+                              child: Text("${upvoteRate + downvoteRate} $reviews_string",
+                                  style: const TextStyle(color: Colors.black26)),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center();
+                  }
+                }
               ),
               Container(
                 height: SizeConfig.screenHeight / 34.15,
@@ -78,7 +94,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     borderRadius: BorderRadius.circular(10)),
               ),
               widget.food.getLocationName() == null
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : GestureDetector(
                       onTap: () async {
                         Navigator.push(
