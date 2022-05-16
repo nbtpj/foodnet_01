@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -107,8 +108,8 @@ class _ReviewStarsState extends State<ReviewStars> {
                               future: widget.food.getLocationName(),
                               builder: (context, snapshot) => Text(
                                     snapshot.hasData
-                                        ? snapshot.data ?? "None"
-                                        : "None",
+                                        ? snapshot.data ?? None
+                                        : None,
                                     style: TextStyle(
                                         color: freeDelivery,
                                         fontWeight: FontWeight.bold,

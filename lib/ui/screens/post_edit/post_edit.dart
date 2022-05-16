@@ -58,7 +58,7 @@ class PostEditForm extends StatefulWidget {
 class _PostEditForm extends State<PostEditForm> {
   final _formKey = GlobalKey<FormBuilderState>();
 
-  Widget _select_tags(PostData food, int i) {
+  StatefulWidget _select_tags(PostData food, int i) {
     return FutureBuilder<List<PostData>>(
         future: getPosts(Filter(search_type: 'category')).toList(),
         builder: (context, snapshot) {
@@ -74,13 +74,13 @@ class _PostEditForm extends State<PostEditForm> {
                     ),
                     const FittedBox(
                         fit: BoxFit.fitHeight,
-                        child: Text("None",
+                        child: Text(None,
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 18)))
                   ],
                 ),
               ),
-              value: "None",
+              value: None,
             )
           ];
           builds.addAll([
@@ -128,21 +128,35 @@ class _PostEditForm extends State<PostEditForm> {
           ]);
           return DropdownButton<String>(
             items: builds,
-            value: food.cateList.length > i ? food.cateList[i] : "None",
+            value: food.cateList.length > i ? food.cateList[i] : None,
             icon: const Icon(Icons.arrow_downward),
             elevation: 16,
             style: const TextStyle(color: Colors.deepPurple),
             onChanged: (newValue) {
               setState(() {
-                if (newValue == "None") {
+                if (food.cateList.contains(newValue!)) {
+                  Fluttertoast.showToast(
+                      msg: already_chosen,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.grey,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  return;
+                }
+                if (newValue == None) {
                   if (food.cateList.length > i) {
                     food.cateList.removeAt(i);
                   }
                 } else {
+                  if (food.cateList.isEmpty) {
+                    food.cateList = [newValue];
+                    return;
+                  }
                   if (food.cateList.length <= i) {
-                    food.cateList.addAll([newValue!]);
+                    food.cateList.addAll([newValue]);
                   } else {
-                    food.cateList[i] = newValue!;
+                    food.cateList[i] = newValue;
                   }
                 }
               });
@@ -151,18 +165,36 @@ class _PostEditForm extends State<PostEditForm> {
         });
   }
 
-  Widget _select_medias() {
+  Widget _select_cover_post() {
+    return SizedBox(
+      height: SizeConfig.screenHeight/5,
+      child: GestureDetector(
+        child: MediaWidget(
+          url: widget.food.outstandingIMGURL,
+          isNet: null,
+        ),
+        onTap: () async {
+          final XFile? image =
+          await widget._picker.pickImage(source: ImageSource.gallery);
+          setState(() {
+            widget.food.outstandingIMGURL =
+            image == null ? widget.food.outstandingIMGURL : image.path;
+          });
+        },
+      ),
+
+    );
+  }
+
+  StatefulWidget _select_medias() {
     return widget.food.mediaUrls.isNotEmpty
         ? MediaList(
             children: [
               for (String element in widget.food.mediaUrls)
                 GestureDetector(
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: MediaWidget(
-                      url: element,
-                      isNet: null,
-                    ),
+                  child: MediaWidget(
+                    url: element,
+                    isNet: null,
                   ),
                   onLongPress: () {
                     setState(() {
@@ -199,25 +231,25 @@ class _PostEditForm extends State<PostEditForm> {
             nableInfiniteScroll: false,
           )
         : MediaList(
-      children: [
-        IconButton(
-            onPressed: () async {
-              final List<XFile>? images =
-              await widget._picker.pickMultiImage();
-              setState(() {
-                widget.food.mediaUrls
-                    .addAll([for (var img in images!) img.path]);
-              });
-            },
-            icon: Icon(
-              Icons.add_a_photo,
-              size: SizeConfig.screenWidth / 5.0,
-              color: buttonColor,
-            )),
-      ],
-      autoPlay: false,
-      nableInfiniteScroll: false,
-    );
+            children: [
+              IconButton(
+                  onPressed: () async {
+                    final List<XFile>? images =
+                        await widget._picker.pickMultiImage();
+                    setState(() {
+                      widget.food.mediaUrls
+                          .addAll([for (var img in images!) img.path]);
+                    });
+                  },
+                  icon: Icon(
+                    Icons.add_a_photo,
+                    size: SizeConfig.screenWidth / 5.0,
+                    color: buttonColor,
+                  )),
+            ],
+            autoPlay: false,
+            nableInfiniteScroll: false,
+          );
   }
 
   Widget _build_form() {
@@ -225,6 +257,7 @@ class _PostEditForm extends State<PostEditForm> {
       key: _formKey,
       child: Expanded(
           child: ListView(children: [
+        _select_cover_post(),
         FormBuilderTextField(
           name: "title",
           initialValue: widget.food.title,
@@ -242,15 +275,15 @@ class _PostEditForm extends State<PostEditForm> {
             name: "price",
             decoration: const InputDecoration(hintText: price_string),
             autofillHints: const ["000 vnd", "500 vnd", ".99 \$"],
-            validator: (value){
-              if (value==null) return null;
+            validator: (value) {
+              if (value == null) return null;
               value = value.replaceAll("[^\\d.]", "");
               return value;
             },
-            initialValue: widget.food.price?.toString() ?? "null",
+            initialValue: widget.food.price?.toString() ?? None,
             onChanged: (value) {
               try {
-                if (value != "null") {
+                if (value != None) {
                   widget.food.price = int.parse(value ?? "0");
                 }
               } catch (e) {}
@@ -291,7 +324,7 @@ class _PostEditForm extends State<PostEditForm> {
                   FutureBuilder<String?>(
                       future: widget.food.getLocationName(),
                       builder: (context, snapshot) => Text(
-                            snapshot.hasData ? snapshot.data ?? "None" : "None",
+                            snapshot.hasData ? snapshot.data ?? None : None,
                             style: TextStyle(
                                 color: freeDelivery,
                                 fontWeight: FontWeight.bold,

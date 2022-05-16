@@ -35,42 +35,54 @@ class _ImgState extends State<MediaWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.isNet == null) {
-      return Image.network(widget.url, fit: BoxFit.cover,
+      return FittedBox(
+          fit: BoxFit.contain,
+          child: Image.network(widget.url, fit: BoxFit.cover,
           errorBuilder: (BuildContext a, Object b, StackTrace? c) {
         try {
           var m = File(widget.url);
-          return Image.file(
+          return FittedBox(
+              fit: BoxFit.contain,
+              child: Image.file(
             File(widget.url),
             fit: BoxFit.cover,
             errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-                Image.asset(placeholder),
-          );
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Image.asset(placeholder)),
+          ));
         } catch (e) {
           print("this is an exception ${e.toString()}");
           return Image.asset(placeholder);
         }
-      });
+      }));
     }
     if (!widget.isNet!) {
       try {
         var m = File(widget.url);
-        return Image.file(
+        return FittedBox(
+            fit: BoxFit.contain,
+            child: Image.file(
           File(widget.url),
           fit: BoxFit.cover,
           errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
               Image.asset(placeholder),
-        );
+        ));
       } catch (e) {
         print("this is an exception ${e.toString()}");
-        return Image.asset(placeholder);
+        return FittedBox(
+          fit: BoxFit.contain,
+          child: Image.asset(placeholder));
       }
     }
-    return Image.network(
+    return FittedBox(
+        fit: BoxFit.contain,
+        child: Image.network(
       widget.url,
       fit: BoxFit.cover,
       errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
           Image.asset(placeholder),
-    );
+    ));
   }
 }
 

@@ -204,6 +204,8 @@ class PostData implements LazyLoadData {
 
   Future<bool> commit_changes() async {
     /// todo lưu lại toàn bộ thay đổi, return false nếu fail
+    /// lưu ý rằng, sẽ có một số url vẫn còn là local, nên bước này sẽ bao gồm cả việc
+    /// upload các media này lên
     return true;
   }
 

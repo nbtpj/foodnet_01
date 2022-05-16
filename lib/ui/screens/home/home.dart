@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/AuthWrapperHome.dart';
 import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
@@ -60,13 +61,13 @@ class _HomeState extends State<Home> {
                 ],
             ),
             const DiscountCard(),
-            FoodPart(partName: "Categories"),
+            FoodPart(partName: tag_string),
             const CategoriesFood(),
-            FoodPart(partName: "Recommend"),
+            FoodPart(partName: recommend_string),
             const RecommendFoods(),
-            FoodPart(partName: "Popular"),
+            FoodPart(partName: popular_string),
             const PopularFoods(),
-            FoodPart(partName: "My Foods"),
+            FoodPart(partName: my_post_string),
             const MyFoods(),
           ],
         ),
