@@ -88,7 +88,7 @@ class UnConfirm extends StatelessWidget {
                   color: buttonColor,
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.all(4),
-              width: 100,
+              width: 90,
               height: 30,
               alignment: Alignment.center,
               child: const Text(
@@ -109,7 +109,7 @@ class UnConfirm extends StatelessWidget {
                 color: Colors.grey[350],
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(4),
-            width: 100,
+            width: 90,
             height: 30,
             alignment: Alignment.center,
             child: const Text(
