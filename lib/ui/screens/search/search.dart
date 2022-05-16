@@ -4,6 +4,7 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../util/global.dart';
 import 'components/SearchList.dart';
 
 class SearchPage extends StatefulWidget {
@@ -24,7 +25,8 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     Future<List<SearchData>> fetchData(String type, String keyword) {
       return getSearchData(Filter(search_type: type, keyword: keyword)).toList();
     }
@@ -32,7 +34,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 35,),
+          SizedBox(height: height / 24.37,), ///35
           Row(
             children: [
               IconButton(
@@ -43,15 +45,15 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.black,
               ),
               Container(
-                width: 348,
+                width: width / 1.18, ///348
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(height / 34.12),  ///25
                 ),
                 child: TextField(
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 15 ,top: 10, bottom: 10),
+                      contentPadding: EdgeInsets.only(left: width / 27.4 ,top: height / 85.3, bottom: height / 85.3), ///(15, 10, 10)
                       border: InputBorder.none,
                       isDense: true,
                       hintText: widget.type == "user" ? "Tìm kiếm người dùng"
