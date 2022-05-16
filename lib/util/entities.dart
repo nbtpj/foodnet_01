@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math';
+
+import 'package:tuple/tuple.dart';
 
 List<LatLng> position_list = [
   const LatLng(37.42796133580664, -122.085749655962),
@@ -155,14 +158,8 @@ class PostData implements LazyLoadData {
     }
   }
 
-  int getUpvoteRate() {
-    /// todo: cài đặt
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
-  }
-
-  int getDownvoteRate() {
-    /// todo: cài đặt
-    return (randomNumberGenerator.nextDouble() * 1000).ceil();
+  Future<Tuple2<int, int>> getRate() async {
+    return await getRateByPostId(id);
   }
 
   PostData.fromJson(Map<String, Object?> json)
