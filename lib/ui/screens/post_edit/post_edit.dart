@@ -5,6 +5,7 @@ import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/nav_bar.dart';
 import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/ui/screens/post_edit/map_picker.dart';
 import 'package:foodnet_01/ui/screens/post_edit/widgets/detail_widget.dart';
@@ -62,7 +63,7 @@ class _PostEditForm extends State<PostEditForm> {
     return FutureBuilder<List<PostData>>(
         future: getPosts(Filter(search_type: 'category')).toList(),
         builder: (context, snapshot) {
-          if (snapshot.hasData){
+          if (snapshot.hasData) {
             List<PostData> tags = snapshot.data ?? [];
             List<DropdownMenuItem<String>> builds = [
               DropdownMenuItem<String>(
@@ -76,8 +77,8 @@ class _PostEditForm extends State<PostEditForm> {
                       const FittedBox(
                           fit: BoxFit.fitHeight,
                           child: Text(None,
-                              style:
-                              TextStyle(color: Colors.black45, fontSize: 18)))
+                              style: TextStyle(
+                                  color: Colors.black45, fontSize: 18)))
                     ],
                   ),
                 ),
@@ -163,10 +164,10 @@ class _PostEditForm extends State<PostEditForm> {
                 });
               },
             );
-          }
-          else {
+          } else {
             return SizedBox.shrink();
-          };
+          }
+          ;
         });
   }
 
@@ -275,16 +276,21 @@ class _PostEditForm extends State<PostEditForm> {
             decoration: const InputDecoration(
               labelText: features_string,
             ),
-            initialValue: [for (var i_feat in widget.food.getFeatures()) "${i_feat[1]}: ${i_feat[0]}"].join("; "),
+            initialValue: [
+              for (var i_feat in widget.food.getFeatures())
+                "${i_feat[1]}: ${i_feat[0]}"
+            ].join("; "),
             onChanged: (value) {
-              List<String> feats = value!=null? value.replaceAll(" ", '').split(";"):[];
+              List<String> feats =
+                  value != null ? value.replaceAll(" ", '').split(";") : [];
               widget.food.features = [];
-              for(var feat in feats){
-                try{
+              for (var feat in feats) {
+                try {
                   String a = feat.split(":")[0], b = feat.split(":")[1];
 
-                  widget.food.features.add([b,a]);
-                }catch(e){};
+                  widget.food.features.add([b, a]);
+                } catch (e) {}
+                ;
               }
             }),
         FormBuilderTextField(
@@ -406,7 +412,7 @@ class _PostEditForm extends State<PostEditForm> {
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const Home()))
+                                    builder: (context) => MyHomePage()))
                             : Navigator.pop(context);
                       },
                       icon: Icon(
