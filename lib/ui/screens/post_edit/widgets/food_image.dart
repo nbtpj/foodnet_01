@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/image_provider.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
-import 'package:foodnet_01/util/constants/colors.dart';
+// import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -18,13 +18,15 @@ class _FoodImageState extends State<FoodImage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
+    return FutureBuilder<ImageProvider>(
+      future: any_image(widget.food.outstandingIMGURL, null),
+        builder: (context, snapshot) => Container(
       height: SizeConfig.screenHeight * 0.45,
       decoration: BoxDecoration(
         color: Colors.orangeAccent,
         image: DecorationImage(
-            image: any_image(widget.food.outstandingIMGURL, null),
-            fit: BoxFit.fitWidth
+            image: snapshot.data!,
+            fit: BoxFit.contain
         ),
       ),
       child: SafeArea(
@@ -60,6 +62,6 @@ class _FoodImageState extends State<FoodImage> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
