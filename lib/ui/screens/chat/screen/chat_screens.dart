@@ -18,15 +18,14 @@ class _ChatScreensState extends State<ChatScreens> {
   _buildMessage(Message message ,bool isMe){
     final msg =  Container(
       margin: isMe ? const EdgeInsets.only(top:8.0 ,bottom:8.0, left: 80.0 )
-          :const EdgeInsets.only(top:8.0 ,bottom:8.0,  ),
+          :const EdgeInsets.only(top:8.0 ,bottom:8.0, right: 80.0 ),
       padding:const EdgeInsets.symmetric(horizontal: 25.0,vertical: 15.0),
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
-        color:isMe ?const Color(0xFFFDF8E9) : Colors.blue.shade50,
-        borderRadius:isMe ?const BorderRadius.only(
+        color:isMe ? Colors.lightBlueAccent : Colors.black12,
+        borderRadius : BorderRadius.only(
             topLeft: Radius.circular(15.0),
-            bottomLeft: Radius.circular(15.0)
-        ) : const BorderRadius.only(
+            bottomLeft: Radius.circular(15.0),
             topRight: Radius.circular(15.0),
             bottomRight: Radius.circular(15.0)
         ),
@@ -38,7 +37,7 @@ class _ChatScreensState extends State<ChatScreens> {
             style:const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
-              color: Colors.blueGrey,
+              color: Colors.black45,
             ),
           ),
           const  SizedBox(height: 8.0,),
@@ -46,7 +45,7 @@ class _ChatScreensState extends State<ChatScreens> {
             style:const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
-              color: Colors.blueGrey,
+              color: Colors.black,
             ),
           ),
         ],
@@ -57,20 +56,7 @@ class _ChatScreensState extends State<ChatScreens> {
       return msg;
     }
 
-    return Row(
-      children: [
-        msg,
-        IconButton(onPressed: (){}, icon:message.isLiked ?const Icon(
-          Icons.favorite_border,
-          size: 29.0,
-          color: Colors.blueGrey,
-        ) : Icon(
-          Icons.favorite,
-          size: 29.0,
-          color: message.isLiked ? Colors.blueGrey : Colors.red,
-        ) ) ,
-      ],
-    );
+    return msg;
   }
 
   _buildMessageComposer(){
@@ -87,7 +73,7 @@ class _ChatScreensState extends State<ChatScreens> {
           const  Expanded(child:TextField(
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-                hintText: "Xabar jo'natish..."
+                hintText: "Message"
             ),
           )),
           IconButton(onPressed: (){},
@@ -105,12 +91,21 @@ class _ChatScreensState extends State<ChatScreens> {
 
     final User user;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(widget.user.name),
+            Text(
+                widget.user.name,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+            ),
           ],
         ),
         elevation: 0.0,
@@ -133,14 +128,8 @@ class _ChatScreensState extends State<ChatScreens> {
               child: Container(
                   decoration:const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0)),
                   ),
                   child: ClipRRect(
-                    borderRadius:const BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0)),
                     child: ListView.builder(
                         reverse: true,
                         padding:const EdgeInsets.only(top: 15.0),

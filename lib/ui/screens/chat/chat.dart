@@ -17,11 +17,13 @@ class _ChatScreenState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon:const Icon(
             Icons.arrow_back,
+            color: Colors.black
           ),
           onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage()));
@@ -33,7 +35,8 @@ class _ChatScreenState extends State<Chat> {
             Text("FoodNet",
               style: TextStyle(
                   fontSize: 30.0,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
               ),  ),
           ],
         ),
@@ -42,6 +45,7 @@ class _ChatScreenState extends State<Chat> {
           IconButton(
             icon:const Icon(
               Icons.search,
+              color: Colors.black,
             ),
             onPressed: (){
               Navigate.pushPage(context, const SearchPage(type: "chat",));
