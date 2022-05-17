@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
+import '../../../../util/global.dart';
+
 class FriendItem extends StatefulWidget {
   final String userAsset;
   final String name;
@@ -30,11 +32,13 @@ class _FriendItemState extends State<FriendItem> {
   }
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
         title: Text(
           widget.name,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.w600
           ),
         ),

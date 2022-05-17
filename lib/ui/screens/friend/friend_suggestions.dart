@@ -5,7 +5,7 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 import '../../../util/navigate.dart';
-import '../../components/friend_item.dart';
+import 'components/friend_item.dart';
 
 class FriendSuggestion extends StatefulWidget {
   const FriendSuggestion({Key? key}) : super(key: key);

@@ -5,8 +5,8 @@ import 'package:foodnet_01/util/entities.dart';
 
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
-import '../../components/friend_item.dart';
 import '../search/search.dart';
+import 'components/friend_item.dart';
 
 class FriendList extends StatefulWidget {
   const FriendList({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
-  Widget _build_friend_list(AsyncSnapshot<List<FriendData>> snapshot) {
+  Widget buildfriendlist(AsyncSnapshot<List<FriendData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
       return ListView.separated(
@@ -170,7 +170,7 @@ class _FriendListState extends State<FriendList> {
                         ],
                       ),
                     ),
-                    _build_friend_list(snapshot)
+                    buildfriendlist(snapshot)
                   ],
                 ),
               );

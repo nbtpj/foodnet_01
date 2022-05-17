@@ -6,8 +6,8 @@ import 'package:foodnet_01/util/navigate.dart';
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
 import '../../../util/global.dart';
-import '../../components/friend_item.dart';
 import '../search/search.dart';
+import 'components/friend_item.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -139,7 +139,6 @@ class _FriendsState extends State<Friends> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
-                        print(friendList);
                         return SizedBox(
                           child: ListView.separated(
                               shrinkWrap: true,
