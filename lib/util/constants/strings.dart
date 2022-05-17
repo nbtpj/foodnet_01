@@ -16,6 +16,7 @@ const String recommend_string = lang=='en'? "Recommend":"Đề xuất bởi Food
 const String reviews_string = lang=='en'? "reviews":"đánh giá";
 const String features_string = lang=='en'? "Features":"Đặc điểm";
 const String friend_string = lang=='en'? "friends":"bạn bè";
+const String logout_string = lang=='en'? "Log out":"Đăng xuất";
 
 
 

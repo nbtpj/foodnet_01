@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -243,14 +244,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                         height: height / 6.09,
 
                                         ///140
-                                        child: Column(
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Column(
                                           children: [
                                             SizedBox(
                                               height: height / 42.65,
 
                                               ///20
                                             ),
-                                            Row(
+                                            GestureDetector(onTap: (){
+                                              /// todo: xem ảnh đại diện
+                                            },
+                                                child:Row(
                                               children: [
                                                 SizedBox(width: width / 27.4),
 
@@ -278,11 +284,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ],
-                                            ),
+                                            )),
                                             SizedBox(height: height / 56.87),
 
                                             ///15
-                                            Row(
+                                            GestureDetector(onTap: (){
+                                              /// todo: chọn ảnh đại diện
+                                            },
+                                                child:Row(
                                               children: [
                                                 SizedBox(width: width / 27.4),
 
@@ -310,10 +319,46 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ],
-                                            ),
+                                            )),
+                                            SizedBox(height: height / 56.87),
+
+                                            ///15
+                                            GestureDetector(onTap: (){
+                                              /// todo: đăng xuất
+                                            },
+                                            child:
+                                            Row(
+                                              children: [
+                                                SizedBox(width: width / 27.4),
+
+                                                ///15
+                                                CircleAvatar(
+                                                  backgroundColor:
+                                                  Colors.grey[350],
+                                                  child: const Icon(
+                                                    IconData(0xf88b,
+                                                        fontFamily:
+                                                        'MaterialIcons'),
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: width / 41.1),
+
+                                                ///10
+                                                Text(
+                                                  logout_string,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: height / 56.87,
+
+                                                    ///15
+                                                  ),
+                                                ),
+                                              ],
+                                            ),),
                                           ],
                                         ),
-                                      );
+                                      ));
                                     });
                               },
                             ))
