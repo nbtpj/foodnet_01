@@ -1,8 +1,8 @@
-import 'package:tuple/tuple.dart';
-import '../ui/screens/chat/model/user_model.dart';
-import 'entities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tuple/tuple.dart';
 
+import 'entities.dart';
 
 /// định nghĩa các API sử dụng
 /// các hàm này nên hỗ trợ cache dữ liệu
@@ -24,6 +24,33 @@ FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
     },
     toFirestore: (postData, _) => postData.categoryToJson());
 
+CollectionReference<FriendData> friendsRef(String profileId) {
+  return FirebaseFirestore.instance
+      .collection('friends')
+      .doc(profileId)
+      .collection("profiles")
+      .withConverter(
+      fromFirestore: (snapshot, _) {
+        var data = snapshot.data()!;
+        data["id"] = snapshot.id;
+        return FriendData.fromJson(data);
+      },
+      toFirestore: (friendData, _) => friendData.toJson());
+}
+
+CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
+    .collection('profiles')
+    .withConverter<ProfileData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return ProfileData.fromJson(data);
+    },
+    toFirestore: (profileData, _) => profileData.toJson());
+
+CollectionReference postReactionRef =
+FirebaseFirestore.instance.collection("reactions-posts");
+
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
   // TODO: implement get_post
@@ -33,8 +60,11 @@ Future<PostData?> getPost(String id) async {
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
-  // TODO: implement get_posts
-  if (filter.search_type! == "food") {
+  // TODO: implement get_posts: có thể trả về với :
+  //  Filter(search_type: 'popular_food')
+  //  Filter(search_type: 'my_food')
+  //  Filter(search_type: 'recommend_food')
+  if (filter.search_type! != "category") {
     var foodSnapshot = await postsRef.get();
     for (var doc in foodSnapshot.docs) {
       yield doc.data();
@@ -47,377 +77,144 @@ Stream<PostData> getPosts(Filter filter) async* {
     }
   }
 }
-Future<PostData?> get_post(String id) async {
-  /// hàm lấy một đối tượng PostData dựa trên id
-  // TODO: implement get_post
-  return null;
+
+Stream<CommentData> fetch_comments(String foodID, int from, int to) async* {
+  for (var i = from; i < to; i++) {
+    yield CommentData(timestamp: DateTime.now());
+  }
 }
 
-Stream<PostData> get_posts(Filter filter) async* {
-  /// lấy 1 danh sách post theo điều kiệu lọc
-  /// trả về dạng stream
-  // TODO: implement get_posts
-  if(filter.search_type! =="food") {
-    yield PostData(
-        id: "1",
-        title: "Chicken Curry Pasta",
-        outstandingIMGURL: "assets/food/ChickenCurryPasta.jpg",
-        cateList: ["Chicken"],
-        price: 22);
-    yield PostData(
-        id: '2',
-        title: "Explosion Burger",
-        outstandingIMGURL: "assets/food/ExplosionBurger.jpg",
-        cateList: ["Fast Food"],
-        price: 15);
-    yield PostData(
-        id: '3',
-        title: "Grilled Chicken",
-        outstandingIMGURL: "assets/food/GrilledChicken.jpg",
-        cateList: ["Chicken"],
-        price: 30);
-    yield PostData(
-        id: '4',
-        title: "Grilled Fish",
-        outstandingIMGURL: "assets/food/GrilledFish.jpg",
-        cateList: ["Fish"],
-        price: 27);
-    yield PostData(
-        id: "5",
-        title: "Heavenly Pizza",
-        outstandingIMGURL: "assets/food/HeavenlyPizza.jpg",
-        cateList: ["Fast Food"],
-        price: 24);
-    yield PostData(
-        id: '6',
-        title: "Mandarin Pancake",
-        outstandingIMGURL: "assets/food/MandarinPancake.jpg",
-        cateList: ["Bakery"],
-        price: 19);
-    yield PostData(
-        id: '7',
-        title: "Organic Mandarin",
-        outstandingIMGURL: "assets/food/OrganicMandarin.jpg",
-        cateList: ["Fruit"],
-        price: 15);
-    yield PostData(
-        id: '8',
-        title: "Organic Orange",
-        outstandingIMGURL: "assets/food/OrganicOrange.jpg",
-        cateList: ["Fruit"],
-        price: 12);
-    yield PostData(
-        id: '9',
-        title: "Raspberries Cake",
-        outstandingIMGURL: "assets/food/RaspberriesCake.jpg",
-        cateList: ["Bakery"],
-        price: 28);
-  }
-  if(filter.search_type! =="category"){
-    yield PostData(
-        id: "1",
-        title: "Chicken",
-        outstandingIMGURL: "assets/category/chicken.png");
-    yield PostData(
-        id: '2',
-        title: "Bakery",
-        outstandingIMGURL: "assets/category/bakery.png");
-    yield PostData(
-        id: '3',
-        title: "Fast Food",
-        outstandingIMGURL: "assets/category/fastfood.png");
-    yield PostData(
-        id: '4',
-        title: "Fish",
-        outstandingIMGURL: "assets/category/fish.png");
-    yield PostData(
-        id: "5",
-        title: "Fruit",
-        outstandingIMGURL: "assets/category/fruit.png");
-    yield PostData(
-        id: '6',
-        title: "Soup",
-        outstandingIMGURL: "assets/category/soup.png");
-    yield PostData(
-        id: '7',
-        title: "Vegetable",
-        outstandingIMGURL: "assets/category/vegetable.png");
-  }
-  // ver 1: giả dữ liệu local
+String? getMyProfileId() {
+  return FirebaseAuth.instance.currentUser?.uid;
 }
 
-Future<FriendData?> get_friend(String id) async {
+Future<ProfileData> getProfile(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
-  return null;
-}
-Future<UserData?> get_user(String id) async {
-  /// hàm lấy một đối tượng UserData dựa trên id
-  // TODO: implement get_user
-  return null;
+  var res = profilesRef.doc(id).get().then((snapshot) {
+    print(snapshot.data()!.toJson());
+    return snapshot.data()!;
+  });
+  return res;
 }
 
-Iterable<UserData> get_users(Filter filter) sync* {
+Stream<ProfileData> getProfiles(Filter filter) async* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users
-  yield UserData();
+  var profileSnapshot = await profilesRef.get();
+  for (var doc in profileSnapshot.docs) {
+    yield doc.data();
+  }
 }
-Stream<FriendData> get_friends(Filter filter) async* {
-  /// lấy 1 danh sách user theo điều kiệu lọc
-  /// trả về dạng stream
-  // TODO: implement get_users
+
+Stream<FriendData> getFriend(String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
+  final friendDocumentRef =
+  friendCollectionRef.where("type", isEqualTo: "friends");
+  final firstPage = friendDocumentRef.orderBy("time").limit(4);
+  final friendDocument = await firstPage.get();
+  for (var doc in friendDocument.docs) {
+    yield doc.data();
+  }
+}
+
+Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
   if (filter.search_type! == "friend_invitations") {
+    final invitationDocumentRef = friendCollectionRef
+        .where("type", isEqualTo: "invitations")
+        .orderBy("time");
+    final invitationDocument = await invitationDocumentRef.get();
+    for (var doc in invitationDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_list") {
+    final friendCollectionRef = friendsRef(profileId);
+    final friendDocumentRef =
+    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+    final friendDocument = await friendDocumentRef.get();
+    for (var doc in friendDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_suggestions") {
     yield FriendData(
         id: '1',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '2',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '3',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '4',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "31W");
-    yield FriendData(
-        id: '5',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '6',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '7',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '8',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-    yield FriendData(
-        id: '9',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        time: "3M");
-  }
-
-  if (filter.search_type! == "friend_list") {
-    yield FriendData(
-        id: '1',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '2',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '3',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '4',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '5',
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '6',
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '7',
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '8',
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-
-  }
-
-  if (filter.search_type! == "friend_suggestions") {
-    yield FriendData(
-        id: '1',
+        time: DateTime.now(),
         name: "Luong Dat",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 8);
     yield FriendData(
-        id: '2',
+        id: '2',time: DateTime.now(),
         name: "Minh Quang",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 8);
     yield FriendData(
-        id: '3',
+        id: '3',time: DateTime.now(),
         name: "Dao Tuan",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '4',
+        id: '4',time: DateTime.now(),
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '5',
+        id: '5',time: DateTime.now(),
         name: "Luong Dat",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '6',
+        id: '6',time: DateTime.now(),
         name: "Minh Quang",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '7',
+        id: '7',time: DateTime.now(),
         name: "Dao Tuan",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
     yield FriendData(
-        id: '8',
+        id: '8',time: DateTime.now(),
         name: "Pham Trong",
         userAsset: "assets/friend/tarek.jpg",
         mutualism: 10);
   }
 }
 
-
-Stream<SearchData> getSearchData(Filter filter) async*{
+Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {
     yield SearchData(
-        id: "1",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
     yield SearchData(
       id: "2",
       name: "Minh Quang",
       //asset: "assets/friend/tarek.jpg"
     );
     yield SearchData(
-        id: "3",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "4",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "5",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "6",
-        name: "Minh Quang",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "7",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
     yield SearchData(
-        id: "8",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
-  } if (filter.search_type == "user" && filter.keyword == "a") {
-    yield SearchData(
-        id: "1",
-        name: "Luong Dat",
-        asset: "assets/friend/tarek.jpg"
-    );
-    yield SearchData(
-        id: "2",
-        name: "Minh Quang",
-        asset: "assets/friend/tarek.jpg"
-    );
-    yield SearchData(
-        id: "3",
-        name: "Pham Trong",
-        asset: "assets/friend/tarek.jpg"
-    );
-    yield SearchData(
-        id: "4",
-        name: "Dao Tuan",
-        asset: "assets/friend/tarek.jpg"
-    );
+        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
   }
-}
-
-Future<ProfileData>? getProfile(String id) async {
-  /// hàm lấy một đối tượng Profile Data dựa trên id
-  if (id == "1") {
-    return ProfileData(
-        id: "1",
-        name: "Lương Đạt",
-        userAsset: "assets/profile/dhia.jpg",
-        wallAsset: "assets/profile/first.png",
-        friendsNumber: 777,
-        works: ["Người Việt Trẻ 06/01 - CLB Sinh viên vận động hiến máu Trường ĐH Công nghệ"],
-        schools: ["Trường ĐH Công Nghệ - ĐHQGHN", "THPT Chuyên Đại học Sư Phạm"],
-        dayOfBirth: "11/10/2001",
-        gender: "Nam",
-        location: "Hà Nội",
-        favorites: ["Bóng đá", "Tình nguyện"],
-        friends: [
-          FriendData(
-            name: "Tarek Loukil",
-            userAsset: "assets/profile/tarek.jpg",
-          ),
-
-          FriendData(
-            name: "Ghassen Boughzala",
-            userAsset: "assets/profile/ghassen.jpg",
-          ),
-
-          FriendData(
-            name: "Hassen Chouaddah",
-            userAsset: "assets/profile/hassen.jpg",
-          ),
-
-          FriendData(
-            name: "Aziz Ammar",
-            userAsset: "assets/profile/aziz.jpg",
-          ),
-        ]
-    );
-  } else {
-    return ProfileData(
-        id: "2",
-        name: "Minh Quang",
-        userAsset: "assets/profile/dhia.jpg",
-        wallAsset: "assets/profile/first.png",
-        mutualism: 25,
-        location: "Hải Dương",
-        gender: "Nam",
-        schools: ["Khoa Công nghệ Thông tin - Trường ĐH Công Nghệ - VNU", "THPT Thanh Hà, Thanh Hà, Hải Dương"]
-    );
+  if (filter.search_type == "user" && filter.keyword == "a") {
+    yield SearchData(
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
   }
 }
 
@@ -428,51 +225,26 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
   yield null;
 }
 
-String file_type(String url){
-  var fileName = (url.split('/').last);
-  return fileName.split('.').last.toLowerCase();
+String file_type(String url) {
+  var fileName = (url
+      .split('/')
+      .last);
+  return fileName
+      .split('.')
+      .last
+      .toLowerCase();
 }
 
-Stream<User> getOnlineUsers() async* {
-  /// hàm tìm kiếm một tập các User đang online là friend của user hiện tại.
-  yield User(
-        id: 0,
-        name: "Foydalanuvchi",
-        imgURL: "assets/chat/me.png"
-  );
-  yield User(
-        id: 1,
-        name: "Abdulloh",
-        imgURL: "assets/chat/gerb.jpg"
-  );
-  yield User(
-        id: 2,
-        name: "Jobirhon",
-        imgURL: "assets/chat/magistrial.jpg"
-  );
-  yield User(
-        id: 3,
-        name: "Javohir",
-        imgURL: "assets/chat/nature.jpg"
-  );
-  yield User(
-        id: 4,
-        name: "Odilbek",
-        imgURL: "assets/chat/night.jpg"
-  );
-  yield User(
-        id: 5,
-        name: "Samandar",
-        imgURL: "assets/chat/night.jpg"
-  );
-  yield User(
-        id: 6,
-        name: "Boburjon",
-        imgURL: "assets/chat/me.png"
-  );
-  yield User(
-        id: 7,
-        name: "Sobirxon",
-        imgURL: "assets/chat/boys.jpg"
-  );
+Future<Tuple2<int, int>> getRateByPostId(String postId) async {
+  DocumentReference docRef = postReactionRef.doc(postId);
+  return docRef.get().then((snapshot) {
+    if (snapshot.exists) {
+      return Tuple2(
+          snapshot.get("upvote") as int,
+          snapshot.get("downvote") as int
+      );
+    } else {
+      return const Tuple2(0, 0);
+    }
+  });
 }

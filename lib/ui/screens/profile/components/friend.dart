@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/profile.dart';
 
+import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
 
 class Friend extends StatelessWidget {
@@ -8,9 +9,11 @@ class Friend extends StatelessWidget {
   final String? firstName;
   final String? lastName;
   final String? name;
-  const Friend({
+  late String id;
+  Friend({
     Key? key,
     required this.userAsset,
+    required this.id,
     this.firstName,
     this.lastName,
     this.name,
@@ -18,17 +21,19 @@ class Friend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return InkWell(
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height / 85.3)), ///10
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(height / 85.3), ///10
             color: Colors.white,
           ),
-          width: 90,
-          height: 165,
+          width: width / 4.567, ///90
+          height: height / 5.17, ///165
           child: Stack(
             alignment: Alignment.centerLeft,
             children: <Widget>[
@@ -36,21 +41,21 @@ class Friend extends StatelessWidget {
                   left: 0,
                   top: 0,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10)),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(height / 85.3), ///10
+                        topRight: Radius.circular(height / 85.3)), ///10
                     child: Image.asset(
                       userAsset,
-                      width: 90,
-                      height: 102,
+                      width: width / 4.567, ///90
+                      height: height / 8.36, ///102
                       fit: BoxFit.cover,
                     ),
                   )),
               Positioned(
                 left: 0,
-                top: 110,
+                top: height / 7.755, ///110
                 child: SizedBox(
-                    width: 90,
+                    width: width / 4.567, ///90,
                     child: Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,7 +69,7 @@ class Friend extends StatelessWidget {
                           Text(
                             name!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12, color: Colors.black),
+                            style: TextStyle(fontSize: height / 71.08, color: Colors.black), ///12
                             maxLines: 2,
                           )
                         ],
@@ -77,7 +82,7 @@ class Friend extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigate.pushPage(context, const ProfilePage(type: "other", id: "2"));
+        Navigate.pushPage(context, ProfilePage(id:id));
       },
     );
   }

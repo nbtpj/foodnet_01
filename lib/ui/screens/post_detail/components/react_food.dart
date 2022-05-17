@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/post_detail/edit/edit_food.dart';
-import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment_food.dart';
-import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/post_edit/post_edit.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class FavoriteFood extends StatefulWidget {
   PostData food;
-  bool is_edditing;
-
-  FavoriteFood({Key? key, required this.food, required this.is_edditing}) : super(key: key);
+  FavoriteFood({Key? key, required this.food}) : super(key: key);
 
   @override
   _FavoriteFoodState createState() => _FavoriteFoodState();
@@ -38,12 +34,12 @@ class _FavoriteFoodState extends State<FavoriteFood> {
         IconButton(
           onPressed: () {
             setState(() {
-              widget.food.change_react();
+              widget.food.changeReact();
             });
           },
-          icon: widget.food.get_react() == 1
+          icon: widget.food.getReact() == 1
               ? const Icon(Icons.favorite, color: Colors.white)
-              : widget.food.get_react() == 0
+              : widget.food.getReact() == 0
                   ? const Icon(Icons.favorite_outline, color: Colors.white)
                   : const Icon(Icons.heart_broken, color: Colors.white),
           color: Colors.white,
@@ -52,10 +48,11 @@ class _FavoriteFoodState extends State<FavoriteFood> {
         widget.food.isEditable()
             ? IconButton(
                 onPressed: () {
+                  /// todo: điều hướng đến trang chỉnh sửa
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditFood(
+                          builder: (context) => PostEditForm(
                                 food: widget.food,
                               )));
                 },

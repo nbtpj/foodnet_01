@@ -5,6 +5,7 @@ import 'package:foodnet_01/util/navigate.dart';
 
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
+import '../../../util/global.dart';
 import '../../components/friend_item.dart';
 import '../search/search.dart';
 
@@ -25,23 +26,27 @@ class _FriendsState extends State<Friends> {
 
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
-    return get_friends(Filter(search_type: "friend_invitations")).toList();
+    return getFriends(
+              Filter(search_type: "friend_invitations"), "BLEoK5h0k1Pls86GrDogy5YfazJ2"
+          ).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Scaffold(
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 10, right: 10, top: 40, bottom: 10),
+            margin: EdgeInsets.only(left: width / 41.1 , right: width / 41.1, top: height / 21.325, bottom: height / 85.3), ///(10, 10, 40, 10)
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Bạn bè ",
                   style: TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                      fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
                 ),
                 CircleAvatar(
                   backgroundColor: Colors.grey[300],
@@ -51,7 +56,7 @@ class _FriendsState extends State<Friends> {
                     },
                     icon: const Icon(Icons.search),
                     color: Colors.black,
-                    iconSize: 30,
+                    iconSize: height / 28.43, ///30
                     padding: const EdgeInsets.only(right: 0),
                   ),
                 ),
@@ -71,10 +76,10 @@ class _FriendsState extends State<Friends> {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.grey[350],
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: const EdgeInsets.all(10),
-                            width: 70,
-                            height: 30,
+                                borderRadius: BorderRadius.circular(height / 42.65)), ///20
+                            margin: EdgeInsets.all(height / 85.3),
+                            width: width / 5.87, ///70
+                            height: height / 28.43, ///30
                             alignment: Alignment.center,
                             child: const Text(
                               "Gợi ý",
@@ -92,11 +97,11 @@ class _FriendsState extends State<Friends> {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.grey[350],
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(height / 42.65)), ///20
                             alignment: Alignment.center,
-                            margin: const EdgeInsets.all(10),
-                            width: 70,
-                            height: 30,
+                            margin: EdgeInsets.all(height / 85.3), ///10
+                            width: width / 5.87, ///70
+                            height: height / 28.43, ///30
                             child: const Text(
                                 "Bạn bè",
                                 style: TextStyle(
@@ -107,23 +112,23 @@ class _FriendsState extends State<Friends> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 4,
+                    SizedBox(
+                      height: height / 213.25, ///4
                     ),
                     const Divider(
                       color: Colors.black54,
                     ),
-                    const SizedBox(
-                      height: 5,
+                    SizedBox(
+                      height: height / 170.6,///5
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                      margin: EdgeInsets.only(left: width / 34.25, right: width / 34.25, top: height / 71.08),///(12, 12, 12)
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             "Lời mời kết bạn",
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: height / 34.12, ///25
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -134,22 +139,23 @@ class _FriendsState extends State<Friends> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
+                        print(friendList);
                         return SizedBox(
                           child: ListView.separated(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               separatorBuilder: (BuildContext context, int index) {
-                                return const SizedBox(
-                                  height: 10,
+                                return SizedBox(
+                                  height: height / 85.3, ///10
                                 );
                               },
                               itemCount: friendList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                var friendItem = friendList[index];
+                                FriendData friendItem = friendList[index];
                                 return FriendItem(
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
-                                  time: friendItem.time!,
+                                  time: friendItem.time_string,
                                   eraseFriendsList: _eraseFriendsList,
                                   index: index,
                                 );

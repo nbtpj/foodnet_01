@@ -11,15 +11,15 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class MediaAsset extends StatefulWidget {
+class MediaWidget extends StatefulWidget {
   late String url;
-  late bool isNet;
+  bool? isNet;
 
-  MediaAsset({Key? key, required this.url, this.isNet = true})
+  MediaWidget({Key? key, required this.url, this.isNet = true})
       : super(key: key);
 
   @override
-  State<MediaAsset> createState() {
+  State<MediaWidget> createState() {
     switch (file_type(url)) {
       case 'mp4':
         return _VideoState();
@@ -29,51 +29,92 @@ class MediaAsset extends StatefulWidget {
   }
 }
 
-class _ImgState extends State<MediaAsset> {
+class _ImgState extends State<MediaWidget> {
   static const String placeholder = 'assets/food/food.webp';
+
   @override
   Widget build(BuildContext context) {
-    if(!widget.isNet){
-      try{
-         var m = File(widget.url);
-         return Image.file(
-           File(widget.url),
-           fit: BoxFit.cover,
-           errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-               Image.asset(placeholder),
-         );
-      }
-      catch (e){
-        print("this is an exception ${e.toString()}");
-        return Image.asset(placeholder);
-      }
-    }
-    return Image.network(
-            widget.url,
+    if (widget.isNet == null) {
+      return FittedBox(
+          fit: BoxFit.contain,
+          child: Image.network(widget.url, fit: BoxFit.cover,
+          errorBuilder: (BuildContext a, Object b, StackTrace? c) {
+        try {
+          var m = File(widget.url);
+          return FittedBox(
+              fit: BoxFit.contain,
+              child: Image.file(
+            File(widget.url),
             fit: BoxFit.cover,
             errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-                Image.asset(placeholder),
-          );
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Image.asset(placeholder)),
+          ));
+        } catch (e) {
+          print("this is an exception ${e.toString()}");
+          return Image.asset(placeholder);
+        }
+      }));
+    }
+    if (!widget.isNet!) {
+      try {
+        var m = File(widget.url);
+        return FittedBox(
+            fit: BoxFit.contain,
+            child: Image.file(
+          File(widget.url),
+          fit: BoxFit.cover,
+          errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
+              Image.asset(placeholder),
+        ));
+      } catch (e) {
+        print("this is an exception ${e.toString()}");
+        return FittedBox(
+          fit: BoxFit.contain,
+          child: Image.asset(placeholder));
+      }
+    }
+    return FittedBox(
+        fit: BoxFit.contain,
+        child: Image.network(
+      widget.url,
+      fit: BoxFit.cover,
+      errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
+          Image.asset(placeholder),
+    ));
   }
 }
 
-class _VideoState extends State<MediaAsset> {
+class _VideoState extends State<MediaWidget> {
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.isNet
-        ? VideoPlayerController.network(
-            widget.url,
-            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-
-          )
-        : VideoPlayerController.file(
-            File(widget.url),
-            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-          );
-
+    if (widget.isNet != null) {
+      _controller = widget.isNet!
+          ? VideoPlayerController.network(
+              widget.url,
+              videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+            )
+          : VideoPlayerController.file(
+              File(widget.url),
+              videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+            );
+    } else {
+      try {
+        _controller = VideoPlayerController.network(
+          widget.url,
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+      } catch (e) {
+        _controller = VideoPlayerController.file(
+          File(widget.url),
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+      }
+    }
     _controller.addListener(() {
       setState(() {});
     });
@@ -93,7 +134,7 @@ class _VideoState extends State<MediaAsset> {
     return VisibilityDetector(
         key: ObjectKey(_controller),
         onVisibilityChanged: (visibility) {
-          if (visibility.visibleFraction == 0 && this.mounted) {
+          if (visibility.visibleFraction == 0 && mounted) {
             _controller.pause(); //pausing  functionality
           }
         },

@@ -6,13 +6,13 @@ import 'package:foodnet_01/ui/screens/post_detail/widgets/food_description.dart'
 import 'package:foodnet_01/ui/screens/post_detail/widgets/increase_decrease_button.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
+
 import 'food_name.dart';
 
 class DetailWidget extends StatefulWidget {
   PostData food;
-  bool is_editting;
 
-  DetailWidget({Key? key, required this.food, required this.is_editting}) : super(key: key);
+  DetailWidget({Key? key, required this.food}) : super(key: key);
 
   @override
   _DetailWidgetState createState() => _DetailWidgetState();
@@ -36,7 +36,7 @@ class _DetailWidgetState extends State<DetailWidget> {
       child: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Column(
-          children: widget.food.isGood
+          children: widget.food.price!=null
               ? [
                   Container(
                     width: SizeConfig.screenWidth / 3.43,
@@ -54,12 +54,13 @@ class _DetailWidgetState extends State<DetailWidget> {
                   ),
 
                   /// 20.0
-                  FoodName(food: widget.food, is_editting:widget.is_editting),
+                  FoodName(food: widget.food,),
                   ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food, is_editting:widget.is_editting),
-                  FoodDescription(food: widget.food, is_editting:widget.is_editting),
+                  FeaturesFood(food: widget.food,),
+                  FoodDescription(food: widget.food,),
                   IncreaseDecrease(food: widget.food),
-                  // AddToCartButton(food: widget.food)
+                  widget.food.isGood?
+                  AddToCartButton(food: widget.food):SizedBox.shrink()
                 ]
               : [
                   Container(
@@ -78,10 +79,10 @@ class _DetailWidgetState extends State<DetailWidget> {
                   ),
 
                   /// 20.0
-                  FoodName(food: widget.food, is_editting:widget.is_editting),
+                  FoodName(food: widget.food,),
                   ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food, is_editting:widget.is_editting),
-                  FoodDescription(food: widget.food, is_editting:widget.is_editting),
+                  FeaturesFood(food: widget.food,),
+                  FoodDescription(food: widget.food,),
                 ],
         ),
       ),

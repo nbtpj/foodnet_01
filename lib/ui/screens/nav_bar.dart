@@ -7,6 +7,7 @@ import 'package:foodnet_01/ui/screens/friend/friend_invitations.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
 import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // FavoritePageView(),
     // ProfilePageView(),
     Friends(),
-    ProfilePage(type: "me", id: "1" , arriveType: "navbar",),
+    ProfilePage(id: "BLEoK5h0k1Pls86GrDogy5YfazJ2", arriveType: "navbar",),
   ];
 
   @override

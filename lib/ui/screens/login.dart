@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:foodnet_01/ui/components/custom_button.dart';
+import 'package:foodnet_01/ui/components/custom_text_field.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/enum.dart';
 import 'package:foodnet_01/util/extensions.dart';
-import 'package:foodnet_01/util/navigate.dart';
 import 'package:foodnet_01/util/validations.dart';
-import 'package:foodnet_01/ui/components/custom_button.dart';
-import 'package:foodnet_01/ui/components/custom_text_field.dart';
+import 'package:lottie/lottie.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

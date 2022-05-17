@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/search/search.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 
 import '../../../util/navigate.dart';
 import '../../components/friend_item.dart';
@@ -22,15 +23,17 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
-      return get_friends(Filter(search_type: "friend_suggestions")).toList();
+      return getFriends(Filter(search_type: "friend_suggestions"), getMyProfileId()).toList();
     }
     return Scaffold(
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 10, right: 10, top: 40, bottom: 10),
+            margin: EdgeInsets.only(left: width / 41.1 , right: width / 41.1, top: height / 21.325, bottom: height / 85.3), ///(10 ,10, 40, 10)
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -40,12 +43,12 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                   },
                   icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
                   color: Colors.black,
-                  iconSize: 30,
+                  iconSize: height / 28.43, ///30
                 ),
-                const Text(
+                Text(
                   "Gợi ý",
                   style: TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                      fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
                 ),
                 IconButton(
                   onPressed: () {
@@ -53,7 +56,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                   },
                   icon: const Icon(Icons.search),
                   color: Colors.black,
-                  iconSize: 30,
+                  iconSize: height / 28.43, ///30
                   padding: const EdgeInsets.only(right: 0),
                 ),
               ],
@@ -63,8 +66,8 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
           const Divider(
             color: Colors.black54,
           ),
-          const SizedBox(
-            height: 5,
+          SizedBox(
+            height: height / 170.6, ///5
           ),
 
           Expanded(
@@ -72,13 +75,13 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                      margin: EdgeInsets.only(left: width / 34.25, right: width / 34.25, top: height / 71.08), ///(12, 12, 12)
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             "Những người bạn có thể biết",
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: height / 34.12, ///25
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -95,8 +98,8 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 separatorBuilder: (BuildContext context, int index) {
-                                  return const SizedBox(
-                                    height: 10,
+                                  return SizedBox(
+                                    height: height / 85.3, ///10
                                   );
                                 },
                                 itemCount: friendSuggestions.length,
@@ -106,7 +109,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                                     userAsset: friendItem.userAsset,
                                     name: friendItem.name,
                                     mutualism: friendItem.mutualism!,
-                                    index: friendItem.id!,
+                                    index: friendItem.id,
                                   );
                                 }
                             );

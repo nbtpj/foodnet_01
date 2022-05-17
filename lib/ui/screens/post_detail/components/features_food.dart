@@ -4,9 +4,7 @@ import 'package:foodnet_01/util/global.dart';
 
 class FeaturesFood extends StatefulWidget {
   PostData food;
-  bool is_editting;
-
-  FeaturesFood({Key? key, required this.food, required this.is_editting}) : super(key: key);
+  FeaturesFood({Key? key, required this.food}) : super(key: key);
 
   @override
   _FeaturesFoodState createState() => _FeaturesFoodState();
@@ -21,7 +19,7 @@ class _FeaturesFoodState extends State<FeaturesFood> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            for (var feats in widget.food.get_features())
+            for (var feats in widget.food.getFeatures())
               ContainerFeatures(
                   percent_text: feats[0], features_text: feats[1]),
           ],

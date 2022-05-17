@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
+import '../../../../util/global.dart';
+
 class InputField extends StatefulWidget {
   final String? icon;
   final String hintText;
@@ -21,21 +23,23 @@ class _InputFieldState extends State<InputField>{
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Container(
-      margin: const EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 10),
+      margin: EdgeInsets.only(top: height / 56.87, left: width / 41.1, right: width / 41.1, bottom: height / 85.3),
       child: TextField(
         cursorColor: Colors.black,
-        style: const TextStyle(
-            fontSize: 20
+        style: TextStyle(
+            fontSize: height / 42.65, ///20
         ),
         decoration: InputDecoration(
           prefixIcon: Container(
-            margin: const EdgeInsets.only(left: 5, right: 8,),
+            margin: EdgeInsets.only(left: width / 82.2, right: width / 51.385,), ///(5, 8)
             child: CircleAvatar(
               backgroundColor: Colors.grey[300],
               child: Icon(
                 IconData(int.parse(widget.icon != null ? widget.icon! : "0xef8d"), fontFamily: 'MaterialIcons'),
-                size: 30,
+                size: height / 28.43, ///30
                 color: Colors.black,
               ),
             ),
@@ -45,7 +49,7 @@ class _InputFieldState extends State<InputField>{
             child: Container(
               width: 60,
               alignment: Alignment.center,
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+              padding: EdgeInsets.fromLTRB(0, height / 170.6, 0, height / 170.6), ///(5, 5)
               color: buttonColor,
               child: Text(
                 widget.setonEdit != null ? "Lưu" :
@@ -67,7 +71,7 @@ class _InputFieldState extends State<InputField>{
           hintStyle: const TextStyle(
             color: Colors.orange,
           ),
-          contentPadding: const EdgeInsets.only(left: 50, top: 13),
+          contentPadding: EdgeInsets.only(left: width / 8.22, top: height / 65.615), ///(50, 13)
         ),
       ),
     );

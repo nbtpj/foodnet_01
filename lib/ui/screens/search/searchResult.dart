@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
+import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import 'components/SearchList.dart';
 
@@ -24,6 +25,8 @@ class SearchResult extends StatefulWidget {
 class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     Future<List<SearchData>> fetchData(String type, String keyword) {
       return getSearchData(Filter(search_type: type, keyword: keyword)).toList();
     }
@@ -31,7 +34,7 @@ class _SearchResultState extends State<SearchResult> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 35,),
+          SizedBox(height: height / 24.37,), ///35
           Row(
             children: [
               IconButton(
@@ -42,14 +45,14 @@ class _SearchResultState extends State<SearchResult> {
                 color: Colors.black,
               ),
               Container(
-                width: 348,
-                height: 35,
+                width: width / 1.18, ///348
+                height: height / 24.37, ///35
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(height / 34.12),  ///25
                 ),
                 child: Container(
-                  margin: const EdgeInsets.only(top: 10, left: 10),
+                  margin: EdgeInsets.only(top: height / 85.3, left: width / 41.1),
                   child: Text(widget.keyWord, textAlign: TextAlign.left,),
                 ),
               ),

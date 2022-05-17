@@ -67,52 +67,7 @@ class _EditComment extends State<EditComment> {
     Column(children: [
       !widget.comment.isEmpty()? CommentComponent(comment: widget.comment, isNet: false,):const SizedBox.shrink(),
       _buildCommentComposer()
-      // ListTile(
-      //         title: TextFormField(
-      //           keyboardType: TextInputType.multiline,
-      //           maxLines: null,
-      //           controller: widget.editor,
-      //           decoration: const InputDecoration(labelText: "Write a comment..."),
-      //         ),
-      //         trailing: SizedBox(
-      //             height: SizeConfig.screenHeight / 22.0,
-      //             width: SizeConfig.screenWidth / 6.0,
-      //             child: ListView(scrollDirection: Axis.horizontal, children: [
-      //               IconButton(
-      //                 onPressed: () {
-      //                   setState(() async {
-      //                     widget.editor.clear();
-      //                     widget.comment.timestamp = DateTime.now();
-      //                     if(await widget.comment.post()){
-      //                       widget.comment = CommentData(comment:'', mediaUrls: [], timestamp: DateTime.now());
-      //                     }
-      //                   });
-      //                 },
-      //                 // borderSide: BorderSide.none,
-      //                 icon: const Icon(
-      //                   Icons.send,
-      //                 ),
-      //                 iconSize: SizeConfig.screenWidth / 12.0,
-      //               ),
-      //               IconButton(
-      //                 onPressed: () async {
-      //                   // Pick images
-      //                   final List<XFile>? images =
-      //                   await widget._picker.pickMultiImage();
-      //
-      //                   setState(() {
-      //
-      //                     widget.comment.mediaUrls = [
-      //                       for (var img in images!) img.path
-      //                     ];
-      //                   });
-      //                 },
-      //                 icon: const Icon(
-      //                   Icons.image,
-      //                 ),
-      //                 iconSize: SizeConfig.screenWidth / 12.0,
-      //               )
-      //             ]))),
+
     ])
     );
   }
