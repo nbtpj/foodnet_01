@@ -400,7 +400,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 height: height / 22.45,
 
                                 ///38
-                                child: Row(
+
+                                child: GestureDetector(onTap: (){
+                                  /// todo: checkpoint
+                                  Navigate.pushPage(
+                                      context,
+                                      DetailProfile(
+                                        profile: profile,
+                                        type: widget.type,
+                                      ));
+                                },
+                                    child:Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -418,7 +428,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],
-                                ),
+                                )),
                               ),
                               SizedBox(
                                 width: width / 51.375,
