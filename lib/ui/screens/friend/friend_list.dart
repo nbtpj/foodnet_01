@@ -35,7 +35,7 @@ class _FriendListState extends State<FriendList> {
             return FriendListItem(
               userAsset: friendItem.userAsset,
               name: friendItem.name,
-              mutual_friends: friendItem.mutualism!,
+              mutualFriends: friendItem.mutualism!,
             );
           });
     } else {

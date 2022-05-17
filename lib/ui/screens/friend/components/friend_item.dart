@@ -32,7 +32,6 @@ class _FriendItemState extends State<FriendItem> {
   }
   @override
   Widget build(BuildContext context) {
-    double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
@@ -45,7 +44,7 @@ class _FriendItemState extends State<FriendItem> {
         isThreeLine: false,
         trailing: Text(widget.time),
         leading: CircleAvatar(
-          radius: 30,
+          radius: height / 28.43, ///30
           backgroundImage: AssetImage(widget.userAsset),
         ),
         subtitle: FittedBox(
@@ -53,9 +52,9 @@ class _FriendItemState extends State<FriendItem> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("10 bạn chung"),
+              const Text("10 bạn chung"),
               (_confirm
-                  ? Confirmed()
+                  ? const Confirmed()
                   : UnConfirm(updateConfirm: _updateConfirm,
                   eraseFriendsList: widget.eraseFriendsList, index: widget.index
               )
@@ -84,6 +83,8 @@ class UnConfirm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Row(
       children: [
         GestureDetector(
@@ -93,10 +94,10 @@ class UnConfirm extends StatelessWidget {
           child: Container(
               decoration: BoxDecoration(
                   color: buttonColor,
-                  borderRadius: BorderRadius.circular(10)),
-              margin: const EdgeInsets.all(4),
-              width: 100,
-              height: 30,
+                  borderRadius: BorderRadius.circular(height / 85.3)), ///10
+              margin: EdgeInsets.all(height / 213.25), ///4
+              width: width / 4.11, ///100
+              height: height / 28.43, ///30
               alignment: Alignment.center,
               child: const Text(
                 "Xác nhận",
@@ -114,10 +115,10 @@ class UnConfirm extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.grey[350],
-                borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(4),
-            width: 100,
-            height: 30,
+                borderRadius: BorderRadius.circular(height / 85.3)), ///10
+            margin: EdgeInsets.all(height / 213.25), ///4
+            width: width / 4.11, ///100
+            height: height / 28.43, ///30
             alignment: Alignment.center,
             child: const Text(
                 "Xoá",
@@ -137,27 +138,29 @@ class Confirmed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Row(
       children: [
         Container(
           decoration: BoxDecoration(
             color: Colors.grey[350],
-            borderRadius: BorderRadius.circular(10)),
-          margin: const EdgeInsets.all(4),
-          width: 150,
-          height: 30,
+            borderRadius: BorderRadius.circular(height / 85.3)), ///10
+          margin: EdgeInsets.all(height / 213.25), ///4
+          width: width / 2.74, ///150
+          height: height / 28.43, ///30
           alignment: Alignment.center,
           child: Row(
             children: [
               SizedBox(
                 height: 0,
-                width: 16,
+                width: width / 25.6875,
               ),
-              Icon(
+              const Icon(
                 IconData(0xf05a3, fontFamily: 'MaterialIcons'),
                 color: Colors.yellow,
               ),
-              Text(
+              const Text(
                 "  Vẫy tay chào",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -172,13 +175,13 @@ class Confirmed extends StatelessWidget {
 class FriendListItem extends StatefulWidget {
   final String userAsset;
   final String name;
-  final int mutual_friends;
+  final int mutualFriends;
 
   const FriendListItem({
     Key? key,
     required this.userAsset,
     required this.name,
-    required this.mutual_friends,
+    required this.mutualFriends,
   }) : super(key: key);
 
   @override
@@ -188,75 +191,77 @@ class FriendListItem extends StatefulWidget {
 class _FriendListItemState extends State<FriendListItem> {
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
         title: Text(
           widget.name,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
           ),
         ),
         isThreeLine: false,
         trailing: IconButton(
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
           onPressed: (){
             showModalBottomSheet(
                 context: context,
                 builder: (builder) {
-                  return Container(
-                    height: 230,
+                  return SizedBox(
+                    height: height / 3.7087, ///230
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 15,
+                          height: height / 56.87, ///15
                         ),
                         ListTile(
                           title: Text(widget.name),
                           isThreeLine: false,
                           leading: CircleAvatar(
-                            radius: 30,
+                            radius: height / 28.43, ///30
                             child: CircleAvatar(
-                              radius: 30,
+                              radius: height / 28.43, ///30
                               backgroundImage: AssetImage(widget.userAsset),
                             ),
                           ),
                         ),
-                        Divider(
+                        const Divider(
                           color: Colors.black,
                           thickness: 0.4,
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: height / 56.87,), ///15
                         Row(
                           children: [
-                            SizedBox(width: 15),
+                            SizedBox(width: width / 27.5), ///15
                             CircleAvatar(
                               backgroundColor: Colors.grey[350],
-                              child: Icon(IconData(0xe153, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                              child: const Icon(IconData(0xe153, fontFamily: 'MaterialIcons'), color: Colors.black,),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: width / 41.1), ///10
                             Text(
                               "Nhắn tin cho " + widget.name,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: height / 56.867, ///15
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: height / 56.867), ///15
                         Row(
                           children: [
-                            SizedBox(width: 15),
+                            SizedBox(width: width / 27.5), ///15
                             CircleAvatar(
                               backgroundColor: Colors.grey[350],
-                              child: Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                              child: const Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: width / 41.1), ///10
                             Text(
                               "Huỷ kết bạn với " + widget.name,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: height / 56.867, ///15
                               ),
                             ),
                           ],
@@ -269,13 +274,13 @@ class _FriendListItemState extends State<FriendListItem> {
           },
         ),
         leading: CircleAvatar(
-          radius: 30,
+          radius: height / 28.43, ///30
           child: CircleAvatar(
-            radius: 30,
+            radius: height / 28.43, ///30
             backgroundImage: AssetImage(widget.userAsset),
           ),
         ),
-        subtitle: Text(widget.mutual_friends.toString() + " bạn chung"),
+        subtitle: Text(widget.mutualFriends.toString() + " bạn chung"),
       ),
       onTap: () {
         // todo: Navigate.pushPage(context, ProfilePage(id: "2"));
@@ -313,17 +318,18 @@ class _FriendSuggestionItemState extends State<FriendSuggestionItem> {
   }
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
         title: Text(
           widget.name,
-          style: TextStyle(
+          style: const TextStyle(
               fontWeight: FontWeight.w600
           ),
         ),
         isThreeLine: false,
         leading: CircleAvatar(
-          radius: 30,
+          radius: height / 28.43, ///30
           backgroundImage: AssetImage(widget.userAsset),
         ),
         subtitle: Column(
@@ -331,7 +337,7 @@ class _FriendSuggestionItemState extends State<FriendSuggestionItem> {
           children: [
             Text(widget.mutualism.toString() + " bạn chung"),
             (_confirm
-                ? Confirmed1()
+                ? const Confirmed1()
                 : UnConfirm1(updateConfirm: _updateConfirm,
                 /*eraseFriendsList: widget.eraseFriendsList,*/ index: widget.index
             )
@@ -359,6 +365,8 @@ class UnConfirm1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Row(
       children: [
         GestureDetector(
@@ -368,10 +376,10 @@ class UnConfirm1 extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: buttonColor,
-                borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(4),
-            width: 120,
-            height: 30,
+                borderRadius: BorderRadius.circular(height / 85.3)), ///10
+            margin: EdgeInsets.all(height / 213.25), ///4
+            width: width / 3.425, ///120
+            height: height / 28.43, ///30
             alignment: Alignment.center,
             child: const Text(
               "Thêm bạn bè",
@@ -389,10 +397,10 @@ class UnConfirm1 extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.grey[350],
-                borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(4),
-            width: 100,
-            height: 30,
+                borderRadius: BorderRadius.circular(height / 85.3)), ///10
+            margin: EdgeInsets.all(height / 213.25), ///4
+            width: width / 4.11, ///100
+            height: height / 28.43, ///30
             alignment: Alignment.center,
             child: const Text(
               "Xoá",
@@ -412,17 +420,19 @@ class Confirmed1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = SizeConfig.screenWidth;
+    double height = SizeConfig.screenHeight;
     return Row(
       children: [
         Container(
             decoration: BoxDecoration(
                 color: Colors.grey[350],
-                borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(4),
-            width: 150,
-            height: 30,
+                borderRadius: BorderRadius.circular(height / 85.3)), ///10
+            margin: EdgeInsets.all(height / 213.25), ///4
+            width: width / 2.74, ///150
+            height: height / 28.43, ///30
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "Đã gửi yêu cầu",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
