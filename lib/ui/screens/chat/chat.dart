@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/category_selector.dart';
 import 'package:foodnet_01/ui/screens/chat/widgets/favourite_contact.dart';
+import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/ui/screens/chat/widgets/recent_chat.dart';
 import 'package:foodnet_01/ui/screens/nav_bar.dart';
 
@@ -49,7 +49,12 @@ class _ChatScreenState extends State<Chat> {
           ),
         ],
       ),
-      body: const  CategorySelector()
+      body: Column(
+        children: [
+          Container(),
+          MessagesSelector()
+        ],
+      )
     );
   }
 }

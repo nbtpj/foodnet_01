@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/category_selector.dart';
 import 'package:foodnet_01/ui/screens/chat/widgets/favourite_contact.dart';
 import 'package:foodnet_01/ui/screens/chat/widgets/recent_chat.dart';
-import 'package:foodnet_01/ui/screens/nav_bar.dart';
 
 class MessagesSelector extends StatefulWidget {
   const MessagesSelector({Key? key}) : super(key: key);

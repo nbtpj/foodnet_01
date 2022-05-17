@@ -46,7 +46,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
                 itemBuilder: (BuildContext context , int index){
                   return GestureDetector(
                     onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ChatScreens(user: favorites[index],)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatScreens(user: favorites[index],)));
                     },
                     child: Padding(
                       padding:const EdgeInsets.all(10.0),
