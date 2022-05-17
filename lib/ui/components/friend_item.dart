@@ -44,18 +44,21 @@ class _FriendItemState extends State<FriendItem> {
           radius: 30,
           backgroundImage: AssetImage(widget.userAsset),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("10 bạn chung"),
-            (_confirm
-                ? Confirmed()
-                : UnConfirm(updateConfirm: _updateConfirm,
-                eraseFriendsList: widget.eraseFriendsList, index: widget.index
-            )
-            )
-          ],
-        ),
+        subtitle: FittedBox(
+          fit: BoxFit.contain,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("10 bạn chung"),
+              (_confirm
+                  ? Confirmed()
+                  : UnConfirm(updateConfirm: _updateConfirm,
+                  eraseFriendsList: widget.eraseFriendsList, index: widget.index
+              )
+              )
+            ],
+          ),
+        )
       ),
       onTap: () {
         // todo Navigate.pushPage(context, ProfilePage(id: "2"));
@@ -88,7 +91,7 @@ class UnConfirm extends StatelessWidget {
                   color: buttonColor,
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.all(4),
-              width: 88,
+              width: 100,
               height: 30,
               alignment: Alignment.center,
               child: const Text(
@@ -109,7 +112,7 @@ class UnConfirm extends StatelessWidget {
                 color: Colors.grey[350],
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(4),
-            width: 88,
+            width: 100,
             height: 30,
             alignment: Alignment.center,
             child: const Text(
