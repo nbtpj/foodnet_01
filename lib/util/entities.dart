@@ -9,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tuple/tuple.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
 List<LatLng> position_list = [
   const LatLng(37.42796133580664, -122.085749655962),
   const LatLng(37.42484642575639, -122.08309359848501),
@@ -74,41 +73,41 @@ class PostData implements LazyLoadData {
   DateTime datetime = DateTime.now();
   int react = randomNumberGenerator.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
-  PostData({
-    this.id = "new",
-    this.title = "",
-    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-    this.mediaUrls = const [
-      "assets/food/HeavenlyPizza.jpg",
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-    ],
-    this.outstandingIMGURL = '',
-    this.price,
-    this.isGood = true,
-    this.react = 1,
-    this.cateList = const [],
-    this.features = const [
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"],
-      ["200+", "Calories"]
-    ]
-  });
+  PostData(
+      {this.id = "new",
+      this.title = "",
+      this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing",
+      this.mediaUrls = const [
+        "assets/food/HeavenlyPizza.jpg",
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+      ],
+      this.outstandingIMGURL = '',
+      this.price,
+      this.isGood = true,
+      this.react = 1,
+      this.cateList = const [],
+      this.features = const [
+        ["200+", "Calories"],
+        ["%10", "Fat"],
+        ["%40", "Proteins"],
+        ["200+", "Calories"]
+      ]});
 
   int i = 0;
 
   int get numcite => 9999;
 
   LatLng positions() {
-    i = ((i + 1) % position_list.length);
-    return position_list[i];
+    return position ?? LatLng(0, 0);
+    // i = ((i + 1) % position_list.length);
+    // return position_list[i];
   }
 
   bool isEditable() {
@@ -165,7 +164,8 @@ class PostData implements LazyLoadData {
   }
 
   PostData.fromJson(Map<String, Object?> json)
-  /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
+
+      /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
       : this(
             id: json['id']! as String,
             description: json['description']! as String,
@@ -208,6 +208,7 @@ class PostData implements LazyLoadData {
     /// upload các media này lên
     return true;
   }
+
   /// todo: Khởi tạo thêm đặc tính features
 
   PostData clone() {
@@ -266,7 +267,10 @@ class FriendData implements LazyLoadData {
             userAsset: json["userAsset"] as String,
             time: (json['time'] as Timestamp).toDate(),
             mutualism: 0);
-  String get time_string {return timeago.format(time);}
+
+  String get time_string {
+    return timeago.format(time);
+  }
 
   Map<String, Object?> toJson() {
     return {
