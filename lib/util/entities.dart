@@ -385,3 +385,35 @@ class Filter {
       this.scoreThreshold,
       LatLngBounds? this.vision_bounds});
 }
+
+class Message {
+  final String userId;
+  final String userName;
+  final String message;
+  final bool unread;
+  final DateTime createdAt;
+
+  Message({
+    required this.userId,
+    required this.userName,
+    required this.message,
+    required this.unread,
+    required this.createdAt
+  });
+
+  static Message fromJson(Map<String, dynamic> json) => Message(
+    userId: json["userId"],
+    userName: json["userName"],
+    message: json["message"],
+    unread: json["unread"],
+    createdAt: json["createdAt"]?.toDate(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "userId": userId,
+    "userName": userName,
+    "message": message,
+    "unread": unread,
+    "createdAt": createdAt.toUtc(),
+  };
+}

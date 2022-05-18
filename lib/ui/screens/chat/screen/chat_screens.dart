@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/chat/model/message_model.dart';
-import 'package:foodnet_01/ui/screens/chat/model/user_model.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
 
 class ChatScreens extends StatefulWidget {
-  final User user;
-  const ChatScreens( {Key? key, required this.user,  }) : super(key: key);
+  final String userId;
+  const ChatScreens( {Key? key, required this.userId,  }) : super(key: key);
 
 
   @override
@@ -15,7 +14,7 @@ class ChatScreens extends StatefulWidget {
 
 class _ChatScreensState extends State<ChatScreens> {
 
-  _buildMessage(Message message ,bool isMe){
+  _buildMessage(Message message, bool isMe){
     final msg =  Container(
       margin: isMe ? const EdgeInsets.only(top:8.0 ,bottom:8.0, left: 80.0 )
           :const EdgeInsets.only(top:8.0 ,bottom:8.0, right: 80.0 ),
@@ -33,7 +32,7 @@ class _ChatScreensState extends State<ChatScreens> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(message.time,
+          Text('10:00',//'$message.createdAt',
             style:const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
@@ -41,7 +40,7 @@ class _ChatScreensState extends State<ChatScreens> {
             ),
           ),
           const  SizedBox(height: 8.0,),
-          Text(message.text,
+          Text(message.message,
             style:const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
@@ -76,7 +75,10 @@ class _ChatScreensState extends State<ChatScreens> {
                 hintText: "Message"
             ),
           )),
-          IconButton(onPressed: (){},
+          IconButton(
+              onPressed: (){
+
+              },
               icon: Icon(Icons.send,size: 29.0,
                 color: Theme.of(context).primaryColor,
               )),
@@ -85,67 +87,89 @@ class _ChatScreensState extends State<ChatScreens> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
+    Future<List<Message>> fetchMessages() async {
+      return getMessages(widget.userId).toList();
+    }
 
-    final User user;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                widget.user.name,
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-            ),
-          ],
-        ),
-        elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon:const Icon(
-              Icons.more_horiz,
-            ),
-            onPressed: (){},
-          ),
-        ],
-      ),
-      body: GestureDetector(
-        onTap: (){
-          FocusScope.of(context).unfocus();
-        },
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                  decoration:const BoxDecoration(
-                    color: Colors.white,
+    return FutureBuilder<ProfileData>(
+      future: getProfile(widget.userId),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          ProfileData? user = snapshot.data;
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              iconTheme: IconThemeData(
+                color: Colors.black, //change your color here
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    user!.name,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
-                  child: ClipRRect(
-                    child: ListView.builder(
-                        reverse: true,
-                        padding:const EdgeInsets.only(top: 15.0),
-                        itemCount: messages.length,
-                        itemBuilder: (BuildContext context, int index){
-                          final Message message = messages[index];
-                          final bool isMe = message.sender.id == currentUser.id;
-                          return _buildMessage(message , isMe);
-                        }),
-                  )
+                ],
+              ),
+              elevation: 0.0,
+              actions: <Widget>[
+                IconButton(
+                  icon:const Icon(
+                    Icons.more_horiz,
+                  ),
+                  onPressed: (){},
+                ),
+              ],
+            ),
+            body: GestureDetector(
+              onTap: (){
+                FocusScope.of(context).unfocus();
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: FutureBuilder<List<Message>>(
+                      future: fetchMessages(),
+                      builder: (contex, snapshot) {
+                        if (snapshot.hasData) {
+                          var messages = snapshot.data;
+                          return Container(
+                              decoration:const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: ClipRRect(
+                                child: ListView.builder(
+                                    reverse: true,
+                                    padding:const EdgeInsets.only(top: 15.0),
+                                    itemCount: messages!.length,
+                                    itemBuilder: (BuildContext context, int index){
+                                      final Message message = messages[index];
+                                      final bool isMe = message.userId == getMyProfileId();
+                                      return _buildMessage(message , isMe);
+                                    }),
+                              )
+                          );
+                        } else {
+                          return const Center();
+                        }
+                      },
+                    ),
+                  ),
+                  _buildMessageComposer(),
+                ],
               ),
             ),
-            _buildMessageComposer(),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return const Center();
+        }
+      }
     );
   }
 }
