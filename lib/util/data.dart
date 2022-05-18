@@ -250,13 +250,27 @@ Future<Tuple2<int, int>> getRateByPostId(String postId) async {
 }
 
 Stream<Message> getMessages(String id) async* {
-  /// lấy danh sách message với 1 user theo điều kiện lọc
+  /// lấy danh sách message với 1 user theo createdAt tăng dần
   /// trả về Stream
-  if (id == "1") {
-    Message(
-        userId: "1",
-        userName: "Phạm Trọng",
+  if (id == "5LbuzmwRYkbp6DvhFGC2KXyg8h33") {
+    yield Message(
+        senderId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
+        receiverId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
         message: "Hello my friend",
+        unread: true,
+        createdAt: DateTime.now()
+    );
+    yield Message(
+        senderId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
+        receiverId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
+        message: "Hello my friend",
+        unread: false,
+        createdAt: DateTime.now()
+    );
+    yield Message(
+        senderId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
+        receiverId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
+        message: "Hello",
         unread: false,
         createdAt: DateTime.now()
     );
@@ -266,31 +280,10 @@ Stream<Message> getMessages(String id) async* {
 Stream<Message> getRecentChat() async* {
   /// lấy danh sách chat gần đây
   yield Message(
-      userId: "1",
-      userName: "Phạm Trọng",
-      message: "Hello my friend",
-      unread: false,
-      createdAt: DateTime.now()
-  );
-  yield Message(
-      userId: "1",
-      userName: "Minh Quang",
+      senderId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
+      receiverId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
       message: "Hello my friend",
       unread: true,
-      createdAt: DateTime.now()
-  );
-  yield Message(
-      userId: "1",
-      userName: "Đào Tuấn",
-      message: "Hello my friend",
-      unread: true,
-      createdAt: DateTime.now()
-  );
-  yield Message(
-      userId: "1",
-      userName: "Lương Đạt",
-      message: "Hello my friend",
-      unread: false,
       createdAt: DateTime.now()
   );
 }

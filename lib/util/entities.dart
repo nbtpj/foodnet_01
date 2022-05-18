@@ -387,31 +387,31 @@ class Filter {
 }
 
 class Message {
-  final String userId;
-  final String userName;
+  final String senderId;
+  final String receiverId;
   final String message;
   final bool unread;
   final DateTime createdAt;
 
   Message({
-    required this.userId,
-    required this.userName,
+    required this.senderId,
+    required this.receiverId,
     required this.message,
     required this.unread,
     required this.createdAt
   });
 
   static Message fromJson(Map<String, dynamic> json) => Message(
-    userId: json["userId"],
-    userName: json["userName"],
+    senderId: json["senderId"],
+    receiverId: json["receiverId"],
     message: json["message"],
     unread: json["unread"],
     createdAt: json["createdAt"]?.toDate(),
   );
 
   Map<String, dynamic> toJson() => {
-    "userId": userId,
-    "userName": userName,
+    "senderId": senderId,
+    "receiverId": receiverId,
     "message": message,
     "unread": unread,
     "createdAt": createdAt.toUtc(),
