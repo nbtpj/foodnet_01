@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -27,17 +28,34 @@ class _FoodNameState extends State<FoodName> {
                       fontSize: SizeConfig.screenHeight / 22.77,
                       fontFamily: "Roboto")
               )),
-          FittedBox(
-              fit: BoxFit.fitWidth,
-              child: GestureDetector(
-                  onTap: () {
-                    /// todo: điều hướng đến trang người dùng
-                  },
-                  child: Text(widget.food.getOwner(),
+          FutureBuilder<ProfileData?>(future: widget.food.getOwner(),
+              builder: (context, snap)=>snap.hasData?
+              FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child:GestureDetector(
+                      onTap: () {
+                        /// todo: điều hướng đến trang người dùng
+                      },
+                      child: Text(snap.data?.name ??None,
                       style: TextStyle(
                           color: Colors.green,
-                          fontSize: SizeConfig.screenHeight / 30,
-                          fontFamily: "Roboto")))),
+                          fontSize: SizeConfig.screenHeight / 40,
+                          fontFamily: "Roboto")))):
+              const SizedBox.shrink()),
+          // FittedBox(
+          //     fit: BoxFit.fitWidth,
+          //     child: GestureDetector(
+          //         onTap: () {
+          //           /// todo: điều hướng đến trang người dùng
+          //         },
+          //         child:  FutureBuilder<String>(future: widget.food.getOwner(),
+          //                 builder: (context, snap)=>snap.hasData?
+          //                 Text(snap.data??None,
+          //                     style: TextStyle(
+          //                         color: Colors.green,
+          //                         fontSize: SizeConfig.screenHeight / 40,
+          //                         fontFamily: "Roboto")):
+          //                 const SizedBox.shrink()))),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
