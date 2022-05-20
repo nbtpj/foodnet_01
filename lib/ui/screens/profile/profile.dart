@@ -3,27 +3,31 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
+import 'package:foodnet_01/ui/screens/profile/view_photo.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import '../search/search.dart';
 import 'components/friend.dart';
 
+//ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
   late String type;
   final String id;
   final String? arriveType;
+  final ImagePicker _picker = ImagePicker();
 
   ProfilePage({
     Key? key,
     required this.id,
     this.arriveType,
   }) : super(key: key) {
-    this.type = id == "BLEoK5h0k1Pls86GrDogy5YfazJ2" ? "me" : "other";
+    type = id == "BLEoK5h0k1Pls86GrDogy5YfazJ2" ? "me" : "other";
 
   }
 
@@ -143,68 +147,85 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                             ///20
                                           ),
-                                          Row(
-                                            children: [
-                                              SizedBox(width: width / 27.4),
 
-                                              ///15
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.grey[350],
-                                                child: const Icon(
-                                                  IconData(0xe498,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.black,
+                                          InkWell(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: width / 27.4),
+
+                                                ///15
+                                                CircleAvatar(
+                                                  backgroundColor:
+                                                  Colors.grey[350],
+                                                  child: const Icon(
+                                                    IconData(0xe498,
+                                                        fontFamily:
+                                                        'MaterialIcons'),
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(width: width / 41.1),
+                                                SizedBox(width: width / 41.1),
 
-                                              ///10
-                                              Text(
-                                                "Xem ảnh đại bìa",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: height / 56.87,
+                                                ///10
+                                                Text(
+                                                  "Xem ảnh bìa",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: height / 56.87,
 
-                                                  ///15
+                                                    ///15
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              Navigate.pushPageReplacement(context, PhotoPage(picture: profile.wallAsset));
+                                            },
                                           ),
                                           SizedBox(height: height / 56.87),
 
                                           ///15
 
-                                          Row(
-                                            children: [
-                                              SizedBox(width: width / 27.4),
+                                          InkWell(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: width / 27.4),
 
-                                              ///15
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.grey[350],
-                                                child: const Icon(
-                                                  IconData(0xf120,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.black,
+                                                ///15
+                                                CircleAvatar(
+                                                  backgroundColor:
+                                                  Colors.grey[350],
+                                                  child: const Icon(
+                                                    IconData(0xf120,
+                                                        fontFamily:
+                                                        'MaterialIcons'),
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(width: width / 41.1),
+                                                SizedBox(width: width / 41.1),
 
-                                              ///10
-                                              Text(
-                                                "Chọn ảnh bìa",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: height / 56.87,
+                                                ///10
+                                                Text(
+                                                  "Chọn ảnh bìa",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: height / 56.87,
 
-                                                  ///15
+                                                    ///15
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                              ],
+                                            ),
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              final XFile? image =
+                                                  await widget._picker.pickImage(source: ImageSource.gallery);
+                                              setState(() {
+                                                profile.wallAsset = profile.userAsset;
+                                              });
+                                            },
+                                          )
+
                                         ],
                                       ),
                                     );
@@ -253,8 +274,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                               ///20
                                             ),
-                                            GestureDetector(onTap: (){
-                                              /// todo: xem ảnh đại diện
+                                            InkWell(onTap: (){
+                                              Navigate.pushPageReplacement(context, PhotoPage(picture: profile.userAsset));
                                             },
                                                 child:Row(
                                               children: [
@@ -288,8 +309,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                             SizedBox(height: height / 56.87),
 
                                             ///15
-                                            GestureDetector(onTap: (){
-                                              /// todo: chọn ảnh đại diện
+                                            InkWell(onTap: () async {
+                                              Navigator.pop(context);
+                                              final XFile? image =
+                                                  await widget._picker.pickImage(source: ImageSource.gallery);
+                                              setState(() {
+                                                profile.wallAsset = profile.userAsset;
+                                              });
                                             },
                                                 child:Row(
                                               children: [
