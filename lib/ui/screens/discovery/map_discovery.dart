@@ -10,6 +10,7 @@ import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_style.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -153,15 +154,16 @@ class _DiscoveryState extends State<Discovery> {
                                                 /// 20
                                                 fontWeight: FontWeight.w700),
                                           )),
-                                      FittedBox(
-                                          fit: BoxFit.fitWidth,
-                                          child: Text(food.getOwner(),
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize:
-                                                      SizeConfig.screenHeight /
-                                                          40,
-                                                  fontFamily: "Roboto"))),
+                                      FutureBuilder<ProfileData?>(future: food.getOwner(),
+                                          builder: (context, snap)=>snap.hasData?
+                                          FittedBox(
+                                              fit: BoxFit.fitWidth,
+                                              child:Text(snap.data?.name ??None,
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: SizeConfig.screenHeight / 40,
+                                                      fontFamily: "Roboto"))):
+                                          const SizedBox.shrink()),
                                       FittedBox(
                                         fit: BoxFit.fitWidth,
                                         child: Text(

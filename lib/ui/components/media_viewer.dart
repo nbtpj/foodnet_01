@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -14,8 +15,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 class MediaWidget extends StatefulWidget {
   late String url;
   bool? isNet;
+  BoxFit? fit;
 
-  MediaWidget({Key? key, required this.url, this.isNet = true})
+  MediaWidget({Key? key, required this.url, this.isNet = true, this.fit=BoxFit.contain})
       : super(key: key);
 
   @override
@@ -30,59 +32,50 @@ class MediaWidget extends StatefulWidget {
 }
 
 class _ImgState extends State<MediaWidget> {
-  static const String placeholder = 'assets/food/food.webp';
 
   @override
   Widget build(BuildContext context) {
     if (widget.isNet == null) {
       return FittedBox(
           fit: BoxFit.contain,
-          child: Image.network(widget.url, fit: BoxFit.cover,
+          child: Image.network(widget.url, fit: widget.fit,
           errorBuilder: (BuildContext a, Object b, StackTrace? c) {
         try {
           var m = File(widget.url);
-          return FittedBox(
-              fit: BoxFit.contain,
-              child: Image.file(
+          return  Image.file(
             File(widget.url),
-            fit: BoxFit.cover,
+            fit: widget.fit,
             errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
                 FittedBox(
                   fit: BoxFit.contain,
-                  child: Image.asset(placeholder)),
-          ));
+                  child: Image.asset(placeholder,fit:widget.fit,)),
+          );
         } catch (e) {
           print("this is an exception ${e.toString()}");
-          return Image.asset(placeholder);
+          return Image.asset(placeholder, fit: widget.fit,);
         }
       }));
     }
     if (!widget.isNet!) {
       try {
         var m = File(widget.url);
-        return FittedBox(
-            fit: BoxFit.contain,
-            child: Image.file(
+        return Image.file(
           File(widget.url),
           fit: BoxFit.cover,
           errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-              Image.asset(placeholder),
-        ));
+              Image.asset(placeholder, fit:widget.fit,),
+        );
       } catch (e) {
         print("this is an exception ${e.toString()}");
-        return FittedBox(
-          fit: BoxFit.contain,
-          child: Image.asset(placeholder));
+        return Image.asset(placeholder, fit: widget.fit,);
       }
     }
-    return FittedBox(
-        fit: BoxFit.contain,
-        child: Image.network(
+    return  Image.network(
       widget.url,
       fit: BoxFit.cover,
       errorBuilder: (BuildContext a, Object b, StackTrace? c) =>
-          Image.asset(placeholder),
-    ));
+          Image.asset(placeholder,fit: widget.fit,),
+    );
   }
 }
 
