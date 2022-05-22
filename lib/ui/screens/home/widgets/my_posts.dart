@@ -183,13 +183,16 @@ class _MyFoodsState extends State<MyFoods> {
                                     /// 20
                                     fontWeight: FontWeight.w700),
                               )),
-                          FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(food.getOwner(),
+                           FutureBuilder<ProfileData?>(future: food.getOwner(),
+                              builder: (context, snap)=>snap.hasData?
+                              FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child:Text(snap.data?.name ??None,
                                   style: TextStyle(
                                       color: Colors.green,
                                       fontSize: SizeConfig.screenHeight / 40,
-                                      fontFamily: "Roboto"))),
+                                      fontFamily: "Roboto"))):
+                              const SizedBox.shrink()),
                           FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(

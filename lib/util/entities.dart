@@ -1,12 +1,15 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
+import 'package:foodnet_01/util/global.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:math';
-
 import 'package:tuple/tuple.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 List<LatLng> position_list = [
   const LatLng(37.42796133580664, -122.085749655962),
@@ -61,49 +64,57 @@ class CommentData {
 
 class PostData implements LazyLoadData {
   String id;
+  String? author_id;
   late String title;
   late String description;
   late List<String> mediaUrls;
   late String outstandingIMGURL;
   int? price;
+  late List<List<String>> features;
   late bool isGood;
   LatLng? position;
   DateTime datetime = DateTime.now();
   int react = randomNumberGenerator.nextInt(2) - 1;
   late List<String> cateList; // chứa string ID của các post category
-  PostData({
-    this.id = "new",
-    this.title = "",
-    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-    this.mediaUrls = const [
-      "assets/food/HeavenlyPizza.jpg",
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-    ],
-    this.outstandingIMGURL = '',
-    this.price,
-    this.isGood = true,
-    this.react = 1,
-    this.cateList = const [],
-  });
+  PostData(
+      {this.author_id,
+      this.id = "new",
+      this.title = "",
+      this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing",
+      this.mediaUrls = const [
+        "assets/food/HeavenlyPizza.jpg",
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+      ],
+      this.outstandingIMGURL = '',
+      this.price,
+      this.isGood = true,
+      this.react = 1,
+      this.cateList = const [],
+      this.features = const [
+        ["200+", "Calories"],
+        ["%10", "Fat"],
+        ["%40", "Proteins"],
+        ["200+", "Calories"]
+      ],
+      this.position});
 
   int i = 0;
 
   int get numcite => 9999;
 
   LatLng positions() {
-    i = ((i + 1) % position_list.length);
-    return position_list[i];
+    return position ?? LatLng(0, 0);
   }
 
   bool isEditable() {
-    return true;
+    return author_id==getMyProfileId();
   }
 
   @override
@@ -120,14 +131,7 @@ class PostData implements LazyLoadData {
   }
 
   List<List<String>> getFeatures() {
-    return [
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"],
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"]
-    ];
+    return features;
   }
 
   Future<String?> getLocationName() async {
@@ -163,8 +167,10 @@ class PostData implements LazyLoadData {
   }
 
   PostData.fromJson(Map<String, Object?> json)
-  /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
+
+      /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
       : this(
+            author_id: json['author_uid']! as String,
             id: json['id']! as String,
             description: json['description']! as String,
             cateList:
@@ -173,7 +179,9 @@ class PostData implements LazyLoadData {
             isGood: json['isGood']! as bool,
             react: json['react']! as int,
             outstandingIMGURL: json['outstandingIMGURL']! as String,
-            title: json['title']! as String);
+            title: json['title']! as String,
+            position: json.containsKey('post_longitude')? LatLng(json['post_latitude'] as double,
+                json['post_longitude'] as double):null);
 
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
@@ -187,7 +195,11 @@ class PostData implements LazyLoadData {
       "cateList": cateList,
       "price": price,
       "isGood": isGood,
-      "react": react
+      "react": react,
+      "author_uid": author_id,
+      "post_latitude": position?.latitude,
+      "post_longitude": position?.longitude,
+      "outstandingIMGURL": outstandingIMGURL
     };
   }
 
@@ -195,17 +207,70 @@ class PostData implements LazyLoadData {
     return {"title": title, "outstandingIMGURL": outstandingIMGURL};
   }
 
-  String getOwner() {
-    /// todo trả về tên người đăng bằng truy vấn cơ sở dữ liệu
-    return "quang";
+  Future<ProfileData?> getOwner() async{
+    var ref = await profilesRef.doc(author_id!).get();
+    return ref.data();
+
   }
 
   Future<bool> commit_changes() async {
     /// todo lưu lại toàn bộ thay đổi, return false nếu fail
     /// lưu ý rằng, sẽ có một số url vẫn còn là local, nên bước này sẽ bao gồm cả việc
     /// upload các media này lên
-    return true;
+    ///
+
+    if (File(outstandingIMGURL).existsSync()) {
+      try {
+        File f = File(outstandingIMGURL);
+        outstandingIMGURL = "$author_id-${DateTime.now().toUtc()}";
+        await storage
+            .ref('food')
+            .child(outstandingIMGURL)
+            .putFile(File(outstandingIMGURL));
+        outstandingIMGURL = storage
+            .ref('food')
+            .child(outstandingIMGURL)
+            .getDownloadURL() as String;
+      } catch (e) {
+        return false;
+      }
+    }
+    for (int i = 0; i < mediaUrls.length; i++) {
+      try {
+        File f = File(mediaUrls[i]);
+        mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
+        await storage
+            .ref('food')
+            .child(mediaUrls[i])
+            .putFile(File(mediaUrls[i]));
+        mediaUrls[i] =
+            storage.ref('food').child(mediaUrls[i]).getDownloadURL() as String;
+      } catch (e) {
+        return false;
+      }
+    }
+    author_id = getMyProfileId();
+    if (author_id != null) {
+      if(id=="new"){
+        DocumentReference doc = await postsRef.add(this);
+        id = doc.id;
+        return true;
+      } else{
+        try{
+          await postsRef.doc(id).set(this);
+        } catch (e){
+          return false;
+        }
+        return true;
+      }
+
+
+    } else {
+      return false;
+    }
   }
+
+  /// todo: Khởi tạo thêm đặc tính features
 
   PostData clone() {
     return PostData(
@@ -218,6 +283,8 @@ class PostData implements LazyLoadData {
       isGood: isGood,
       react: react,
       cateList: cateList,
+      author_id: author_id,
+      position: position,
     );
   }
 }
@@ -237,16 +304,16 @@ class UserData implements LazyLoadData {
 }
 
 class FriendData implements LazyLoadData {
-  String? id;
+  String id;
   String name;
-  String? time;
+  DateTime time;
   String userAsset;
   int? mutualism;
 
   FriendData({
-    this.id,
+    required this.id,
     required this.name,
-    this.time,
+    required this.time,
     required this.userAsset,
     this.mutualism,
   });
@@ -261,8 +328,12 @@ class FriendData implements LazyLoadData {
             id: json["id"]! as String,
             name: json["name"]! as String,
             userAsset: json["userAsset"] as String,
-
+            time: (json['time'] as Timestamp).toDate(),
             mutualism: 0);
+
+  String get time_string {
+    return timeago.format(time);
+  }
 
   Map<String, Object?> toJson() {
     return {

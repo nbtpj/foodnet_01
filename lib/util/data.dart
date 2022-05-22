@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tuple/tuple.dart';
 
 import 'entities.dart';
@@ -64,17 +65,26 @@ Stream<PostData> getPosts(Filter filter) async* {
   //  Filter(search_type: 'popular_food')
   //  Filter(search_type: 'my_food')
   //  Filter(search_type: 'recommend_food')
-  if (filter.search_type! != "category") {
-    var foodSnapshot = await postsRef.get();
-    for (var doc in foodSnapshot.docs) {
-      yield doc.data();
-    }
-  }
-  if (filter.search_type! == "category") {
+  switch (filter.search_type){
+    case null:
+    case "category":
     var categorySnapshot = await categoriesRef.orderBy("title").get();
     for (var doc in categorySnapshot.docs) {
       yield doc.data();
     }
+    break;
+    case "my_food":
+      var foodSnapshot = await postsRef.where('author_uid', isEqualTo:getMyProfileId() ).get();
+      for (var doc in foodSnapshot.docs) {
+        // debugPrint("current author_uid is ${doc.data().author_id??""}");
+        yield doc.data();
+      }
+      break;
+    default:
+      var foodSnapshot = await postsRef.get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
   }
 }
 
