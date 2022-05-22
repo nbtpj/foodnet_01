@@ -155,6 +155,7 @@ class _FriendsState extends State<Friends> {
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
                                   time: friendItem.time_string,
+                                  mutualism: friendItem.mutualism,
                                   eraseFriendsList: _eraseFriendsList,
                                   index: index,
                                 );

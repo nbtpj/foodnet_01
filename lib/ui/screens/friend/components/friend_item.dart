@@ -9,6 +9,7 @@ class FriendItem extends StatefulWidget {
   final String time;
   final void Function(int) eraseFriendsList;
   final int index;
+  final int mutualism;
   const FriendItem({
     Key? key,
     required this.userAsset,
@@ -16,6 +17,7 @@ class FriendItem extends StatefulWidget {
     required this.time,
     required this.eraseFriendsList,
     required this.index,
+    required this.mutualism,
   }) : super(key: key);
 
   @override
@@ -52,7 +54,7 @@ class _FriendItemState extends State<FriendItem> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("10 bạn chung"),
+              Text(widget.mutualism.toString() + " bạn chung"),
               (_confirm
                   ? const Confirmed()
                   : UnConfirm(updateConfirm: _updateConfirm,
@@ -161,7 +163,7 @@ class Confirmed extends StatelessWidget {
                 color: Colors.yellow,
               ),
               const Text(
-                "  Vẫy tay chào",
+                "  Gửi lời chào",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
