@@ -180,8 +180,10 @@ class PostData implements LazyLoadData {
             react: json['react']! as int,
             outstandingIMGURL: json['outstandingIMGURL']! as String,
             title: json['title']! as String,
-            position: json.containsKey('post_longitude')? LatLng(json['post_latitude'] as double,
-                json['post_longitude'] as double):null);
+            // todo: position: json.containsKey('post_longitude') && json.containsKey('post_latitude')?
+            // LatLng(json['post_latitude']! as double,
+            //     json['post_longitude']! as double):null
+  );
 
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
@@ -197,8 +199,9 @@ class PostData implements LazyLoadData {
       "isGood": isGood,
       "react": react,
       "author_uid": author_id,
-      "post_latitude": position?.latitude,
-      "post_longitude": position?.longitude,
+      // todo
+      // "post_latitude": position?.latitude,
+      // "post_longitude": position?.longitude,
       "outstandingIMGURL": outstandingIMGURL
     };
   }
