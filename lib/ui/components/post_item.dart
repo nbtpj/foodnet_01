@@ -87,7 +87,7 @@ class _TwoColPostListView extends State<StatefulWidget>{
                                           fontSize: SizeConfig.screenHeight / 40,
                                           fontFamily: "Roboto"))):
                               const SizedBox.shrink()),
-                          FittedBox(
+                          food.cateList.isNotEmpty?FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
                                 food.cateList.join(','),
@@ -97,7 +97,7 @@ class _TwoColPostListView extends State<StatefulWidget>{
 
                                     /// 16
                                     fontWeight: FontWeight.w400),
-                              )),
+                              )):SizedBox.shrink(),
                           Padding(
                             padding:
                             EdgeInsets.only(top: SizeConfig.screenHeight /
