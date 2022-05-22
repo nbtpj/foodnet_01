@@ -1,14 +1,12 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'dart:math';
 
+import 'package:tuple/tuple.dart';
 
 List<LatLng> position_list = [
   const LatLng(37.42796133580664, -122.085749655962),
@@ -68,7 +66,6 @@ class PostData implements LazyLoadData {
   late List<String> mediaUrls;
   late String outstandingIMGURL;
   int? price;
-  late List<List<String>> features;
   late bool isGood;
   LatLng? position;
   DateTime datetime = DateTime.now();
@@ -94,12 +91,6 @@ class PostData implements LazyLoadData {
     this.isGood = true,
     this.react = 1,
     this.cateList = const [],
-    this.features = const [
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"],
-      ["200+", "Calories"]
-    ]
   });
 
   int i = 0;
@@ -129,7 +120,14 @@ class PostData implements LazyLoadData {
   }
 
   List<List<String>> getFeatures() {
-    return features;
+    return [
+      ["200+", "Calories"],
+      ["%10", "Fat"],
+      ["%40", "Proteins"],
+      ["200+", "Calories"],
+      ["%10", "Fat"],
+      ["%40", "Proteins"]
+    ];
   }
 
   Future<String?> getLocationName() async {
@@ -208,7 +206,6 @@ class PostData implements LazyLoadData {
     /// upload các media này lên
     return true;
   }
-  /// todo: Khởi tạo thêm đặc tính features
 
   PostData clone() {
     return PostData(
@@ -240,16 +237,16 @@ class UserData implements LazyLoadData {
 }
 
 class FriendData implements LazyLoadData {
-  String id;
+  String? id;
   String name;
-  DateTime time;
+  String? time;
   String userAsset;
   int? mutualism;
 
   FriendData({
-    required this.id,
+    this.id,
     required this.name,
-    required this.time,
+    this.time,
     required this.userAsset,
     this.mutualism,
   });
@@ -264,9 +261,8 @@ class FriendData implements LazyLoadData {
             id: json["id"]! as String,
             name: json["name"]! as String,
             userAsset: json["userAsset"] as String,
-            time: (json['time'] as Timestamp).toDate(),
+
             mutualism: 0);
-  String get time_string {return timeago.format(time);}
 
   Map<String, Object?> toJson() {
     return {
