@@ -173,6 +173,7 @@ class PostData implements LazyLoadData {
             author_id: json['author_uid']! as String,
             id: json['id']! as String,
             description: json['description']! as String,
+            mediaUrls:(json['mediaUrls'] as List).map((e) => e as String).toList(),
             cateList:
                 (json['cateList'] as List).map((e) => e as String).toList(),
             price: json['price']! as int,
@@ -180,9 +181,8 @@ class PostData implements LazyLoadData {
             react: json['react']! as int,
             outstandingIMGURL: json['outstandingIMGURL']! as String,
             title: json['title']! as String,
-            // todo: position: json.containsKey('post_longitude') && json.containsKey('post_latitude')?
-            // LatLng(json['post_latitude']! as double,
-            //     json['post_longitude']! as double):null
+            position: json['position']!=null?LatLng((json['position']! as GeoPoint).latitude,
+                (json['position']! as GeoPoint).longitude):null
   );
 
   PostData.categoryFromJson(Map<String, Object?> json)
@@ -199,9 +199,9 @@ class PostData implements LazyLoadData {
       "isGood": isGood,
       "react": react,
       "author_uid": author_id,
-      // todo
-      // "post_latitude": position?.latitude,
-      // "post_longitude": position?.longitude,
+      "title":title,
+      "mediaUrls":mediaUrls,
+      "position": position!=null?GeoPoint(position!.latitude, position!.longitude):null,
       "outstandingIMGURL": outstandingIMGURL
     };
   }
@@ -221,36 +221,42 @@ class PostData implements LazyLoadData {
     /// lưu ý rằng, sẽ có một số url vẫn còn là local, nên bước này sẽ bao gồm cả việc
     /// upload các media này lên
     ///
+    if(title.isEmpty){
+      debugPrint("error: title can not be empty!");
 
-    if (File(outstandingIMGURL).existsSync()) {
+      return false;
+    }
+    if (await File(outstandingIMGURL).exists()) {
       try {
-        File f = File(outstandingIMGURL);
+        File f = await File(outstandingIMGURL).create();
         outstandingIMGURL = "$author_id-${DateTime.now().toUtc()}";
         await storage
             .ref('food')
             .child(outstandingIMGURL)
-            .putFile(File(outstandingIMGURL));
-        outstandingIMGURL = storage
-            .ref('food')
-            .child(outstandingIMGURL)
-            .getDownloadURL() as String;
+            .putFile(f);
+        outstandingIMGURL = await storage.ref('food').child(outstandingIMGURL)
+            .getDownloadURL();
       } catch (e) {
+        debugPrint("error: can not upload: "+outstandingIMGURL+e.toString());
         return false;
       }
     }
     for (int i = 0; i < mediaUrls.length; i++) {
-      try {
-        File f = File(mediaUrls[i]);
-        mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
-        await storage
-            .ref('food')
-            .child(mediaUrls[i])
-            .putFile(File(mediaUrls[i]));
-        mediaUrls[i] =
-            storage.ref('food').child(mediaUrls[i]).getDownloadURL() as String;
-      } catch (e) {
-        return false;
+      if (await File(mediaUrls[i]).exists()){
+        try {
+          File f = await File(mediaUrls[i]).create();
+          mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
+          await storage
+              .ref('food')
+              .child(mediaUrls[i])
+              .putFile(f);
+          mediaUrls[i] = await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
+        } catch (e) {
+          debugPrint("error: can not upload: "+mediaUrls[i]+e.toString());
+          return false;
+        }
       }
+
     }
     author_id = getMyProfileId();
     if (author_id != null) {
