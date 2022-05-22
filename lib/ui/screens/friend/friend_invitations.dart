@@ -18,11 +18,6 @@ class Friends extends StatefulWidget {
 
 class _FriendsState extends State<Friends> {
   dynamic friendList;
-  void _eraseFriendsList(int index) {
-    setState(() {
-      friendList.removeAt(index);
-    });
-  }
 
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
@@ -156,7 +151,6 @@ class _FriendsState extends State<Friends> {
                                   name: friendItem.name,
                                   time: friendItem.time_string,
                                   mutualism: friendItem.mutualism,
-                                  eraseFriendsList: _eraseFriendsList,
                                   index: index,
                                 );
                               }),

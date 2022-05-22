@@ -161,7 +161,7 @@ class _DetailProfileState extends State<DetailProfile> {
             widget.type == "me" ? const InputField(icon: "0xe497", hintText: "Thêm giới tính") : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
 
             widget.profile.dayOfBirth != null ?
-            ProfileTitle(subText: "Sinh nhật ", mainText: widget.profile.dayOfBirth!, type: widget.type, asset: "0xe120",) :
+            ProfileTitle(subText: "Sinh nhật ", mainText: widget.profile.dayOfBirth!.substring(0, 10), type: widget.type, asset: "0xe120",) :
             widget.type == "me" ? const InputField(icon: "0xef0f", hintText: "Thêm sinh nhật") : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe120",),
 
             Container(
