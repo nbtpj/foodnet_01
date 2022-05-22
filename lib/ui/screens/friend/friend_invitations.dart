@@ -135,14 +135,9 @@ class _FriendsState extends State<Friends> {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
                         return SizedBox(
-                          child: ListView.separated(
+                          child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (BuildContext context, int index) {
-                                return SizedBox(
-                                  height: height / 85.3, ///10
-                                );
-                              },
                               itemCount: friendList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 FriendData friendItem = friendList[index];
@@ -152,6 +147,7 @@ class _FriendsState extends State<Friends> {
                                   time: friendItem.time_string,
                                   mutualism: friendItem.mutualism,
                                   index: index,
+                                  type: "invitation",
                                 );
                               }),
                         );
