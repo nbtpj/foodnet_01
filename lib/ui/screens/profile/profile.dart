@@ -2,28 +2,34 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
+import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
+import 'package:foodnet_01/ui/screens/profile/components/wall_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
+import 'package:foodnet_01/ui/screens/profile/view_photo.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import '../search/search.dart';
 import 'components/friend.dart';
 
+//ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
   late String type;
   final String id;
   final String? arriveType;
+  final ImagePicker _picker = ImagePicker();
 
   ProfilePage({
     Key? key,
     required this.id,
     this.arriveType,
   }) : super(key: key) {
-    this.type = id == getMyProfileId() ? "me" : "other";
+    type = id == "BLEoK5h0k1Pls86GrDogy5YfazJ2" ? "me" : "other";
 
   }
 
@@ -38,10 +44,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<ProfileData?>(
+        body: FutureBuilder<ProfileData>(
       future: getProfile(widget.id),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data!=null) {
+        if (snapshot.hasData) {
           ProfileData? profile = snapshot.data;
           /*if (profile?.schools != null) {
               print(profile?.schools?.length);
@@ -110,258 +116,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       ///250
                       child: Stack(alignment: Alignment.centerLeft, children: <
                           Widget>[
-                        Positioned(
-                          left: 0,
-                          top: 0,
-                          child: InkWell(
-                            child: Container(
-                              color: lightColor,
-                              height: height / 4.74,
-
-                              ///180
-                              child: Image.asset(
-                                profile.wallAsset,
-                                height: height / 4.74,
-
-                                ///180
-                                width: MediaQuery.of(context).size.width,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (builder) {
-                                    return SizedBox(
-                                      height: height / 6.09,
-
-                                      ///140
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height / 42.65,
-
-                                            ///20
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(width: width / 27.4),
-
-                                              ///15
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.grey[350],
-                                                child: const Icon(
-                                                  IconData(0xe498,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              SizedBox(width: width / 41.1),
-
-                                              ///10
-                                              Text(
-                                                "Xem ảnh đại bìa",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: height / 56.87,
-
-                                                  ///15
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: height / 56.87),
-
-                                          ///15
-
-                                          Row(
-                                            children: [
-                                              SizedBox(width: width / 27.4),
-
-                                              ///15
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.grey[350],
-                                                child: const Icon(
-                                                  IconData(0xf120,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              SizedBox(width: width / 41.1),
-
-                                              ///10
-                                              Text(
-                                                "Chọn ảnh bìa",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: height / 56.87,
-
-                                                  ///15
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  });
-                            },
-                          ),
-                        ),
-                        Positioned(
-                            left: (MediaQuery.of(context).size.width / 2) -
-                                width / 6.85,
-
-                            ///60
-                            top: height / 7.11,
-
-                            ///120
-                            child: InkWell(
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(height / 14.22),
-
-                                ///60
-                                child: Image.asset(
-                                  profile.userAsset,
-                                  height: height / 7.11,
-
-                                  ///120
-                                  width: width / 3.425,
-
-                                  ///120
-                                ),
-                              ),
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (builder) {
-                                      return SizedBox(
-                                        height: height / 6.09,
-
-                                        ///140
-                                        child: FittedBox(
-                                          fit: BoxFit.contain,
-                                          child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: height / 42.65,
-
-                                              ///20
-                                            ),
-                                            GestureDetector(onTap: (){
-                                              /// todo: xem ảnh đại diện
-                                            },
-                                                child:Row(
-                                              children: [
-                                                SizedBox(width: width / 27.4),
-
-                                                ///15
-                                                CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.grey[350],
-                                                  child: const Icon(
-                                                    IconData(0xe498,
-                                                        fontFamily:
-                                                            'MaterialIcons'),
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(width: width / 41.1),
-
-                                                ///10
-                                                Text(
-                                                  "Xem ảnh đại diện",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: height / 56.87,
-
-                                                    ///15
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                            SizedBox(height: height / 56.87),
-
-                                            ///15
-                                            GestureDetector(onTap: (){
-                                              /// todo: chọn ảnh đại diện
-                                            },
-                                                child:Row(
-                                              children: [
-                                                SizedBox(width: width / 27.4),
-
-                                                ///15
-                                                CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.grey[350],
-                                                  child: const Icon(
-                                                    IconData(0xf120,
-                                                        fontFamily:
-                                                            'MaterialIcons'),
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(width: width / 41.1),
-
-                                                ///10
-                                                Text(
-                                                  "Chọn ảnh đại diện",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: height / 56.87,
-
-                                                    ///15
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                            SizedBox(height: height / 56.87),
-
-                                            ///15
-                                            GestureDetector(onTap: (){
-                                              /// todo: đăng xuất
-                                            },
-                                            child:
-                                            Row(
-                                              children: [
-                                                SizedBox(width: width / 27.4),
-
-                                                ///15
-                                                CircleAvatar(
-                                                  backgroundColor:
-                                                  Colors.grey[350],
-                                                  child: const Icon(
-                                                    IconData(0xf88b,
-                                                        fontFamily:
-                                                        'MaterialIcons'),
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(width: width / 41.1),
-
-                                                ///10
-                                                Text(
-                                                  logout_string,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: height / 56.87,
-
-                                                    ///15
-                                                  ),
-                                                ),
-                                              ],
-                                            ),),
-                                          ],
-                                        ),
-                                      ));
-                                    });
-                              },
-                            ))
+                        WallPicture(picture: profile.wallAsset),
+                        UserPicture(picture: profile.userAsset)
                       ]),
                     ),
                     Container(

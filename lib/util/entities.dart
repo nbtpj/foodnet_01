@@ -409,14 +409,14 @@ class FriendData implements LazyLoadData {
   String name;
   DateTime time;
   String userAsset;
-  int? mutualism;
+  int mutualism;
 
   FriendData({
     required this.id,
     required this.name,
     required this.time,
     required this.userAsset,
-    this.mutualism,
+    required this.mutualism,
   });
 
   @override

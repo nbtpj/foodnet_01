@@ -5,7 +5,7 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 import '../../../util/navigate.dart';
-import '../../components/friend_item.dart';
+import 'components/friend_item.dart';
 
 class FriendSuggestion extends StatefulWidget {
   const FriendSuggestion({Key? key}) : super(key: key);
@@ -94,22 +94,19 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             var friendSuggestions = snapshot.data ?? [];
-                            return ListView.separated(
+                            return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return SizedBox(
-                                    height: height / 85.3, ///10
-                                  );
-                                },
                                 itemCount: friendSuggestions.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   var friendItem = friendSuggestions[index];
-                                  return FriendSuggestionItem(
+                                  return FriendItem(
                                     userAsset: friendItem.userAsset,
                                     name: friendItem.name,
-                                    mutualism: friendItem.mutualism!,
-                                    index: friendItem.id,
+                                    time: friendItem.time_string,
+                                    mutualism: friendItem.mutualism,
+                                    index: index,
+                                    type: "suggestion",
                                   );
                                 }
                             );

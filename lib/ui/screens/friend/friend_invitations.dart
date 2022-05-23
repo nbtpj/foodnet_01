@@ -6,8 +6,8 @@ import 'package:foodnet_01/util/navigate.dart';
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
 import '../../../util/global.dart';
-import '../../components/friend_item.dart';
 import '../search/search.dart';
+import 'components/friend_item.dart';
 
 class Friends extends StatefulWidget {
   const Friends({Key? key}) : super(key: key);
@@ -18,11 +18,6 @@ class Friends extends StatefulWidget {
 
 class _FriendsState extends State<Friends> {
   dynamic friendList;
-  void _eraseFriendsList(int index) {
-    setState(() {
-      friendList.removeAt(index);
-    });
-  }
 
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
@@ -139,16 +134,10 @@ class _FriendsState extends State<Friends> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
-                        print(friendList);
                         return SizedBox(
-                          child: ListView.separated(
+                          child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (BuildContext context, int index) {
-                                return SizedBox(
-                                  height: height / 85.3, ///10
-                                );
-                              },
                               itemCount: friendList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 FriendData friendItem = friendList[index];
@@ -156,8 +145,9 @@ class _FriendsState extends State<Friends> {
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
                                   time: friendItem.time_string,
-                                  eraseFriendsList: _eraseFriendsList,
+                                  mutualism: friendItem.mutualism,
                                   index: index,
+                                  type: "invitation",
                                 );
                               }),
                         );
