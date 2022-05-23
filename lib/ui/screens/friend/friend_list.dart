@@ -6,7 +6,7 @@ import 'package:foodnet_01/util/entities.dart';
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 import '../search/search.dart';
-import 'components/friend_item.dart';
+import 'components/friend_list_item.dart';
 
 class FriendList extends StatefulWidget {
   const FriendList({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _FriendListState extends State<FriendList> {
             return FriendListItem(
               userAsset: friendItem.userAsset,
               name: friendItem.name,
-              mutualFriends: friendItem.mutualism!,
+              mutualFriends: friendItem.mutualism,
             );
           });
     } else {
