@@ -53,25 +53,25 @@ CollectionReference<FriendData> friendsRef(String profileId) {
 CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     .collection('profiles')
     .withConverter<ProfileData>(
-    fromFirestore: (snapshot, _) {
-      var data = snapshot.data()!;
-      data["id"] = snapshot.id;
-      print("get a profile");
-      print(data);
-      var a = ProfileData.fromJson(data);
-      print(a.toJson());
-      print('_______');
+  fromFirestore: (snapshot, _) {
+    var data = snapshot.data()!;
+    data["id"] = snapshot.id;
+    print("get a profile");
+    print(data);
+    var a = ProfileData.fromJson(data);
+    print(a.toJson());
+    print('_______');
 
-      return a;
-    },
-    toFirestore: (profileData, _) => profileData.toJson(),
+    return a;
+  },
+  toFirestore: (profileData, _) => profileData.toJson(),
 );
 
 CollectionReference<ReactionPostData> postReactionRef = FirebaseFirestore.instance
     .collection("reactions-posts")
     .withConverter(
-      fromFirestore: ReactionPostData.fromJson,
-      toFirestore: (reactionPostData, _) => reactionPostData.toJson());
+    fromFirestore: ReactionPostData.fromJson,
+    toFirestore: (reactionPostData, _) => reactionPostData.toJson());
 
 DocumentReference<ReactionData> reactionRef(String postId, String userId) {
   return postReactionRef
@@ -79,8 +79,8 @@ DocumentReference<ReactionData> reactionRef(String postId, String userId) {
       .collection("reactions")
       .doc(userId)
       .withConverter(
-        fromFirestore: ReactionData.fromJson,
-        toFirestore: (reactionData, _) => reactionData.toJson());
+      fromFirestore: ReactionData.fromJson,
+      toFirestore: (reactionData, _) => reactionData.toJson());
 }
 
 Future<PostData?> getPost(String id) async {
@@ -99,11 +99,11 @@ Stream<PostData> getPosts(Filter filter) async* {
   switch (filter.search_type){
     case null:
     case "category":
-    var categorySnapshot = await categoriesRef.orderBy("title").get();
-    for (var doc in categorySnapshot.docs) {
-      yield doc.data();
-    }
-    break;
+      var categorySnapshot = await categoriesRef.orderBy("title").get();
+      for (var doc in categorySnapshot.docs) {
+        yield doc.data();
+      }
+      break;
     case "my_food":
       var foodSnapshot = await postsRef.where('author_uid', isEqualTo:getMyProfileId() ).get();
       for (var doc in foodSnapshot.docs) {
@@ -291,17 +291,17 @@ Future<ReactionPostData> getRateByPostId(String postId) {
 Future<int> getMyReaction(String postId) {
   DocumentReference<ReactionData> myReactionRef = reactionRef(postId, getMyProfileId());
   return myReactionRef.get()
-    .then((snapshot) {
-      if (!snapshot.exists) {
-        return 0;
+      .then((snapshot) {
+    if (!snapshot.exists) {
+      return 0;
+    } else {
+      ReactionData data = snapshot.data()!;
+      if (data.type == "upvote") {
+        return 1;
       } else {
-        ReactionData data = snapshot.data()!;
-        if (data.type == "upvote") {
-          return 1;
-        } else {
-          return -1;
-        }
+        return -1;
       }
+    }
   });
 }
 
@@ -314,3 +314,79 @@ void removeReaction(String postId, String userId) {
   DocumentReference<ReactionData> reactRef = reactionRef(postId, userId);
   reactRef.delete();
 }
+
+
+final db = FirebaseFirestore.instance;
+
+Stream<Message> getMessages(String id) async* {
+  /// lấy danh sách message với 1 user sắp xếp theo createdAt
+  /// trả về Stream
+  final String? myProfileId = getMyProfileId();
+
+  try {
+    final messageDoc = await db.collection("messages")
+    // .where("senderId", whereIn: [myProfileId, id])
+    // .where("receiverId", whereIn: [myProfileId, id])
+        .orderBy("createdAt", descending: true)
+        .get();
+    for (var doc in messageDoc.docs) {
+      yield Message.fromJson(doc.data());
+    }
+  } on Exception catch (e) {
+    print(e.toString());
+    return;
+  }
+}
+
+Stream<Message> getRecentChat() async* {
+  /// lấy danh sách chat gần đây
+  yield Message(
+      senderId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
+      receiverId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
+      message: "Hello my friend",
+      unread: true,
+      createdAt: DateTime.now()
+  );
+
+  final String? myProfileId = getMyProfileId();
+
+  try {
+    final messageDoc = await db.collection("messages")
+    // .where("senderId", whereIn: [myProfileId, id])
+    // .where("receiverId", whereIn: [myProfileId, id])
+        .orderBy("createdAt", descending: true)
+        .get();
+    for (var doc in messageDoc.docs) {
+      yield Message.fromJson(doc.data());
+    }
+  } on Exception catch (e) {
+    print(e.toString());
+    return;
+  }
+}
+
+Future sendMessage(String senderId, String receiverId, String message) async {
+  final newMessage = Message(
+      senderId: senderId,
+      receiverId: receiverId,
+      message: message.trim(),
+      unread: true,
+      createdAt: DateTime.now()
+  );
+
+  try {
+    late CollectionReference refMessage = db.collection("messages");
+    var res = await refMessage.add(newMessage.toJson());
+    print(res);
+    return {
+      "status": true,
+      "message": "success"
+    };
+  } on FirebaseAuthException catch(e) {
+    return {
+      "status": false,
+      "message": e.message.toString()
+    };
+  }
+}
+

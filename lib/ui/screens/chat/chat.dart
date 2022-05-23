@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/category_selector.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/favourite_contact.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/recent_chat.dart';
+import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/ui/screens/nav_bar.dart';
 
 import '../../../util/navigate.dart';
@@ -17,11 +15,13 @@ class _ChatScreenState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon:const Icon(
             Icons.arrow_back,
+            color: Colors.black
           ),
           onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage()));
@@ -30,10 +30,11 @@ class _ChatScreenState extends State<Chat> {
         title:Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children:const[
-            Text("Chatting App",
+            Text("FoodNet",
               style: TextStyle(
-                  fontSize: 19.0,
-                  fontWeight: FontWeight.bold
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
               ),  ),
           ],
         ),
@@ -42,6 +43,7 @@ class _ChatScreenState extends State<Chat> {
           IconButton(
             icon:const Icon(
               Icons.search,
+              color: Colors.black,
             ),
             onPressed: (){
               Navigate.pushPage(context, const SearchPage(type: "chat",));
@@ -50,27 +52,11 @@ class _ChatScreenState extends State<Chat> {
         ],
       ),
       body: Column(
-        children: <Widget>[
-          const  CategorySelector(),
-          Expanded(
-            child: Container(
-              decoration:const BoxDecoration(
-                color: Color(0xFFFDF8E9),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0)
-                ),
-              ),
-              child: Column(
-                children:  <Widget>[
-                  FavoriteContacts(),
-                  RecentChats(),
-                ],
-              ),
-            ),
-          ),
+        children: [
+          Container(),
+          MessagesSelector()
         ],
-      ),
+      )
     );
   }
 }
