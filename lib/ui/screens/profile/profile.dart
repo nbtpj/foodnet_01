@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<ProfileData>(
+        body: FutureBuilder<ProfileData?>(
       future: getProfile(widget.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

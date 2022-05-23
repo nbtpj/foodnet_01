@@ -59,7 +59,7 @@ class RecentChats extends StatelessWidget {
                                     bottomRight: Radius.circular(20.0),
                                   ),
                                 ),
-                                child: FutureBuilder<ProfileData>(
+                                child: FutureBuilder<ProfileData?>(
                                     future: getProfile(chat.senderId),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {

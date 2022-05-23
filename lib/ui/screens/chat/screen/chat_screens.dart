@@ -156,7 +156,7 @@ class _ChatScreensState extends State<ChatScreens> {
       return getMessages(widget.userId).toList();
     }
 
-    return FutureBuilder<ProfileData>(
+    return FutureBuilder<ProfileData?>(
         future: getProfile(widget.userId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
