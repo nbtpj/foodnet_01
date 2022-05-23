@@ -14,7 +14,7 @@ class EditComment extends StatefulWidget {
   EditComment({Key? key, required this.food}) : super(key: key) {
     comment = CommentData(
         postID: food.id,
-        userID: getMyProfileId()!,
+        userID: getMyProfileId(),
         commentID: "new",
         comment: "",
         mediaUrls: [],
@@ -70,7 +70,7 @@ class _EditComment extends State<EditComment> {
                     widget.editor.clear();
                     widget.comment = CommentData(
                         postID: widget.food.id,
-                        userID: getMyProfileId()!,
+                        userID: getMyProfileId(),
                         commentID: "new",
                         comment: '',
                         mediaUrls: [],

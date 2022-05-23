@@ -151,7 +151,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
             ),
           );
         } else {
-          return Center();
+          return CircularProgressIndicator();
         }
       },
     );

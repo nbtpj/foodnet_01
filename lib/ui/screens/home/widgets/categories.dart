@@ -82,7 +82,8 @@ class _CategoriesFoodState extends State<CategoriesFood> {
             ),
           );
         } else {
-          return const Center();
+          return CircularProgressIndicator();
+          // return const Center();
         }
       }
     );

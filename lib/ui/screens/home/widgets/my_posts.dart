@@ -282,7 +282,8 @@ class _MyFoodsState extends State<MyFoods> {
           );
         }
         else {
-          return const Center();
+          return CircularProgressIndicator();
+          // return const Center();
         }
       },
     );

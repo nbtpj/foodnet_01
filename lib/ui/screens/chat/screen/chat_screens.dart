@@ -231,7 +231,8 @@ class _ChatScreensState extends State<ChatScreens> {
               ),
             );
           } else {
-            return const Center();
+            return CircularProgressIndicator();
+            // return const Center();
           }
         });
   }

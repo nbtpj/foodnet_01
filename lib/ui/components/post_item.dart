@@ -86,7 +86,7 @@ class _TwoColPostListView extends State<StatefulWidget>{
                                           color: Colors.green,
                                           fontSize: SizeConfig.screenHeight / 40,
                                           fontFamily: "Roboto"))):
-                              const SizedBox.shrink()),
+                              const CircularProgressIndicator()),
                           food.cateList.isNotEmpty?FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(

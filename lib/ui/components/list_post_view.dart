@@ -38,7 +38,7 @@ Widget buildlist(Future<List<PostData>> listpost,BuildContext context) {
                           borderRadius: BorderRadius.circular(30.0),
                           boxShadow: [
                             BoxShadow(
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                               blurRadius: 6,
                               color: Colors.black.withOpacity(0.3),
                             )
@@ -57,8 +57,8 @@ Widget buildlist(Future<List<PostData>> listpost,BuildContext context) {
                                         "${food.outstandingIMGURL}"),
                                     fit: BoxFit.cover,
                                   ),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30.0),
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: const Radius.circular(30.0),
                                       topRight: Radius.circular(30.0)),
                                 ),
                               ),
@@ -106,12 +106,12 @@ Widget buildlist(Future<List<PostData>> listpost,BuildContext context) {
                               width: SizeConfig.screenWidth/8.22,             /// 50.0
                               decoration: BoxDecoration(
                                   color: buttonColor,
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     bottomRight: Radius.circular(30.0),
                                     topLeft: Radius.circular(30.0),
                                   )
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.shopping_cart_rounded,
                                 color: Colors.white,
                               ),
@@ -128,7 +128,7 @@ Widget buildlist(Future<List<PostData>> listpost,BuildContext context) {
         );
       }
       else{
-        return Center();
+        return const CircularProgressIndicator();
       }
     },
   );

@@ -156,7 +156,9 @@ class _PopularFoodsState extends State<PopularFoods> {
           );
         }
         else{
-          return const Center();
+          return CircularProgressIndicator();
+
+          // return const Center();
         }
       },
     );

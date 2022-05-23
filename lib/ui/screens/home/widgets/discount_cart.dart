@@ -76,7 +76,9 @@ class _DiscountCardState extends State<DiscountCard> {
               ),
             );
           } else {
-            return Center();
+            return CircularProgressIndicator();
+
+            // return Center();
           }
         },
       ),
