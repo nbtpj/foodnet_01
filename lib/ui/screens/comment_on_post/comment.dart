@@ -23,9 +23,6 @@ class CommentComponent extends StatefulWidget {
   @override
   _CommentComponent createState() => _CommentComponent();
 
-  String get userID {
-    return comment.userID;
-  }
 }
 
 class _CommentComponent extends State<CommentComponent> {

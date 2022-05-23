@@ -65,9 +65,9 @@ class _EditComment extends State<EditComment> {
           IconButton(
               onPressed: () {
                 setState(() async {
-                  widget.editor.clear();
                   widget.comment.timestamp = DateTime.now();
                   if (await widget.comment.post()) {
+                    widget.editor.clear();
                     widget.comment = CommentData(
                         postID: widget.food.id,
                         userID: getMyProfileId()!,

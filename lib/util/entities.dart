@@ -11,8 +11,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tuple/tuple.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
-
 final randomNumberGenerator = Random();
 
 /// định nghĩa các đối tượng dữ liệu
@@ -42,64 +40,63 @@ class CommentData {
     required this.timestamp,
     this.react = 0,
   });
+
   CommentData.fromJson(Map<String, dynamic> json)
       : commentID = json['commentID'] as String,
         comment = json['comment'] as String,
-        mediaUrls = (json['mediaUrls'] as List).map((e) => e as String).toList(),
+        mediaUrls =
+            (json['mediaUrls'] as List).map((e) => e as String).toList(),
         timestamp = (json['timestamp'] as Timestamp).toDate(),
-        react = json['react'] as int
-  ;
+        react = json['react'] as int,
+        postID = json['postID'] as String,
+        userID = json['userID'] as String;
 
   Map<String, dynamic> toJson() => {
-    'comment': comment,
-    'mediaUrls': mediaUrls,
-    'timestamp': Timestamp.fromDate(timestamp),
-    'react': react,
-    'userID':userID,
-    'postID':postID,
-  };
+        'comment': comment,
+        'mediaUrls': mediaUrls,
+        'timestamp': Timestamp.fromDate(timestamp),
+        'react': react,
+        'userID': userID,
+        'postID': postID,
+      };
 
-  Future<ProfileData?> load_profile() async{
+  Future<ProfileData?> load_profile() async {
     profile = await getProfile(userID);
     return profile;
   }
 
-
   Future<bool> post() async {
     for (int i = 0; i < mediaUrls.length; i++) {
-      if (await File(mediaUrls[i]).exists()){
+      if (await File(mediaUrls[i]).exists()) {
         try {
           File f = await File(mediaUrls[i]).create();
           mediaUrls[i] = "$userID-cmton-$postID-${DateTime.now().toUtc()}";
-          await storage
-              .ref('food')
+          await storage.ref('comments').child(mediaUrls[i]).putFile(f);
+          mediaUrls[i] = await storage
+              .ref('comments')
               .child(mediaUrls[i])
-              .putFile(f);
-          mediaUrls[i] = await storage.ref('comments').child(mediaUrls[i]).getDownloadURL();
+              .getDownloadURL();
         } catch (e) {
-          debugPrint("error: can not upload: "+mediaUrls[i]+e.toString());
+          debugPrint("error: can not upload: " + mediaUrls[i] + e.toString());
           return false;
         }
       }
-
     }
 
     if (getMyProfileId() != null) {
       userID = getMyProfileId()!;
-      if(commentID=="new"){
+      if (commentID == "new") {
         DocumentReference doc = await commentsRef.add(this);
         commentID = doc.id;
         return true;
-      } else{
-        try{
+      } else {
+        try {
           await commentsRef.doc(commentID).set(this);
-        } catch (e){
+        } catch (e) {
           return false;
         }
         return true;
       }
-
-
     } else {
       return false;
     }
@@ -107,12 +104,10 @@ class CommentData {
 
   bool isEmpty() {
     bool a = comment.isEmpty && mediaUrls.isEmpty;
-    print('current post is empty?'+a.toString());
+    print('current post is empty?' + a.toString());
     print('____________');
     return a;
   }
-
-
 }
 
 class PostData implements LazyLoadData {
@@ -167,7 +162,7 @@ class PostData implements LazyLoadData {
   }
 
   bool isEditable() {
-    return author_id==getMyProfileId();
+    return author_id == getMyProfileId();
   }
 
   @override
@@ -226,7 +221,8 @@ class PostData implements LazyLoadData {
             author_id: json['author_uid']! as String,
             id: json['id']! as String,
             description: json['description']! as String,
-            mediaUrls:(json['mediaUrls'] as List).map((e) => e as String).toList(),
+            mediaUrls:
+                (json['mediaUrls'] as List).map((e) => e as String).toList(),
             cateList:
                 (json['cateList'] as List).map((e) => e as String).toList(),
             price: json['price']! as int,
@@ -234,9 +230,10 @@ class PostData implements LazyLoadData {
             react: json['react']! as int,
             outstandingIMGURL: json['outstandingIMGURL']! as String,
             title: json['title']! as String,
-            position: json['position']!=null?LatLng((json['position']! as GeoPoint).latitude,
-                (json['position']! as GeoPoint).longitude):null
-  );
+            position: json['position'] != null
+                ? LatLng((json['position']! as GeoPoint).latitude,
+                    (json['position']! as GeoPoint).longitude)
+                : null);
 
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
@@ -252,9 +249,11 @@ class PostData implements LazyLoadData {
       "isGood": isGood,
       "react": react,
       "author_uid": author_id,
-      "title":title,
-      "mediaUrls":mediaUrls,
-      "position": position!=null?GeoPoint(position!.latitude, position!.longitude):null,
+      "title": title,
+      "mediaUrls": mediaUrls,
+      "position": position != null
+          ? GeoPoint(position!.latitude, position!.longitude)
+          : null,
       "outstandingIMGURL": outstandingIMGURL
     };
   }
@@ -263,10 +262,9 @@ class PostData implements LazyLoadData {
     return {"title": title, "outstandingIMGURL": outstandingIMGURL};
   }
 
-  Future<ProfileData?> getOwner() async{
+  Future<ProfileData?> getOwner() async {
     var ref = await profilesRef.doc(author_id!).get();
     return ref.data();
-
   }
 
   Future<bool> commit_changes() async {
@@ -274,7 +272,7 @@ class PostData implements LazyLoadData {
     /// lưu ý rằng, sẽ có một số url vẫn còn là local, nên bước này sẽ bao gồm cả việc
     /// upload các media này lên
     ///
-    if(title.isEmpty){
+    if (title.isEmpty) {
       debugPrint("error: title can not be empty!");
 
       return false;
@@ -283,50 +281,43 @@ class PostData implements LazyLoadData {
       try {
         File f = await File(outstandingIMGURL).create();
         outstandingIMGURL = "$author_id-${DateTime.now().toUtc()}";
-        await storage
-            .ref('food')
-            .child(outstandingIMGURL)
-            .putFile(f);
-        outstandingIMGURL = await storage.ref('food').child(outstandingIMGURL)
-            .getDownloadURL();
+        await storage.ref('food').child(outstandingIMGURL).putFile(f);
+        outstandingIMGURL =
+            await storage.ref('food').child(outstandingIMGURL).getDownloadURL();
       } catch (e) {
-        debugPrint("error: can not upload: "+outstandingIMGURL+e.toString());
+        debugPrint(
+            "error: can not upload: " + outstandingIMGURL + e.toString());
         return false;
       }
     }
     for (int i = 0; i < mediaUrls.length; i++) {
-      if (await File(mediaUrls[i]).exists()){
+      if (await File(mediaUrls[i]).exists()) {
         try {
           File f = await File(mediaUrls[i]).create();
           mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
-          await storage
-              .ref('food')
-              .child(mediaUrls[i])
-              .putFile(f);
-          mediaUrls[i] = await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
+          await storage.ref('food').child(mediaUrls[i]).putFile(f);
+          mediaUrls[i] =
+              await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
         } catch (e) {
-          debugPrint("error: can not upload: "+mediaUrls[i]+e.toString());
+          debugPrint("error: can not upload: " + mediaUrls[i] + e.toString());
           return false;
         }
       }
-
     }
     author_id = getMyProfileId();
     if (author_id != null) {
-      if(id=="new"){
+      if (id == "new") {
         DocumentReference doc = await postsRef.add(this);
         id = doc.id;
         return true;
-      } else{
-        try{
+      } else {
+        try {
           await postsRef.doc(id).set(this);
-        } catch (e){
+        } catch (e) {
           return false;
         }
         return true;
       }
-
-
     } else {
       return false;
     }

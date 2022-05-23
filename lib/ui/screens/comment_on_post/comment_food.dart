@@ -31,19 +31,19 @@ class _CommentFoodState extends State<CommentFood> {
           builder: (BuildContext context,
               AsyncSnapshot<List<CommentData>> snapshot) {
             List<CommentData> listCommend;
-            if (snapshot.hasData){
+            if (snapshot.hasData) {
               listCommend = snapshot.data ?? [];
-            } else{
+            } else {
               listCommend = [];
             }
 
-
             print("comment list");
-            print(snapshot);
+            for (var d in listCommend) print(d.toJson());
             return Container(
               decoration: BoxDecoration(
-                color: Colors.orangeAccent,
+                color: Colors.white38,
                 image: DecorationImage(
+                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
                     image: NetworkImage(widget.food.outstandingIMGURL),
                     fit: BoxFit.cover),
               ),
@@ -52,6 +52,8 @@ class _CommentFoodState extends State<CommentFood> {
                 itemCount: listCommend.length,
                 itemBuilder: (context, index) {
                   CommentData data = listCommend[index];
+                  print('comment data is');
+                  print(data.toJson());
                   return CommentComponent(
                     comment: data,
                     isNet: true,
