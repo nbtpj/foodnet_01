@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/AuthWrapperHome.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../util/constants/strings.dart';
@@ -140,8 +142,11 @@ class _UserPictureState extends State<UserPicture> {
                             SizedBox(height: height / 56.87),
 
                             ///15
-                            GestureDetector(onTap: (){
-                              /// todo: đăng xuất
+                            GestureDetector(onTap: ()async{
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                              return const AuthWrapperHome();
+                            }));
                             },
                               child:
                               Row(
