@@ -11,15 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tuple/tuple.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-List<LatLng> position_list = [
-  const LatLng(37.42796133580664, -122.085749655962),
-  const LatLng(37.42484642575639, -122.08309359848501),
-  const LatLng(37.42381625902441, -122.0928531512618),
-  const LatLng(37.41994095849639, -122.08159055560827),
-  const LatLng(37.413175077529935, -122.10101041942836),
-  const LatLng(37.419013242401576, -122.11134664714336),
-  const LatLng(37.40260962243491, -122.0976958796382),
-];
+
 
 final randomNumberGenerator = Random();
 
@@ -32,34 +24,95 @@ class LazyLoadData {
 }
 
 class CommentData {
-  late String username;
-  late String avatarUrl;
+  late String commentID;
   late String comment;
+  late String userID;
+  late String postID;
   late DateTime timestamp;
   late List<String> mediaUrls;
+  late int react;
+  ProfileData? profile;
 
   CommentData({
-    this.username = "Tuan",
-    this.avatarUrl = "assets/friend/tarek.jpg",
-    this.comment = "nice",
-    this.mediaUrls = const [
-      "assets/food/HeavenlyPizza.jpg",
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-    ],
+    required this.commentID,
+    required this.postID,
+    required this.userID,
+    this.comment = "",
+    this.mediaUrls = const [],
     required this.timestamp,
+    this.react = 0,
   });
+  CommentData.fromJson(Map<String, dynamic> json)
+      : commentID = json['commentID'] as String,
+        comment = json['comment'] as String,
+        mediaUrls = (json['mediaUrls'] as List).map((e) => e as String).toList(),
+        timestamp = (json['timestamp'] as Timestamp).toDate(),
+        react = json['react'] as int
+  ;
+
+  Map<String, dynamic> toJson() => {
+    'comment': comment,
+    'mediaUrls': mediaUrls,
+    'timestamp': Timestamp.fromDate(timestamp),
+    'react': react,
+    'userID':userID,
+    'postID':postID,
+  };
+
+  Future<ProfileData?> load_profile() async{
+    profile = await getProfile(userID);
+    return profile;
+  }
+
 
   Future<bool> post() async {
-    return true;
+    for (int i = 0; i < mediaUrls.length; i++) {
+      if (await File(mediaUrls[i]).exists()){
+        try {
+          File f = await File(mediaUrls[i]).create();
+          mediaUrls[i] = "$userID-cmton-$postID-${DateTime.now().toUtc()}";
+          await storage
+              .ref('food')
+              .child(mediaUrls[i])
+              .putFile(f);
+          mediaUrls[i] = await storage.ref('comments').child(mediaUrls[i]).getDownloadURL();
+        } catch (e) {
+          debugPrint("error: can not upload: "+mediaUrls[i]+e.toString());
+          return false;
+        }
+      }
+
+    }
+
+    if (getMyProfileId() != null) {
+      userID = getMyProfileId()!;
+      if(commentID=="new"){
+        DocumentReference doc = await commentsRef.add(this);
+        commentID = doc.id;
+        return true;
+      } else{
+        try{
+          await commentsRef.doc(commentID).set(this);
+        } catch (e){
+          return false;
+        }
+        return true;
+      }
+
+
+    } else {
+      return false;
+    }
   }
 
   bool isEmpty() {
-    return comment.isEmpty && mediaUrls.isEmpty;
+    bool a = comment.isEmpty && mediaUrls.isEmpty;
+    print('current post is empty?'+a.toString());
+    print('____________');
+    return a;
   }
 
-  String get userID {
-    return "1";
-  }
+
 }
 
 class PostData implements LazyLoadData {
@@ -122,9 +175,9 @@ class PostData implements LazyLoadData {
     // TODO: implement loadMore
   }
 
-  CommentData getPreviousComment() {
-    return CommentData(timestamp: DateTime.now());
-  }
+  // CommentData getPreviousComment() {
+  //   return CommentData(timestamp: DateTime.now());
+  // }
 
   int getNumRate() {
     return 0;

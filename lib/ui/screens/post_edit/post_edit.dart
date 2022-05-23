@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
-import 'package:foodnet_01/ui/screens/home/home.dart';
 import 'package:foodnet_01/ui/screens/nav_bar.dart';
 import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/ui/screens/post_edit/map_picker.dart';
@@ -167,7 +166,6 @@ class _PostEditForm extends State<PostEditForm> {
           } else {
             return SizedBox.shrink();
           }
-          ;
         });
   }
 
@@ -222,8 +220,9 @@ class _PostEditForm extends State<PostEditForm> {
                     final List<XFile>? images =
                         await widget._picker.pickMultiImage();
                     setState(() {
-                      widget.food.mediaUrls
-                          .addAll([for (var img in images!) img.path]);
+                      if (images != null)
+                        widget.food.mediaUrls
+                            .addAll([for (var img in images) img.path]);
                     });
                   },
                   icon: Icon(
@@ -408,12 +407,29 @@ class _PostEditForm extends State<PostEditForm> {
                   child: IconButton(
                       onPressed: () async {
                         _formKey.currentState?.save();
-                        await widget.food.commit_changes()
-                            ? Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyHomePage()))
-                            : Navigator.pop(context);
+                        bool t = await widget.food.commit_changes();
+                        if (t) {
+                          Fluttertoast.showToast(
+                              msg: upload_success,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage()));
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: upload_fail,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          // Navigator.pop(context);
+                        }
                       },
                       icon: Icon(
                         Icons.check,

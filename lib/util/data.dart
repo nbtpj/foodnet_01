@@ -25,6 +25,17 @@ FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
     },
     toFirestore: (postData, _) => postData.categoryToJson());
 
+CollectionReference<CommentData> commentsRef =
+FirebaseFirestore.instance.collection('comments').withConverter<CommentData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["commentID"] = snapshot.id;
+      print("data is");
+      print(data);
+      return CommentData.fromJson(data);
+    },
+    toFirestore: (commentData, _) => commentData.toJson());
+
 CollectionReference<FriendData> friendsRef(String profileId) {
   return FirebaseFirestore.instance
       .collection('friends')
@@ -45,9 +56,16 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     fromFirestore: (snapshot, _) {
       var data = snapshot.data()!;
       data["id"] = snapshot.id;
-      return ProfileData.fromJson(data);
+      print("get a profile");
+      print(data);
+      var a = ProfileData.fromJson(data);
+      print(a.toJson());
+      print('_______');
+
+      return a;
     },
-    toFirestore: (profileData, _) => profileData.toJson());
+    toFirestore: (profileData, _) => profileData.toJson(),
+);
 
 CollectionReference postReactionRef =
 FirebaseFirestore.instance.collection("reactions-posts");
@@ -89,8 +107,9 @@ Stream<PostData> getPosts(Filter filter) async* {
 }
 
 Stream<CommentData> fetch_comments(String foodID, int from, int to) async* {
-  for (var i = from; i < to; i++) {
-    yield CommentData(timestamp: DateTime.now());
+  var commentSnap = await commentsRef.where('postID', isEqualTo:foodID).get();
+  for (var doc in commentSnap.docs) {
+    yield doc.data();
   }
 }
 
@@ -98,14 +117,14 @@ String? getMyProfileId() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
 
-Future<ProfileData> getProfile(String id) async {
+Future<ProfileData?> getProfile(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
-  var res = profilesRef.doc(id).get().then((snapshot) {
-    print(snapshot.data()!.toJson());
-    return snapshot.data()!;
-  });
-  return res;
+  var a = (await profilesRef.doc(id).get()).data();
+  print('get!'+id.toString());
+  print(a);
+  print('_______________');
+  return a;
 }
 
 Stream<ProfileData> getProfiles(Filter filter) async* {

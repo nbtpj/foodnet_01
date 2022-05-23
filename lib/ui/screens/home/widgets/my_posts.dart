@@ -82,7 +82,7 @@ class _MyFoodsState extends State<MyFoods> {
                           FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
-                                "Thêm một bài đăng mới",
+                                add_a_new_post,
                                 style: TextStyle(
                                     color: Colors.black54,
                                     fontSize: SizeConfig.screenHeight / 34.15,

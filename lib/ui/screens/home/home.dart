@@ -7,6 +7,7 @@ import 'package:foodnet_01/ui/screens/home/widgets/popular.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/recommend.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/search_food.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
 
 import 'widgets/categories.dart';
@@ -40,24 +41,22 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             // UserNameText(),
-             Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Expanded(
-                    flex: 7,
-                    child: SearchFood()
-                  ),
-                  Expanded(child: IconButton(
-                      onPressed: () async {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                          return Chat();
-                        }));
-                      },
-                      icon: const Icon(Icons.message),
-                      iconSize: 40,
-                    )
-                  )
-                ],
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Expanded(flex: 7, child: SearchFood()),
+                Expanded(
+                    child: IconButton(
+                  onPressed: () async {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return Chat();
+                    }));
+                  },
+                  icon: const Icon(Icons.message),
+                  iconSize: 40,
+                ))
+              ],
             ),
             const DiscountCard(),
             FoodPart(partName: tag_string),
@@ -67,7 +66,9 @@ class _HomeState extends State<Home> {
             FoodPart(partName: popular_string),
             const PopularFoods(),
             FoodPart(partName: my_post_string),
-            const MyFoods(),
+            getMyProfileId() != null
+                ? const MyFoods()
+                : SizedBox.shrink(), // login requirement
           ],
         ),
       ),

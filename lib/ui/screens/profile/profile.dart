@@ -23,7 +23,7 @@ class ProfilePage extends StatefulWidget {
     required this.id,
     this.arriveType,
   }) : super(key: key) {
-    this.type = id == "BLEoK5h0k1Pls86GrDogy5YfazJ2" ? "me" : "other";
+    this.type = id == getMyProfileId() ? "me" : "other";
 
   }
 
@@ -38,10 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<ProfileData>(
+        body: FutureBuilder<ProfileData?>(
       future: getProfile(widget.id),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data!=null) {
           ProfileData? profile = snapshot.data;
           /*if (profile?.schools != null) {
               print(profile?.schools?.length);

@@ -17,6 +17,12 @@ const String reviews_string = lang=='en'? "reviews":"đánh giá";
 const String features_string = lang=='en'? "Features":"Đặc điểm";
 const String friend_string = lang=='en'? "friends":"bạn bè";
 const String logout_string = lang=='en'? "Log out":"Đăng xuất";
+const String add_a_new_post = lang=='en'? "Add a new post":"Tạo một bài đăng mới";
+const String upload_fail = lang=='en'? "Upload fail!":"Cập nhật thất bại!";
+const String upload_success = lang=='en'? "Upload success!":"Cập nhật thành công!";
+const String undefined_user = lang=='en'? "Undefined user":"Người dùng không xác định";
+
+
 
 
 

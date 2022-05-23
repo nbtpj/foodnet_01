@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_invitations.dart';
 import 'package:foodnet_01/ui/screens/home/home.dart';
+import 'package:foodnet_01/ui/screens/login.dart';
 import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -27,8 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // CartView(),
     // FavoritePageView(),
     // ProfilePageView(),
-    Friends(),
-    ProfilePage(id: "BLEoK5h0k1Pls86GrDogy5YfazJ2", arriveType: "navbar",),
+    getMyProfileId()!=null? Friends():Login(),
+    getMyProfileId()!=null? ProfilePage(id: getMyProfileId()!, arriveType: "navbar",):Login(),
   ];
 
   @override
