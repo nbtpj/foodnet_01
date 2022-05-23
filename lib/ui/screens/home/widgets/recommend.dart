@@ -133,6 +133,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                 right: SizeConfig.screenWidth / 41.1,
 
                                 /// 10.0
+                                /// todo
                                 child: food.react == 1
                                     ? const Icon(Icons.favorite,
                                         color: Colors.white)
