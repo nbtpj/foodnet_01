@@ -19,16 +19,9 @@ class _FriendListState extends State<FriendList> {
   Widget buildfriendlist(AsyncSnapshot<List<FriendData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
-      return ListView.separated(
+      return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              height: SizeConfig.screenHeight / 85.3,
-
-              ///10
-            );
-          },
           itemCount: friendList.length,
           itemBuilder: (BuildContext context, int index) {
             var friendItem = friendList[index];
