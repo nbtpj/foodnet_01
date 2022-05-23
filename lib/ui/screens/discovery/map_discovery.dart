@@ -177,7 +177,7 @@ class _DiscoveryState extends State<Discovery> {
                                               /// 16
                                               fontWeight: FontWeight.w400),
                                         ),
-                                      ):SizedBox.shrink(),
+                                      ):const SizedBox.shrink(),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             top: SizeConfig.screenHeight /
@@ -238,7 +238,7 @@ class _DiscoveryState extends State<Discovery> {
             ),
           );
         } else {
-          return const Center();
+          return const CircularProgressIndicator();
         }
       },
     );
