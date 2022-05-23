@@ -5,14 +5,22 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class FavoriteFood extends StatefulWidget {
-  PostData food;
-  FavoriteFood({Key? key, required this.food}) : super(key: key);
+  final PostData food;
+  Future<int>? futureReact;
+  final Function notifyParent;
+  FavoriteFood({Key? key, required this.food, required this.notifyParent}) : super(key: key);
 
   @override
   _FavoriteFoodState createState() => _FavoriteFoodState();
 }
 
 class _FavoriteFoodState extends State<FavoriteFood> {
+  @override
+  void initState() {
+    widget.futureReact = widget.food.getReact();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -31,20 +39,30 @@ class _FavoriteFoodState extends State<FavoriteFood> {
           color: Colors.white,
           iconSize: SizeConfig.screenHeight / 22.77,
         ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              widget.food.changeReact();
-            });
-          },
-          icon: widget.food.getReact() == 1
-              ? const Icon(Icons.favorite, color: Colors.white)
-              : widget.food.getReact() == 0
-                  ? const Icon(Icons.favorite_outline, color: Colors.white)
-                  : const Icon(Icons.heart_broken, color: Colors.white),
-          color: Colors.white,
-          iconSize: SizeConfig.screenHeight / 22.77,
-        ),
+        FutureBuilder<int>(
+            future: widget.futureReact,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.food.changeReact();
+                      widget.notifyParent();
+                    });
+                  },
+                  icon: widget.food.react == 1
+                      ? const Icon(Icons.favorite, color: Colors.white)
+                      : widget.food.react == 0
+                      ? const Icon(Icons.favorite_outline, color: Colors.white)
+                      : const Icon(Icons.heart_broken, color: Colors.white),
+                  color: Colors.white,
+                  iconSize: SizeConfig.screenHeight / 22.77,
+                );
+              } else {
+                return const Center();
+              }
+            })
+        ,
         widget.food.isEditable()
             ? IconButton(
                 onPressed: () {

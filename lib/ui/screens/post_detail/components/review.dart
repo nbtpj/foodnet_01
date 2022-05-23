@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_discovery.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
@@ -5,7 +6,6 @@ import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
 
 class ReviewStars extends StatefulWidget {
   PostData food;
@@ -17,6 +17,15 @@ class ReviewStars extends StatefulWidget {
 }
 
 class _ReviewStarsState extends State<ReviewStars> {
+  Future<ReactionPostData>? _futureReaction;
+
+  @override
+  void initState() {
+    _futureReaction = widget.food.getRate();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,12 +38,12 @@ class _ReviewStarsState extends State<ReviewStars> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FutureBuilder<Tuple2<int, int>>(
-                future: widget.food.getRate(),
+              FutureBuilder<ReactionPostData>(
+                future: _futureReaction,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    final upvoteRate = snapshot.data!.item1;
-                    final downvoteRate = snapshot.data!.item2;
+                    final upvoteRate = widget.food.numUpvote;
+                    final downvoteRate = widget.food.numDownvote;
                     return Row(
                       children: [
                         Row(
