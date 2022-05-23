@@ -249,31 +249,25 @@ Future<Tuple2<int, int>> getRateByPostId(String postId) async {
   });
 }
 
+final db = FirebaseFirestore.instance;
+
 Stream<Message> getMessages(String id) async* {
-  /// lấy danh sách message với 1 user theo createdAt tăng dần
+  /// lấy danh sách message với 1 user sắp xếp theo createdAt
   /// trả về Stream
-  if (id == "5LbuzmwRYkbp6DvhFGC2KXyg8h33") {
-    yield Message(
-        senderId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
-        receiverId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
-        message: "Hello my friend",
-        unread: true,
-        createdAt: DateTime.now()
-    );
-    yield Message(
-        senderId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
-        receiverId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
-        message: "Hello my friend",
-        unread: false,
-        createdAt: DateTime.now()
-    );
-    yield Message(
-        senderId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
-        receiverId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
-        message: "Hello",
-        unread: false,
-        createdAt: DateTime.now()
-    );
+  final String? myProfileId = getMyProfileId();
+
+  try {
+    final messageDoc = await db.collection("messages")
+        // .where("senderId", whereIn: [myProfileId, id])
+        // .where("receiverId", whereIn: [myProfileId, id])
+        .orderBy("createdAt", descending: true)
+        .get();
+    for (var doc in messageDoc.docs) {
+      yield Message.fromJson(doc.data());
+    }
+  } on Exception catch (e) {
+    print(e.toString());
+    return;
   }
 }
 
@@ -286,4 +280,46 @@ Stream<Message> getRecentChat() async* {
       unread: true,
       createdAt: DateTime.now()
   );
+
+  final String? myProfileId = getMyProfileId();
+
+  try {
+    final messageDoc = await db.collection("messages")
+    // .where("senderId", whereIn: [myProfileId, id])
+    // .where("receiverId", whereIn: [myProfileId, id])
+        .orderBy("createdAt", descending: true)
+        .get();
+    for (var doc in messageDoc.docs) {
+      yield Message.fromJson(doc.data());
+    }
+  } on Exception catch (e) {
+    print(e.toString());
+    return;
+  }
 }
+
+Future sendMessage(String senderId, String receiverId, String message) async {
+  final newMessage = Message(
+      senderId: senderId,
+      receiverId: receiverId,
+      message: message.trim(),
+      unread: true,
+      createdAt: DateTime.now()
+  );
+
+  try {
+    late CollectionReference refMessage = db.collection("messages");
+    var res = await refMessage.add(newMessage.toJson());
+    print(res);
+    return {
+      "status": true,
+      "message": "success"
+    };
+  } on FirebaseAuthException catch(e) {
+    return {
+      "status": false,
+      "message": e.message.toString()
+    };
+  }
+}
+

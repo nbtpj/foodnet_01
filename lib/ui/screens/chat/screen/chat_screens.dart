@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -15,6 +16,9 @@ class ChatScreens extends StatefulWidget {
 }
 
 class _ChatScreensState extends State<ChatScreens> {
+  TextEditingController messageController = TextEditingController();
+  bool isLoading = false;
+
   _buildMessage(Message message, bool isMe) {
     final msg = Container(
       margin: isMe
@@ -73,14 +77,20 @@ class _ChatScreensState extends State<ChatScreens> {
                 size: 29.0,
                 color: Theme.of(context).primaryColor,
               )),
-          const Expanded(
-              child: TextField(
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(hintText: "Message"),
-          )),
+          Expanded(
+            child: TextField(
+              controller: messageController,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(hintText: "Message"),
+            )
+          ),
           IconButton(
               onPressed: () {
-                // TODO: Send message
+                var senderId = getMyProfileId();
+                var receiverId = widget.userId;
+                var message = messageController.text;
+
+                send(senderId!, receiverId, message);
               },
               icon: Icon(
                 Icons.send,
@@ -90,6 +100,54 @@ class _ChatScreensState extends State<ChatScreens> {
         ],
       ),
     );
+  }
+
+  send(String senderId, String receiverId, String message) async {
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    var res = await sendMessage(senderId, receiverId, message);
+
+    setState(() {
+      isLoading = false;
+    });
+    if (res["status"] == true) {
+      messageController.clear();
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                ),
+              elevation: 0,
+              backgroundColor: dialogColor,
+              child:  Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text("Message", style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+                  SizedBox(height: 15,),
+                  Text(res["message"], style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
+                  SizedBox(height: 22,),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Ok", style: TextStyle(fontSize: 18, color: Color(0xFF99a4f3)),)
+                        ),
+                  ),
+                ],
+              ),
+              );
+          }
+      );
+    }
   }
 
   @override
