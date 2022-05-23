@@ -164,7 +164,7 @@ class _PostEditForm extends State<PostEditForm> {
               },
             );
           } else {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
         });
   }
@@ -436,6 +436,44 @@ class _PostEditForm extends State<PostEditForm> {
                         // size: SizeConfig.screenWidth / 10.28,
                         color: freeDelivery,
                       ))),
+              Container(
+                  height: SizeConfig.screenHeight / 19.51,
+                  width: SizeConfig.screenWidth / 10.28,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                      onPressed: () async {
+                        bool t = await widget.food.delete();
+                        if (t) {
+                          Fluttertoast.showToast(
+                              msg: upload_success,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage()));
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: upload_fail,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ))),
+
             ],
           ),
           _build_form(),

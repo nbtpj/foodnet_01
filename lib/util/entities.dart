@@ -340,6 +340,15 @@ class PostData implements LazyLoadData {
       position: position,
     );
   }
+
+  Future<bool> delete() async {
+    try {
+      await postsRef.doc(id).delete();
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
 }
 
 class BoxChatData implements LazyLoadData {
