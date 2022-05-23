@@ -8,7 +8,6 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tuple/tuple.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 List<LatLng> position_list = [
@@ -74,8 +73,10 @@ class PostData implements LazyLoadData {
   late bool isGood;
   LatLng? position;
   DateTime datetime = DateTime.now();
-  int react = randomNumberGenerator.nextInt(2) - 1;
+  late int react;
   late List<String> cateList; // chứa string ID của các post category
+  int numUpvote;
+  int numDownvote;
   PostData(
       {this.author_id,
       this.id = "new",
@@ -95,7 +96,7 @@ class PostData implements LazyLoadData {
       this.outstandingIMGURL = '',
       this.price,
       this.isGood = true,
-      this.react = 1,
+      this.react = 0,
       this.cateList = const [],
       this.features = const [
         ["200+", "Calories"],
@@ -103,7 +104,9 @@ class PostData implements LazyLoadData {
         ["%40", "Proteins"],
         ["200+", "Calories"]
       ],
-      this.position});
+      this.position,
+      this.numUpvote = 0,
+      this.numDownvote = 0});
 
   int i = 0;
 
@@ -126,10 +129,6 @@ class PostData implements LazyLoadData {
     return CommentData(timestamp: DateTime.now());
   }
 
-  int getNumRate() {
-    return 0;
-  }
-
   List<List<String>> getFeatures() {
     return features;
   }
@@ -149,8 +148,8 @@ class PostData implements LazyLoadData {
     return address;
   }
 
-  int getReact() {
-    /// todo: cài đặt sử dụng truy vấn bảng reaction
+  Future<int> getReact() async {
+    react = await getMyReaction(id);
     return react;
   }
 
@@ -160,10 +159,50 @@ class PostData implements LazyLoadData {
     if (react > 1) {
       react = -1;
     }
+
+    switch (react) {
+      case 0:
+        numDownvote -= 1;
+        break;
+      case 1:
+        numUpvote += 1;
+        break;
+      case -1:
+        numUpvote -= 1;
+        numDownvote += 1;
+        break;
+      default: return;
+    }
   }
 
-  Future<Tuple2<int, int>> getRate() async {
-    return await getRateByPostId(id);
+  void commitReaction() {
+    switch (react) {
+      case 0:
+        removeReaction(id, getMyProfileId());
+        break;
+      case 1:
+        addReaction(id, ReactionData(
+            userId: getMyProfileId(),
+            type: "upvote",
+            time: DateTime.now())
+        );
+        break;
+      case -1:
+        addReaction(id, ReactionData(
+            userId: getMyProfileId(),
+            type: "downvote",
+            time: DateTime.now())
+        );
+        break;
+      default: return;
+    }
+  }
+
+  Future<ReactionPostData> getRate() async{
+    ReactionPostData data = await getRateByPostId(id);
+    numUpvote = data.numUpvote;
+    numDownvote = data.numDownvote;
+    return data;
   }
 
   PostData.fromJson(Map<String, Object?> json)
@@ -337,9 +376,9 @@ class FriendData implements LazyLoadData {
 
   Map<String, Object?> toJson() {
     return {
-      if (id != null) "id": id,
+      "id": id,
       "name": name,
-      if (time != null) "time": time,
+      "time": time,
       "userAsset": userAsset
     };
   }
@@ -448,4 +487,71 @@ class Filter {
       this.keyword,
       this.scoreThreshold,
       LatLngBounds? this.vision_bounds});
+}
+
+class ReactionData implements LazyLoadData {
+  String userId;
+  String type;
+  DateTime time;
+
+  ReactionData({
+    required this.userId,
+    required this.type,
+    required this.time
+  });
+
+  factory ReactionData.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options) {
+    final data = snapshot.data();
+    if (data == null) {
+        return ReactionData(userId: "", type: "", time: DateTime.now());
+    }
+    return ReactionData(
+        userId: snapshot.id,
+        type: data["type"],
+        time: DateTime.parse((data["time"] as Timestamp).toDate().toString())
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "type": type,
+      "time": Timestamp.fromDate(time)
+    };
+  }
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }
+}
+
+class ReactionPostData {
+  int numUpvote;
+  int numDownvote;
+
+  ReactionPostData({
+    this.numUpvote = 0,
+    this.numDownvote = 0,
+  });
+
+  factory ReactionPostData.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options) {
+    final data = snapshot.data();
+    if (data == null) {
+      return ReactionPostData();
+    } else {
+      return ReactionPostData(
+        numUpvote: data["upvote"],
+        numDownvote: data["downvote"],
+      );
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "upvote": numUpvote,
+      "downvote": numDownvote
+    };
+  }
 }

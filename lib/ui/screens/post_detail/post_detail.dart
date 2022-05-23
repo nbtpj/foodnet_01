@@ -13,6 +13,15 @@ class PostDetailView extends StatefulWidget {
 }
 
 class _PostDetailView extends State<PostDetailView> {
+  refresh() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    widget.food.commitReaction();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +31,7 @@ class _PostDetailView extends State<PostDetailView> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            FoodImage(food: widget.food),
+            FoodImage(food: widget.food, notifyParent: refresh,),
             DetailWidget(food: widget.food),
           ],
         ),

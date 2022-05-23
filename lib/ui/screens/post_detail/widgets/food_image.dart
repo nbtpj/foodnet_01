@@ -6,7 +6,8 @@ import 'package:foodnet_01/util/global.dart';
 
 class FoodImage extends StatefulWidget {
   PostData food;
-  FoodImage({required this.food});
+  final Function notifyParent;
+  FoodImage({required this.food, required this.notifyParent});
 
   @override
   _FoodImageState createState() => _FoodImageState();
@@ -34,7 +35,7 @@ class _FoodImageState extends State<FoodImage> {
             children: [
               const ArrowBack(),
               // CommentFood(food: widget.food),
-              FavoriteFood(food: widget.food,),
+              FavoriteFood(food: widget.food, notifyParent: widget.notifyParent,),
             ],
           ),
         ),

@@ -49,8 +49,21 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     },
     toFirestore: (profileData, _) => profileData.toJson());
 
-CollectionReference postReactionRef =
-FirebaseFirestore.instance.collection("reactions-posts");
+CollectionReference<ReactionPostData> postReactionRef = FirebaseFirestore.instance
+    .collection("reactions-posts")
+    .withConverter(
+      fromFirestore: ReactionPostData.fromJson,
+      toFirestore: (reactionPostData, _) => reactionPostData.toJson());
+
+DocumentReference<ReactionData> reactionRef(String postId, String userId) {
+  return postReactionRef
+      .doc(postId)
+      .collection("reactions")
+      .doc(userId)
+      .withConverter(
+        fromFirestore: ReactionData.fromJson,
+        toFirestore: (reactionData, _) => reactionData.toJson());
+}
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -94,8 +107,8 @@ Stream<CommentData> fetch_comments(String foodID, int from, int to) async* {
   }
 }
 
-String? getMyProfileId() {
-  return FirebaseAuth.instance.currentUser?.uid;
+String getMyProfileId() {
+  return FirebaseAuth.instance.currentUser!.uid;
 }
 
 Future<ProfileData> getProfile(String id) async {
@@ -245,16 +258,40 @@ String file_type(String url) {
       .toLowerCase();
 }
 
-Future<Tuple2<int, int>> getRateByPostId(String postId) async {
-  DocumentReference docRef = postReactionRef.doc(postId);
+Future<ReactionPostData> getRateByPostId(String postId) {
+  DocumentReference<ReactionPostData> docRef = postReactionRef.doc(postId);
   return docRef.get().then((snapshot) {
     if (snapshot.exists) {
-      return Tuple2(
-          snapshot.get("upvote") as int,
-          snapshot.get("downvote") as int
-      );
+      return snapshot.data()!;
     } else {
-      return const Tuple2(0, 0);
+      return ReactionPostData();
     }
   });
+}
+
+Future<int> getMyReaction(String postId) {
+  DocumentReference<ReactionData> myReactionRef = reactionRef(postId, getMyProfileId());
+  return myReactionRef.get()
+    .then((snapshot) {
+      if (!snapshot.exists) {
+        return 0;
+      } else {
+        ReactionData data = snapshot.data()!;
+        if (data.type == "upvote") {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+  });
+}
+
+void addReaction(String postId, ReactionData reactionData) {
+  DocumentReference<ReactionData> reactRef = reactionRef(postId, reactionData.userId);
+  reactRef.set(reactionData);
+}
+
+void removeReaction(String postId, String userId) {
+  DocumentReference<ReactionData> reactRef = reactionRef(postId, userId);
+  reactRef.delete();
 }
