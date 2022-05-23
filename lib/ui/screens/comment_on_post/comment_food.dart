@@ -14,6 +14,7 @@ class CommentFood extends StatefulWidget {
   @override
   _CommentFoodState createState() => _CommentFoodState();
 }
+// todo: update realtime + sort by time
 
 class _CommentFoodState extends State<CommentFood> {
   @override
