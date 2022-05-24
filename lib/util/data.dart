@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 import 'entities.dart';
@@ -337,50 +338,67 @@ void removeReaction(String postId, String userId) {
 
 final db = FirebaseFirestore.instance;
 
-Stream<Message> getMessages(String id) async* {
+Stream<QuerySnapshot> getMessages(String id) {
   /// lấy danh sách message với 1 user sắp xếp theo createdAt
   /// trả về Stream
-  final String? myProfileId = getMyProfileId();
+  final String myProfileId = getMyProfileId();
+
+  final messageDoc = db
+      .collection("messages")
+      .where("senderId", whereIn: [myProfileId, id])
+      .orderBy("createdAt", descending: true);
+  return messageDoc.snapshots();
+}
+
+Stream<QuerySnapshot> getRecentChat() {
+  /// lấy danh sách chat gần đây
+  final String myProfileId = getMyProfileId();
+  return db
+      .collection("recent-users")
+      .doc(myProfileId)
+      .collection("recent-chats")
+      .orderBy("createdAt", descending: true)
+      .snapshots();
+}
+
+Future editRecentChat(String profileId, String userId, Message message) async {
+  var refRecentChat1 = db.collection("recent-users").doc(profileId).collection("recent-chats");
+  var refRecentChat2 = db.collection("recent-users").doc(userId).collection("recent-chats");
+
+  String newMessage = message.message.length < 10 ? message.message : message.message;
 
   try {
-    final messageDoc = await db
-        .collection("messages")
-        // .where("senderId", whereIn: [myProfileId, id])
-        // .where("receiverId", whereIn: [myProfileId, id])
-        .orderBy("createdAt", descending: true)
-        .get();
-    for (var doc in messageDoc.docs) {
-      yield Message.fromJson(doc.data());
-    }
-  } on Exception catch (e) {
-    print(e.toString());
+    await refRecentChat1.doc(userId).set({
+      "senderId": userId,
+      "receiverId": profileId,
+      "message": newMessage,
+      "unread": false,
+      "createdAt": message.createdAt
+    });
+    await refRecentChat2.doc(profileId).set({
+      "senderId": profileId,
+      "receiverId": userId,
+      "message": newMessage,
+      "unread": true,
+      "createdAt": message.createdAt
+    });
+    print("edited recent chat");
+  } on FirebaseAuthException catch (e) {
+    print(e.message.toString());
     return;
   }
 }
 
-Stream<Message> getRecentChat() async* {
-  /// lấy danh sách chat gần đây
-  yield Message(
-      senderId: "5LbuzmwRYkbp6DvhFGC2KXyg8h33",
-      receiverId: "jAvU41YlRGQoVwygSGMdrubKC5m2",
-      message: "Hello my friend",
-      unread: true,
-      createdAt: DateTime.now());
-
-  final String? myProfileId = getMyProfileId();
+Future seenChat(String profileId, String userId) async {
+  var refRecentChat = db.collection("recent-users").doc(profileId).collection("recent-chats");
 
   try {
-    final messageDoc = await db
-        .collection("messages")
-        // .where("senderId", whereIn: [myProfileId, id])
-        // .where("receiverId", whereIn: [myProfileId, id])
-        .orderBy("createdAt", descending: true)
-        .get();
-    for (var doc in messageDoc.docs) {
-      yield Message.fromJson(doc.data());
-    }
-  } on Exception catch (e) {
-    print(e.toString());
+    await refRecentChat.doc(userId).update({
+      "unread": false
+    });
+    print("Seen chat");
+  } on FirebaseAuthException catch (e) {
+    print(e.message.toString());
     return;
   }
 }
@@ -396,6 +414,8 @@ Future sendMessage(String senderId, String receiverId, String message) async {
   try {
     late CollectionReference refMessage = db.collection("messages");
     var res = await refMessage.add(newMessage.toJson());
+
+    await editRecentChat(senderId, receiverId, newMessage);
     print(res);
     return {"status": true, "message": "success"};
   } on FirebaseAuthException catch (e) {

@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
+import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -90,7 +93,7 @@ class _ChatScreensState extends State<ChatScreens> {
                 var receiverId = widget.userId;
                 var message = messageController.text;
 
-                send(senderId!, receiverId, message);
+                send(senderId, receiverId, message);
               },
               icon: Icon(
                 Icons.send,
@@ -152,9 +155,9 @@ class _ChatScreensState extends State<ChatScreens> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Message>> fetchMessages() async {
-      return getMessages(widget.userId).toList();
-    }
+    // Future<List<Message>> fetchMessages() async {
+    //   return getMessages(widget.userId).toList();
+    // }
 
     return FutureBuilder<ProfileData?>(
         future: getProfile(widget.userId),
@@ -168,6 +171,12 @@ class _ChatScreensState extends State<ChatScreens> {
                 backgroundColor: Colors.white,
                 iconTheme: IconThemeData(
                   color: Colors.black, //change your color here
+                ),
+                leading: IconButton (
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Chat()));
+                  },
                 ),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -197,11 +206,12 @@ class _ChatScreensState extends State<ChatScreens> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: FutureBuilder<List<Message>>(
-                        future: fetchMessages(),
+                      child: StreamBuilder<QuerySnapshot>(
+                        // future: fetchMessages(),
+                        stream: getMessages(widget.userId),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            var messages = snapshot.data;
+                            var messages = snapshot.data?.docs;
                             return Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
@@ -213,13 +223,18 @@ class _ChatScreensState extends State<ChatScreens> {
                                       itemCount: messages!.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        final Message message = messages[index];
+                                        final Message message = Message.fromJson(messages[index].data() as Map<String, dynamic>);
                                         final bool isMe = message.senderId ==
                                             getMyProfileId();
-                                        return _buildMessage(message, isMe);
+                                        if ((isMe || message.senderId == widget.userId) && (message.receiverId == getMyProfileId() || message.receiverId == widget.userId)) {
+                                          return _buildMessage(message, isMe);
+                                        } else {
+                                          return const Center();
+                                        }
                                       }),
                                 ));
                           } else {
+                            // return const CircularProgressIndicator();
                             return const Center();
                           }
                         },
@@ -231,7 +246,7 @@ class _ChatScreensState extends State<ChatScreens> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
             // return const Center();
           }
         });

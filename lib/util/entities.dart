@@ -83,7 +83,7 @@ class CommentData {
     }
 
     if (getMyProfileId() != null) {
-      userID = getMyProfileId()!;
+      userID = getMyProfileId();
       if (commentID == "new") {
         DocumentReference doc = await commentsRef.add(this);
         commentID = doc.id;
