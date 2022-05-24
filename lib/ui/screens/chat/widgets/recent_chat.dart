@@ -106,11 +106,16 @@ class _RecentChatsState extends State<RecentChats> {
                                                               0.45,
                                                       child: Text(
                                                         chat.message,
-                                                        style: const TextStyle(
+                                                        style: chat.unread
+                                                            ? const TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
+                                                        )
+                                                        : const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 15.0,
+                                                          fontWeight: FontWeight.w400,
                                                         ),
                                                         overflow: TextOverflow
                                                             .ellipsis,
