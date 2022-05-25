@@ -8,6 +8,9 @@ class InputField extends StatefulWidget {
   final String hintText;
   final void Function()? setonEdit;
   final Future<void> Function(String, String)? add;
+  final void Function(String, String, int)? edit;
+  final int? index;
+  final String? subText;
 
   const InputField({
     Key? key,
@@ -15,6 +18,9 @@ class InputField extends StatefulWidget {
     required this.hintText,
     this.add,
     this.setonEdit,
+    this.edit,
+    this.index,
+    this.subText,
   }) : super(key: key);
 
   @override
@@ -82,6 +88,18 @@ class _InputFieldState extends State<InputField>{
             ),
             onTap: () {
               if (widget.setonEdit != null) {
+                if (widget.subText == "Học tại ") {
+                  widget.edit!(textController.text, "schools", widget.index!);
+                }
+                if (widget.subText == "Làm việc tại ") {
+                  widget.edit!(textController.text, "works", widget.index!);
+                }
+                if (widget.subText == "Sở thích ") {
+                  widget.edit!(textController.text, "favorites", widget.index!);
+                }
+                if (widget.subText == "Đến từ ") {
+                  widget.edit!(textController.text, "location", -1);
+                }
                 widget.setonEdit!();
               } else {
                 if (widget.hintText == "Thêm trường học") {

@@ -9,13 +9,17 @@ class ProfileTitle extends StatefulWidget {
   final String subText;
   final String type;
   final String mainText;
+  final void Function(String, String, int)? edit;
+  final int? index;
 
   const ProfileTitle({
     Key? key,
     this.asset,
+    this.edit,
     required this.subText,
     required this.mainText,
     required this.type,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -34,7 +38,7 @@ class _ProfileTitleState extends State<ProfileTitle> {
   Widget build(BuildContext context) {
     double height = SizeConfig.screenHeight;
     return onEdit
-        ? InputField(icon: widget.asset, hintText: widget.mainText, setonEdit: setonEdit,)
+        ? InputField(icon: widget.asset, hintText: widget.mainText, setonEdit: setonEdit, edit: widget.edit, index: widget.index, subText: widget.subText,)
         : ListTile(
       title: RichText(
         overflow: TextOverflow.ellipsis,

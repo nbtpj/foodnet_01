@@ -42,9 +42,20 @@ class _DetailProfileState extends State<DetailProfile> {
     }
   }
 
-  /*Future<void> editSchool(String school) async {
-    widget.profile.schools!.add(school);
-    bool success = await widget.profile.updateSchools();
+  Future<void> edit(String editContent, String type, int index) async {
+    if (type == "schools") {
+      widget.profile.schools![index] = editContent;
+    }
+    if (type == "works") {
+      widget.profile.works![index] = editContent;
+    }
+    if (type == "favorites") {
+      widget.profile.favorites![index] = editContent;
+    }
+    if (type == "location") {
+      widget.profile.location = editContent;
+    }
+    bool success = await widget.profile.update(type);
     if (success) {
       setState(() {
         widget.profile = widget.profile;
@@ -52,7 +63,7 @@ class _DetailProfileState extends State<DetailProfile> {
     }
   }
 
-  Future<void> deleteSchool(String school) async {
+  /*Future<void> deleteSchool(String school) async {
     widget.profile.schools!.add(school);
     bool success = await widget.profile.updateSchools();
     if (success) {
@@ -129,7 +140,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.works!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type);
+                    return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type, asset: "0xe6f2",);
                   }
@@ -160,7 +171,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.schools!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type);
+                    return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type, asset: "0xe559",);
                   }
@@ -181,7 +192,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.profile.location != null ?
-            ProfileTitle(subText: "Đến từ ", mainText: widget.profile.location!, type: widget.type, asset: "0xf7f5",) :
+            ProfileTitle(subText: "Đến từ ", mainText: widget.profile.location!, type: widget.type, asset: "0xf7f5", edit: edit,) :
             widget.type == "me" ? InputField(icon: "0xf107", hintText: "Thêm nơi sống", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xf7f5",),
 
             Container(
@@ -229,7 +240,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.favorites!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type,);
+                    return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type, asset: "0xe25b",);
                   }
