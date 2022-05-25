@@ -22,16 +22,16 @@ class DetailProfile extends StatefulWidget {
 
 class _DetailProfileState extends State<DetailProfile> {
   Future<void> add(String addContent, String type) async {
-    if (type == "schools") {
+    if (type == "schools" && addContent != "") {
       widget.profile.schools!.add(addContent);
     }
-    if (type == "works") {
+    if (type == "works" && addContent != "") {
       widget.profile.works!.add(addContent);
     }
-    if (type == "favorites") {
+    if (type == "favorites" && addContent != "") {
       widget.profile.favorites!.add(addContent);
     }
-    if (type == "location") {
+    if (type == "location" && addContent != "") {
       widget.profile.location = addContent;
     }
     bool success = await widget.profile.update(type);
@@ -44,16 +44,32 @@ class _DetailProfileState extends State<DetailProfile> {
 
   Future<void> edit(String editContent, String type, int index) async {
     if (type == "schools") {
-      widget.profile.schools![index] = editContent;
+      if (editContent == "") {
+        widget.profile.schools!.removeAt(index);
+      } else {
+        widget.profile.schools![index] = editContent;
+      }
     }
     if (type == "works") {
-      widget.profile.works![index] = editContent;
+      if (editContent == "") {
+        widget.profile.works!.removeAt(index);
+      } else {
+        widget.profile.works![index] = editContent;
+      }
     }
     if (type == "favorites") {
-      widget.profile.favorites![index] = editContent;
+      if (editContent == "") {
+        widget.profile.favorites!.removeAt(index);
+      } else {
+        widget.profile.favorites![index] = editContent;
+      }
     }
     if (type == "location") {
-      widget.profile.location = editContent;
+      if (editContent == "") {
+        widget.profile.location = null;
+      } else {
+        widget.profile.location = editContent;
+      }
     }
     bool success = await widget.profile.update(type);
     if (success) {

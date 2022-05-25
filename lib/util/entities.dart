@@ -531,7 +531,15 @@ class ProfileData {
         profilesRef.doc(id).update({type: favorites});
       }
       if (type == "location") {
-        profilesRef.doc(id).update({type: location});
+        if (location == null) {
+          final update = <String, dynamic> {
+            "location": FieldValue.delete(),
+          };
+
+          profilesRef.doc(id).update(update);
+        } else {
+          profilesRef.doc(id).update({type: location});
+        }
       }
     } catch (e) {
       debugPrint("Error updating document $e");
