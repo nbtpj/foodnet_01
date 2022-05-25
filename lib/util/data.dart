@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tuple/tuple.dart';
@@ -105,31 +106,42 @@ Stream<PostData> getPosts(Filter filter) async* {
       }
       break;
     case "my_food":
-      var foodSnapshot =
-          await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
+      var foodSnapshot = await postsRef
+          .where('author_uid', isEqualTo: getMyProfileId())
+          .limit(10)
+          .get();
       for (var doc in foodSnapshot.docs) {
-        // debugPrint("current author_uid is ${doc.data().author_id??""}");
         yield doc.data();
       }
       break;
-    case "base_on_location":
+    case "base_on_locations":
       // todo
-      var foodSnapshot = await postsRef
-          .where('location',
-              isGreaterThanOrEqualTo: GeoPoint(
-                  filter.vision_bounds!.southwest.latitude,
-                  filter.vision_bounds!.southwest.longitude),
-              isLessThanOrEqualTo: GeoPoint(
-                  filter.vision_bounds!.northeast.latitude,
-                  filter.vision_bounds!.northeast.longitude))
+      print('hi query');
+      print('position query is' +
+          filter.visibleRegion.toString());
+      var begin = GeoHash.fromDecimalDegrees(filter.visibleRegion![2],filter.visibleRegion![0]),
+          end = GeoHash.fromDecimalDegrees(filter.visibleRegion![3],filter.visibleRegion![1]);
+      var foodSnapshot = await postsRef.orderBy("position_hash")
+          .startAt([begin.geohash])
+          .endAt([end.geohash])
+          .limit(10)
           .get();
+      print('position query rs.len: ' +
+          foodSnapshot.size.toString());
       for (var doc in foodSnapshot.docs) {
-        // debugPrint("current author_uid is ${doc.data().author_id??""}");
+        debugPrint("get a location result");
+        yield doc.data();
+      }
+      break;
+    case 'popular_food':
+      var foodSnapshot =
+          await postsRef.orderBy('react', descending: true).limit(10).get();
+      for (var doc in foodSnapshot.docs) {
         yield doc.data();
       }
       break;
     default:
-      var foodSnapshot = await postsRef.get();
+      var foodSnapshot = await postsRef.limit(10).get();
       for (var doc in foodSnapshot.docs) {
         yield doc.data();
       }
