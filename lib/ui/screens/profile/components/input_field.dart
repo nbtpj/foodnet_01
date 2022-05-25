@@ -7,11 +7,13 @@ class InputField extends StatefulWidget {
   final String? icon;
   final String hintText;
   final void Function()? setonEdit;
+  final Future<void> Function(String, String)? add;
 
   const InputField({
     Key? key,
     this.icon,
     required this.hintText,
+    this.add,
     this.setonEdit,
   }) : super(key: key);
 
@@ -21,6 +23,23 @@ class InputField extends StatefulWidget {
 
 class _InputFieldState extends State<InputField>{
 
+  final textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.setonEdit != null) {
+      textController.text = widget.hintText;
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
@@ -28,6 +47,7 @@ class _InputFieldState extends State<InputField>{
     return Container(
       margin: EdgeInsets.only(top: height / 56.87, left: width / 41.1, right: width / 41.1, bottom: height / 85.3),
       child: TextField(
+        controller: textController,
         cursorColor: Colors.black,
         style: TextStyle(
             fontSize: height / 42.65, ///20
@@ -63,10 +83,23 @@ class _InputFieldState extends State<InputField>{
             onTap: () {
               if (widget.setonEdit != null) {
                 widget.setonEdit!();
+              } else {
+                if (widget.hintText == "Thêm trường học") {
+                  widget.add!(textController.text, "schools");
+                }
+                if (widget.hintText == "Thêm công việc") {
+                  widget.add!(textController.text, "works");
+                }
+                if (widget.hintText == "Thêm sở thích") {
+                  widget.add!(textController.text, "favorites");
+                }
+                if (widget.hintText == "Thêm nơi sống") {
+                  widget.add!(textController.text, "location");
+                }
+                textController.text = '';
               }
             },
           ),
-
           hintText: widget.hintText,
           hintStyle: const TextStyle(
             color: Colors.orange,

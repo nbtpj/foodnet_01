@@ -488,9 +488,9 @@ class ProfileData {
       name: json["name"]! as String,
       userAsset: json["userAsset"]! as String,
       wallAsset: json["wallAsset"]! as String,
-      dayOfBirth: (json["dob"]! as Timestamp).toDate().toString(),
-      gender: json["gender"]! as String,
-      location: json["location"] as String,
+      dayOfBirth: json["dob"]!= null ? (json["dob"]! as Timestamp).toDate().toString() : null,
+      gender: json["gender"]!= null ? json["gender"]! as String : null,
+      location:json["location"]!= null ? json["location"] as String : null,
       works: (json["works"] as List).map((e) => e as String).toList(),
       schools: (json["schools"] as List).map((e) => e as String).toList(),
       favorites:
@@ -517,6 +517,27 @@ class ProfileData {
       "friends": friendReferences,
       "friendsNumber": friendsNumber
     };
+  }
+
+  Future<bool> update(String type) async {
+    try {
+      if (type == "schools") {
+        profilesRef.doc(id).update({type: schools});
+      }
+      if (type == "works") {
+        profilesRef.doc(id).update({type: works});
+      }
+      if (type == "favorites") {
+        profilesRef.doc(id).update({type: favorites});
+      }
+      if (type == "location") {
+        profilesRef.doc(id).update({type: location});
+      }
+    } catch (e) {
+      debugPrint("Error updating document $e");
+      return false;
+    }
+    return true;
   }
 }
 
