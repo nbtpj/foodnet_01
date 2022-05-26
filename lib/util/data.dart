@@ -3,7 +3,7 @@ import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tuple/tuple.dart';
-
+import  'package:string_similarity/string_similarity.dart';
 import 'entities.dart';
 
 /// định nghĩa các API sử dụng
@@ -89,14 +89,28 @@ Future<PostData?> getPost(String id) async {
   // TODO: implement get_post
   return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
 }
+Stream<PostData> pseudoFullTextSearchPost(String key) async*{
+  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
+  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
+  var foodSnapshot = await postsRef.get();
+  List<Tuple2> scores = [];
+  for (var doc in foodSnapshot.docs) {
+    var post = doc.data();
+    String txt = post.title+post.description;
+    var similarity = key.toLowerCase().similarityTo(txt.toLowerCase());
+    if(similarity>0.6) scores.add(Tuple2(similarity, post));
 
+  }
+  scores.sort((Tuple2 a, Tuple2 b) {
+    return a.item1.compareTo(b.item1)*-1;
+  });
+  for(var tuple in scores){
+    yield tuple.item2 as PostData;
+  }
+}
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
-  // TODO: implement get_posts: có thể trả về với :
-  //  Filter(search_type: 'popular_food')
-  //  Filter(search_type: 'my_food')
-  //  Filter(search_type: 'recommend_food')
   switch (filter.search_type) {
     case null:
     case "category":

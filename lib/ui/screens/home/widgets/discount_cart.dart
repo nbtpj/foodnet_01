@@ -54,7 +54,7 @@ class _DiscountCardState extends State<DiscountCard> {
                     .map((e) => ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Stack(
-                            fit: StackFit.expand,
+                            fit: StackFit.loose,
                             children: [
                               GestureDetector(
                                   onTap: () {

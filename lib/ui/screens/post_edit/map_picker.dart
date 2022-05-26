@@ -81,7 +81,7 @@ class _LocationPickerState extends State<LocationPicker> {
             ],
           ),
           Positioned(
-            left: SizeConfig.screenWidth / 2-25,
+            left: SizeConfig.screenWidth / 2-50,
             top: SizeConfig.screenHeight / 2,
             child: const Icon(
               Icons.place,
