@@ -151,7 +151,13 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                           : const Icon(Icons.heart_broken,
                                           color: Colors.white));
                                 } else {
-                                  return const CircularProgressIndicator();
+                                  return Positioned(
+                                      top: SizeConfig.screenHeight / 68.3,
+
+                                      /// 10.0
+                                      right: SizeConfig.screenWidth / 41.1,
+                                      child: const CircularProgressIndicator()
+                                  );
                                 }
                               }
                             )
