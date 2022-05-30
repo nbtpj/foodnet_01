@@ -307,6 +307,7 @@ Future<ReactionPostData> getRateByPostId(String postId) {
   });
 }
 
+
 Future<int> getMyReaction(String postId) {
   DocumentReference<ReactionData> myReactionRef =
       reactionRef(postId, getMyProfileId());
@@ -324,16 +325,18 @@ Future<int> getMyReaction(String postId) {
   });
 }
 
-void addReaction(String postId, ReactionData reactionData) {
+Future<void> addReaction(String postId, ReactionData reactionData) {
   DocumentReference<ReactionData> reactRef =
       reactionRef(postId, reactionData.userId);
-  reactRef.set(reactionData);
+  return reactRef.set(reactionData);
 }
 
-void removeReaction(String postId, String userId) {
+Future<void> removeReaction(String postId, String userId) {
   DocumentReference<ReactionData> reactRef = reactionRef(postId, userId);
-  reactRef.delete();
+  return reactRef.delete();
 }
+
+
 
 final db = FirebaseFirestore.instance;
 

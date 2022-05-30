@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -19,6 +20,9 @@ class _RecommendFoodsState extends State<RecommendFoods> {
 
   @override
   Widget build(BuildContext context) {
+    refresh() {
+      setState(() {});
+    }
     return FutureBuilder<List<PostData>>(
       future: fetchRecommendPost(),
       builder: (context, snapshot) {
@@ -41,7 +45,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    PostDetailView(food: food)));
+                                    PostDetailView(food: food, notifyParent: refresh)));
                       },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(
@@ -68,7 +72,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                offset: Offset(4, 6),
+                                offset: const Offset(4, 6),
                                 blurRadius: 4,
                                 color: Colors.black.withOpacity(0.3),
                               )
@@ -126,22 +130,31 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                     /// 18
                                   ],
                                 )),
-                            Positioned(
-                                top: SizeConfig.screenHeight / 68.3,
+                            FutureBuilder<int>(
+                              future: food.getReact(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final react = snapshot.data!;
+                                  return Positioned(
+                                      top: SizeConfig.screenHeight / 68.3,
 
-                                /// 10.0
-                                right: SizeConfig.screenWidth / 41.1,
+                                      /// 10.0
+                                      right: SizeConfig.screenWidth / 41.1,
 
-                                /// 10.0
-                                /// todo
-                                child: food.react == 1
-                                    ? const Icon(Icons.favorite,
-                                        color: Colors.white)
-                                    : food.react == 0
-                                        ? const Icon(Icons.favorite_outline,
-                                            color: Colors.white)
-                                        : const Icon(Icons.heart_broken,
-                                            color: Colors.white))
+                                      /// 10.0
+                                      child: react == 1
+                                          ? const Icon(Icons.favorite,
+                                          color: Colors.white)
+                                          : react == 0
+                                          ? const Icon(Icons.favorite_outline,
+                                          color: Colors.white)
+                                          : const Icon(Icons.heart_broken,
+                                          color: Colors.white));
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }
+                            )
                           ],
                         ),
                       ),
@@ -152,7 +165,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
       },
     );

@@ -5,8 +5,10 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class PostDetailView extends StatefulWidget {
-  PostData food;
-  PostDetailView({required this.food});
+  final PostData food;
+  final Function? notifyParent;
+
+  const PostDetailView({Key? key, required this.food, this.notifyParent}) : super(key: key);
 
   @override
   _PostDetailView createState() => _PostDetailView();
@@ -19,7 +21,10 @@ class _PostDetailView extends State<PostDetailView> {
 
   @override
   void dispose() {
-    widget.food.commitReaction();
+    widget.food.commitReaction()
+      .then((_) {
+        widget.notifyParent!();
+      });
     super.dispose();
   }
 

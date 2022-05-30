@@ -223,26 +223,24 @@ class PostData implements LazyLoadData {
     }
   }
 
-  void commitReaction() {
+  Future<void> commitReaction() {
     switch (react) {
       case 0:
-        removeReaction(id, getMyProfileId());
-        break;
+        return removeReaction(id, getMyProfileId());
       case 1:
-        addReaction(id, ReactionData(
+        return addReaction(id, ReactionData(
             userId: getMyProfileId(),
             type: "upvote",
             time: DateTime.now())
         );
-        break;
       case -1:
-        addReaction(id, ReactionData(
+        return addReaction(id, ReactionData(
             userId: getMyProfileId(),
             type: "downvote",
             time: DateTime.now())
         );
-        break;
-      default: return;
+      default:
+        return Future<void>(() {});
     }
   }
 
