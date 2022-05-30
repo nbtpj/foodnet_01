@@ -194,95 +194,36 @@ class _DetailList extends State<DetailList> {
     );
   }
 
+  Widget _build_list(BuildContext context) {
+    return FutureBuilder<List<PostData>>(
+        future: widget._fetcher().toList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<PostData> ls = snapshot.data ?? [];
+            print('debug 1');
+            print(ls.toList());
+            var rows = [];
+            int chunkSize = 2;
+            for (var i = 0; i < ls.length; i += chunkSize) {
+              rows.add(ls.sublist(
+                  i, i + chunkSize > ls.length ? ls.length : i + chunkSize));
+            }
+            return ListView.builder(
+                itemCount: rows.length,
+                itemBuilder: (context, index) {
+                  return _build_pair(context, rows[index]);
+                });
+          } else {
+            return const Center();
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                color: Colors.deepOrangeAccent,
-                child: Row(
-                  children: [
-                    const ArrowBack(),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          SizeConfig.screenWidth / 27.4,
-
-                          /// 15.0
-                          SizeConfig.screenHeight / 68.3,
-
-                          /// 10.0
-                          SizeConfig.screenWidth / 41.1,
-
-                          /// 10.0
-                          SizeConfig.screenHeight / 68.3
-
-                        /// 10.0
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FittedBox(
-                              child: Text(
-                                widget.name,
-                                style: TextStyle(
-                                    fontSize: SizeConfig.screenHeight / 34.15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black87),
-                              )
-
-                            /// 20.0
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color: Colors.black45,
-                            size: SizeConfig.screenHeight / 21.35,
-                          )
-
-                          /// 32.0
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-          child:
-          FutureBuilder<List<PostData>>(
-            future: widget._fetcher().toList(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<PostData> ls = snapshot.data ?? [];
-                print('debug 1');
-                print(ls.toList());
-                var rows = [];
-                int chunkSize = 2;
-                for (var i = 0; i < ls.length; i += chunkSize) {
-                  rows.add(ls.sublist(
-                      i,
-                      i + chunkSize > ls.length
-                          ? ls.length
-                          : i + chunkSize));
-                }
-                return ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: rows.length,
-                    itemBuilder: (context, index) {
-                      return _build_pair(context, rows[index]);
-                    });
-              } else {
-                return const CircularProgressIndicator();
-              }
-            },
-          )),
-          ]
-      ),
+        backgroundColor: Colors.white,
+        body: Stack(children: [_build_list(context)])
     );
   }
 }
