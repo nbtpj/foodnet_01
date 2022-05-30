@@ -4,9 +4,12 @@ import 'package:foodnet_01/ui/screens/post_detail/widgets/food_image.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
+// ignore: must_be_immutable
 class PostDetailView extends StatefulWidget {
-  PostData food;
-  PostDetailView({required this.food});
+  final PostData food;
+  final Function? notifyParent;
+  bool isChange = false;
+  PostDetailView({Key? key, required this.food, this.notifyParent}) : super(key: key);
 
   @override
   _PostDetailView createState() => _PostDetailView();
@@ -14,12 +17,19 @@ class PostDetailView extends StatefulWidget {
 
 class _PostDetailView extends State<PostDetailView> {
   refresh() {
-    setState(() {});
+    setState(() {
+      widget.isChange = true;
+    });
   }
 
   @override
   void dispose() {
-    widget.food.commitReaction();
+    if (widget.isChange) {
+      widget.food.commitReaction()
+          .then((_) {
+        widget.notifyParent!();
+      });
+    }
     super.dispose();
   }
 

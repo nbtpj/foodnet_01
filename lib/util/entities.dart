@@ -126,7 +126,6 @@ class PostData implements LazyLoadData {
   late List<String> cateList; // chứa string ID của các post category
   int numUpvote;
   int numDownvote;
-
   PostData(
       {this.author_id,
         this.id = "new",
@@ -221,38 +220,32 @@ class PostData implements LazyLoadData {
         numUpvote -= 1;
         numDownvote += 1;
         break;
-      default:
-        return;
+      default: return;
     }
   }
 
-  void commitReaction() {
+  Future<void> commitReaction() {
     switch (react) {
       case 0:
-        removeReaction(id, getMyProfileId());
-        break;
+        return removeReaction(id, getMyProfileId());
       case 1:
-        addReaction(
-            id,
-            ReactionData(
-                userId: getMyProfileId(),
-                type: "upvote",
-                time: DateTime.now()));
-        break;
+        return addReaction(id, ReactionData(
+            userId: getMyProfileId(),
+            type: "upvote",
+            time: DateTime.now())
+        );
       case -1:
-        addReaction(
-            id,
-            ReactionData(
-                userId: getMyProfileId(),
-                type: "downvote",
-                time: DateTime.now()));
-        break;
+        return addReaction(id, ReactionData(
+            userId: getMyProfileId(),
+            type: "downvote",
+            time: DateTime.now())
+        );
       default:
-        return;
+        return Future<void>(() {});
     }
   }
 
-  Future<ReactionPostData> getRate() async {
+  Future<ReactionPostData> getRate() async{
     ReactionPostData data = await getRateByPostId(id);
     numUpvote = data.numUpvote;
     numDownvote = data.numDownvote;
@@ -303,10 +296,7 @@ class PostData implements LazyLoadData {
       "position_hash": position != null
           ? GeoHash.fromDecimalDegrees(position!.longitude, position!.latitude)
           .geohash
-          : null
-      // 'position_latitude': position != null? position!.latitude: null,
-      // 'position_longitude': position != null? position!.longitude: null,
-    };
+          : null,    };
   }
 
   Map<String, Object?> categoryToJson() {
