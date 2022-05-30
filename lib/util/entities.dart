@@ -541,6 +541,17 @@ class ProfileData {
           profilesRef.doc(id).update({type: location});
         }
       }
+      if (type == "gender") {
+        if (gender == null) {
+          final update = <String, dynamic> {
+            "gender": FieldValue.delete(),
+          };
+
+          profilesRef.doc(id).update(update);
+        } else {
+          profilesRef.doc(id).update({type: gender});
+        }
+      }
     } catch (e) {
       debugPrint("Error updating document $e");
       return false;

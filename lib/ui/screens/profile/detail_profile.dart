@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
+import 'package:foodnet_01/ui/screens/profile/components/dropdown_field.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -33,6 +34,9 @@ class _DetailProfileState extends State<DetailProfile> {
     }
     if (type == "location" && addContent != "") {
       widget.profile.location = addContent;
+    }
+    if (type == "gender" && addContent != "Giới tính") {
+      widget.profile.gender = addContent;
     }
     bool success = await widget.profile.update(type);
     if (success) {
@@ -69,6 +73,13 @@ class _DetailProfileState extends State<DetailProfile> {
         widget.profile.location = null;
       } else {
         widget.profile.location = editContent;
+      }
+    }
+    if (type == "gender") {
+      if (editContent == "Giới tính") {
+        widget.profile.gender = null;
+      } else {
+        widget.profile.gender = editContent;
       }
     }
     bool success = await widget.profile.update(type);
@@ -226,7 +237,7 @@ class _DetailProfileState extends State<DetailProfile> {
 
             widget.profile.gender != null ?
             ProfileTitle(subText: "Giới tính ", mainText: widget.profile.gender!, type: widget.type, asset: "0xe491",) :
-            widget.type == "me" ? InputField(icon: "0xe497", hintText: "Thêm giới tính", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
+            widget.type == "me" ? DropDownField(icon: "0xe497", hintText: "Thêm giới tính", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
 
             widget.profile.dayOfBirth != null ?
             ProfileTitle(subText: "Sinh nhật ", mainText: widget.profile.dayOfBirth!.substring(0, 10), type: widget.type, asset: "0xe120",) :
