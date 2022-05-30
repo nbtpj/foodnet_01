@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // FavoritePageView(),
     // ProfilePageView(),
     getMyProfileId()!=null? Friends():Login(),
-    getMyProfileId()!=null? ProfilePage(id: getMyProfileId()!, arriveType: "navbar",):Login(),
+    getMyProfileId()!=null? ProfilePage(id: getMyProfileId(), arriveType: "navbar",):Login(),
   ];
 
   @override

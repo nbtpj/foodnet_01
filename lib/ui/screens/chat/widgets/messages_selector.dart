@@ -23,7 +23,7 @@ class _MessagesSelectorState extends State<MessagesSelector> {
                 ),
               ),
               child: Column(
-                children:  <Widget>[
+                children: [
                   FavoriteContacts(),
                   RecentChats(),
                 ],

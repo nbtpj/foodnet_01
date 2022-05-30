@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
+import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -19,46 +24,115 @@ class _ChatScreensState extends State<ChatScreens> {
   TextEditingController messageController = TextEditingController();
   bool isLoading = false;
 
-  _buildMessage(Message message, bool isMe) {
-    final msg = Container(
-      margin: isMe
-          ? const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
-          : const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-      width: MediaQuery.of(context).size.width * 0.75,
-      decoration: BoxDecoration(
-        color: isMe ? Colors.lightBlueAccent : Colors.black12,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            bottomLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-            bottomRight: Radius.circular(15.0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  _buildMessage(Message message, bool isMe, String userAsset) {
+    final msg;
+    if (isMe) {
+      msg = Container(
+        margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 100.0, right: 10.0),
+        // padding: const EdgeInsets.all(value),
+        // width: MediaQuery.of(context).size.width * 0.75,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.lightBlueAccent,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  bottomLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                  bottomRight: Radius.circular(15.0)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    getTimeAgo(message.createdAt),
+                    style: const TextStyle(
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black45,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    message.message,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    } else {
+      msg = Row(
         children: [
-          Text(
-            getTimeAgo(message.createdAt),
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600,
-              color: Colors.black45,
-            ),
-          ),
           const SizedBox(
-            height: 8.0,
+            width: 10.0,
           ),
-          Text(
-            message.message,
-            style: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
+          CircleAvatar(
+              radius: 20.0,
+              backgroundImage: AssetImage(userAsset)),
+          const SizedBox(
+            width: 10.0,
           ),
+          Container(
+              margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 10.0),
+              // padding: const EdgeInsets.all(value),
+              width: MediaQuery.of(context).size.width * 0.65,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        bottomLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          getTimeAgo(message.createdAt),
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black45,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        Text(
+                          message.message,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+          )
         ],
-      ),
-    );
+      );
+    }
+
 
     return msg;
   }
@@ -90,7 +164,7 @@ class _ChatScreensState extends State<ChatScreens> {
                 var receiverId = widget.userId;
                 var message = messageController.text;
 
-                send(senderId!, receiverId, message);
+                send(senderId, receiverId, message);
               },
               icon: Icon(
                 Icons.send,
@@ -152,9 +226,9 @@ class _ChatScreensState extends State<ChatScreens> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Message>> fetchMessages() async {
-      return getMessages(widget.userId).toList();
-    }
+    // Future<List<Message>> fetchMessages() async {
+    //   return getMessages(widget.userId).toList();
+    // }
 
     return FutureBuilder<ProfileData?>(
         future: getProfile(widget.userId),
@@ -169,11 +243,21 @@ class _ChatScreensState extends State<ChatScreens> {
                 iconTheme: IconThemeData(
                   color: Colors.black, //change your color here
                 ),
+                leading: IconButton (
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    CircleAvatar(
+                        radius: 25.0,
+                        backgroundImage: AssetImage(user!.userAsset)),
+                    const SizedBox(width: 10.0,),
                     Text(
-                      user!.name,
+                      user.name,
                       style: TextStyle(
                         color: Colors.black,
                       ),
@@ -197,11 +281,12 @@ class _ChatScreensState extends State<ChatScreens> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: FutureBuilder<List<Message>>(
-                        future: fetchMessages(),
+                      child: StreamBuilder<QuerySnapshot>(
+                        // future: fetchMessages(),
+                        stream: getMessages(widget.userId),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            var messages = snapshot.data;
+                            var messages = snapshot.data?.docs;
                             return Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
@@ -213,13 +298,18 @@ class _ChatScreensState extends State<ChatScreens> {
                                       itemCount: messages!.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        final Message message = messages[index];
+                                        final Message message = Message.fromJson(messages[index].data() as Map<String, dynamic>);
                                         final bool isMe = message.senderId ==
                                             getMyProfileId();
-                                        return _buildMessage(message, isMe);
+                                        if ((isMe || message.senderId == widget.userId) && (message.receiverId == getMyProfileId() || message.receiverId == widget.userId)) {
+                                          return _buildMessage(message, isMe, user.userAsset);
+                                        } else {
+                                          return const Center();
+                                        }
                                       }),
                                 ));
                           } else {
+                            // return const CircularProgressIndicator();
                             return const Center();
                           }
                         },
@@ -231,7 +321,7 @@ class _ChatScreensState extends State<ChatScreens> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
             // return const Center();
           }
         });

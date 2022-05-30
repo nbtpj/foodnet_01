@@ -1,19 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
-class RecentChats extends StatelessWidget {
+class RecentChats extends StatefulWidget {
   const RecentChats({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<RecentChats> createState() => _RecentChatsState();
+}
+
+class _RecentChatsState extends State<RecentChats> {
+  @override
   Widget build(BuildContext context) {
-    Future<List<Message>> fetchRecentChat() async {
-      return getRecentChat().toList();
-    }
+    // Future<List<Message>> fetchRecentChat() async {
+    //   return getRecentChat().toList();
+    // }
 
     return Expanded(
       child: Container(
@@ -27,19 +33,18 @@ class RecentChats extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 topRight: Radius.circular(30.0)),
-            child: FutureBuilder<List<Message>>(
-                future: fetchRecentChat(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var chats = snapshot.data;
-
+            child: StreamBuilder<QuerySnapshot>(
+                stream: getRecentChat(),
+                builder: (context, snapshot1) {
+                  if (snapshot1.hasData) {
+                    var chats = snapshot1.data?.docs;
                     return ListView.builder(
                         itemCount: chats?.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Message chat = chats![index];
+                          final Message chat = Message.fromJson(chats![index].data() as Map<String, dynamic>);
                           return GestureDetector(
                               onTap: () {
-                                // TODO: set unread is false
+                                seenChat(chat.receiverId, chat.senderId);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ChatScreens(
                                           userId: chat.senderId,
@@ -61,9 +66,9 @@ class RecentChats extends StatelessWidget {
                                 ),
                                 child: FutureBuilder<ProfileData?>(
                                     future: getProfile(chat.senderId),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        var user = snapshot.data;
+                                    builder: (context, snapshot2) {
+                                      if (snapshot2.hasData) {
+                                        var user = snapshot2.data;
                                         return Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -101,11 +106,16 @@ class RecentChats extends StatelessWidget {
                                                               0.45,
                                                       child: Text(
                                                         chat.message,
-                                                        style: const TextStyle(
+                                                        style: chat.unread
+                                                            ? const TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
+                                                        )
+                                                        : const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 15.0,
+                                                          fontWeight: FontWeight.w400,
                                                         ),
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -160,13 +170,15 @@ class RecentChats extends StatelessWidget {
                                           ],
                                         );
                                       } else {
+                                        // return const CircularProgressIndicator();
                                         return const Center();
                                       }
                                     }),
                               ));
                         });
                   } else {
-                    return const Center();
+                    return const CircularProgressIndicator();
+                    // return const Center();
                   }
                 }),
           )),

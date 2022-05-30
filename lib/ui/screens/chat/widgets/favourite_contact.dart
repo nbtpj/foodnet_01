@@ -14,7 +14,6 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
   @override
   Widget build(BuildContext context) {
     Future<List<FriendData>> fetchRootFriend() async {
-      //todo: implement get root post (categorical post)
       return getFriends(Filter(search_type: "friend_list"), getMyProfileId())
           .toList();
     }
@@ -60,7 +59,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            // TODO: set unread is false
+                            seenChat(getMyProfileId(), favourites[index].id);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ChatScreens(
                                       userId: favourites[index].id,
