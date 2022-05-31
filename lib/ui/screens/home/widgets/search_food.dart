@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/search/search.dart';
+import 'package:foodnet_01/ui/screens/search_food/search.dart';
 import 'package:foodnet_01/util/global.dart';
 
 import '../../../../util/navigate.dart';
@@ -24,7 +24,7 @@ class _SearchFoodState extends State<SearchFood> {
         ),
         child: InkWell(
           onTap: (){
-            Navigate.pushPage(context, const SearchPage(type: "food"));
+            Navigate.pushPage(context, const SearchFoodPage(type: "food"));
           },
           child: Container(
             height: SizeConfig.screenHeight/13.66,          /// 50.0
