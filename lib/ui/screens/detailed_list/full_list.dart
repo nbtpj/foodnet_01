@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
@@ -17,7 +18,6 @@ class DetailList extends StatefulWidget {
       case my_post_string:
         var foodSnapshot = await postsRef
             .where('author_uid', isEqualTo: getMyProfileId())
-            .limit(10)
             .get();
         for (var doc in foodSnapshot.docs) {
           yield doc.data();
@@ -32,7 +32,7 @@ class DetailList extends StatefulWidget {
         }
         break;
       default:
-        var foodSnapshot = await postsRef.limit(10).get();
+        var foodSnapshot = await postsRef.get();
         for (var doc in foodSnapshot.docs) {
           yield doc.data();
         }
@@ -200,8 +200,6 @@ class _DetailList extends State<DetailList> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostData> ls = snapshot.data ?? [];
-            print('debug 1');
-            print(ls.toList());
             var rows = [];
             int chunkSize = 2;
             for (var i = 0; i < ls.length; i += chunkSize) {
@@ -214,7 +212,7 @@ class _DetailList extends State<DetailList> {
                   return _build_pair(context, rows[index]);
                 });
           } else {
-            return const Center();
+            return loading;
           }
         });
   }
@@ -223,7 +221,15 @@ class _DetailList extends State<DetailList> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Stack(children: [_build_list(context)])
+        body: Stack(children:
+            [Column(
+              children: [
+                Row(children: [ArrowBack()],),
+                Expanded(child: _build_list(context)
+                )
+              ],
+            )
+        ])
     );
   }
 }
