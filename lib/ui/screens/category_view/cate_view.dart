@@ -9,48 +9,52 @@ import 'package:foodnet_01/util/global.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:tuple/tuple.dart';
 
-class DetailList extends StatefulWidget {
-  late String name;
+class DetailCateList extends StatefulWidget {
+  late PostData cate;
 
-  Stream<PostData> _fetcher() async* {
-    switch (name) {
-      case my_post_string:
-        var foodSnapshot = await postsRef
-            .where('author_uid', isEqualTo: getMyProfileId())
-            .get();
-        for (var doc in foodSnapshot.docs) {
-          yield doc.data();
-        }
-        break;
 
-      case popular_string:
-        var foodSnapshot =
-            await postsRef.orderBy('react', descending: true).limit(10).get();
-        for (var doc in foodSnapshot.docs) {
-          yield doc.data();
-        }
-        break;
-      default:
-        var foodSnapshot = await postsRef.get();
-        for (var doc in foodSnapshot.docs) {
-          yield doc.data();
-        }
-    }
-  }
-
-  DetailList({Key? key, required this.name}) : super(key: key);
+  DetailCateList({Key? key, required this.cate}) : super(key: key);
 
   @override
-  _DetailList createState() {
-    return _DetailList();
+  _DetailCateList createState() {
+    return _DetailCateList();
   }
 }
 
-class _DetailList extends State<DetailList> {
+class _DetailCateList extends State<DetailCateList> {
+
+  String keyword = "";
+  Widget _build_header(BuildContext context) {
+    return Row(
+      children: [
+        const ArrowBack(),
+        _build_search(context)
+      ],
+    );
+  }
+
+
+  Stream<PostData> pseudoFullTextSearchByCate() async* {
+    var foodSnapshot = await postsRef.where('cateList', arrayContains: widget.cate.title).get();
+    List<Tuple2> scores = [];
+    for (var doc in foodSnapshot.docs) {
+      var post = doc.data();
+      String txt = post.title+post.description;
+      var similarity = keyword.toLowerCase().similarityTo(txt.toLowerCase());
+      scores.add(Tuple2(similarity, post));
+
+    }
+    scores.sort((Tuple2 a, Tuple2 b) {
+      return a.item1.compareTo(b.item1)*-1;
+    });
+    for(var tuple in scores){
+      yield tuple.item2 as PostData;
+    }
+  }
 
   Widget _build_list(BuildContext context) {
     return FutureBuilder<List<PostData>>(
-        future: pseudoFullTextSearch().toList(),
+        future: pseudoFullTextSearchByCate().toList(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostData> ls = snapshot.data ?? [];
@@ -70,15 +74,7 @@ class _DetailList extends State<DetailList> {
           }
         });
   }
-  String keyword = "";
-  Widget _build_header(BuildContext context) {
-    return Row(
-      children: [
-        const ArrowBack(),
-        _build_search(context)
-      ],
-    );
-  }
+
   Widget _build_search(BuildContext context) {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
@@ -111,43 +107,20 @@ class _DetailList extends State<DetailList> {
     );
   }
 
-
-
-  Stream<PostData> pseudoFullTextSearch() async* {
-    var foodSnapshot = await widget._fetcher().toList();
-    List<Tuple2> scores = [];
-    for (var doc in foodSnapshot) {
-      String txt = doc.title+doc.description;
-      var similarity = keyword.toLowerCase().similarityTo(txt.toLowerCase());
-      scores.add(Tuple2(similarity, doc));
-
-    }
-    scores.sort((Tuple2 a, Tuple2 b) {
-      return a.item1.compareTo(b.item1)*-1;
-    });
-    for(var tuple in scores){
-      yield tuple.item2 as PostData;
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Stack(children:
-            [Column(
-              children: [
-                SizedBox(
-                  height: SizeConfig.screenHeight / 24.37,
-                ),
-                _build_header(context),
-                // Row(children: const [ArrowBack()],),
-                Expanded(child: _build_list(context)
-                )
-              ],
-            )
-        ])
-    );
+        body: Stack(children: [
+          Column(
+            children: [
+              SizedBox(
+                height: SizeConfig.screenHeight / 24.37,
+              ),
+              _build_header(context),
+              Expanded(child: _build_list(context))
+            ],
+          )
+        ]));
   }
 }

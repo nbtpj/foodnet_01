@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -156,7 +157,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
 
                                       /// 10.0
                                       right: SizeConfig.screenWidth / 41.1,
-                                      child: const CircularProgressIndicator()
+                                      child: loading
                                   );
                                 }
                               }
@@ -171,7 +172,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
             ),
           );
         } else {
-          return const CircularProgressIndicator();
+          return loading;
         }
       },
     );

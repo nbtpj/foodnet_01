@@ -99,7 +99,7 @@ Stream<PostData> pseudoFullTextSearchPost(String key) async*{
     var post = doc.data();
     String txt = post.title+post.description;
     var similarity = key.toLowerCase().similarityTo(txt.toLowerCase());
-    if(similarity>0.6) scores.add(Tuple2(similarity, post));
+    scores.add(Tuple2(similarity, post));
 
   }
   scores.sort((Tuple2 a, Tuple2 b) {

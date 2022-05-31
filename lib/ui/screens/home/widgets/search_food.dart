@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/search_food/search.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/global.dart';
 
 import '../../../../util/navigate.dart';
@@ -24,17 +25,17 @@ class _SearchFoodState extends State<SearchFood> {
         ),
         child: InkWell(
           onTap: (){
-            Navigate.pushPage(context, const SearchFoodPage(type: "food"));
+            Navigate.pushPage(context, const SearchFoodPage());
           },
           child: Container(
             height: SizeConfig.screenHeight/13.66,          /// 50.0
             width: SizeConfig.screenWidth/1.068,            /// 385.0
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               boxShadow: [
                 BoxShadow(
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 6,
                   color: Colors.black.withOpacity(0.3),
                 )
@@ -42,11 +43,11 @@ class _SearchFoodState extends State<SearchFood> {
             ),
             child:Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
+                const Padding(
+                  padding: EdgeInsets.all(12.0),
                   child: Icon(Icons.search, color: Colors.black26,),
                 ),
-                Text("Search", style: TextStyle(color: Colors.black26, fontSize: SizeConfig.screenHeight/42.69))     /// 16
+                Text(search_string, style: TextStyle(color: Colors.black26, fontSize: SizeConfig.screenHeight/42.69))     /// 16
               ],
             )
           ),
