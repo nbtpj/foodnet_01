@@ -27,7 +27,7 @@ const String delete_all_string = lang=='en'?"Delete all":"Xoá tất cả";
 const String result_string = lang=='en'?"Results":"Kết quả";
 const String search_string = lang=='en'?"Search":"Tìm kiếm";
 const String search_food_hint_string = lang=='en'?"Which food to eat?":"Bạn muốn ăn gì?";
-
+const String current_string = ".đ";
 
 
 

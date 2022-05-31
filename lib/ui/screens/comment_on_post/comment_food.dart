@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
-import 'package:foodnet_01/ui/components/image_provider.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/edit_area.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -23,7 +22,7 @@ class _CommentFoodState extends State<CommentFood> {
         body: Column(children: <Widget>[
       Row(
         children: const [
-          Positioned(left: 0, top: 0, child: ArrowBack()),
+          Positioned(left: 0, top: 20, child: ArrowBack()),
         ],
       ),
       Expanded(
@@ -38,13 +37,11 @@ class _CommentFoodState extends State<CommentFood> {
               listCommend = [];
             }
 
-            print("comment list");
-            for (var d in listCommend) print(d.toJson());
             return Container(
               decoration: BoxDecoration(
                 color: Colors.white38,
                 image: DecorationImage(
-                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
                     image: NetworkImage(widget.food.outstandingIMGURL),
                     fit: BoxFit.cover),
               ),
@@ -53,8 +50,6 @@ class _CommentFoodState extends State<CommentFood> {
                 itemCount: listCommend.length,
                 itemBuilder: (context, index) {
                   CommentData data = listCommend[index];
-                  print('comment data is');
-                  print(data.toJson());
                   return CommentComponent(
                     comment: data,
                     isNet: true,

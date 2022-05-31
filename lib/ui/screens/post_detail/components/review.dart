@@ -24,7 +24,6 @@ class _ReviewStarsState extends State<ReviewStars> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,63 +36,74 @@ class _ReviewStarsState extends State<ReviewStars> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              widget.food.price != null
+                  ? Text(
+                      "${widget.food.price}$current_string",
+                      softWrap: true,
+                      style: TextStyle(
+                          color: buttonColor,
+                          fontSize: SizeConfig.screenHeight / 37.95,
+                          fontWeight: FontWeight.bold),
+                    )
+                  : const Center(),
               FutureBuilder<ReactionPostData>(
-                future: _futureReaction,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final upvoteRate = widget.food.numUpvote;
-                    final downvoteRate = widget.food.numDownvote;
-                    return Row(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.favorite,
-                              color: textColor,
-                            ),
-                            Text(
-                              "$upvoteRate",
-                              style: TextStyle(
+                  future: _futureReaction,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final upvoteRate = widget.food.numUpvote;
+                      final downvoteRate = widget.food.numDownvote;
+                      return Row(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.favorite,
                                 color: textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: SizeConfig.screenHeight / 45.54
                               ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.heart_broken,
-                              color: textColor,
-                            ),
-                            Text(
-                              "$downvoteRate",
-                              style: TextStyle(
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.screenHeight / 45.54
+                              Text(
+                                "$upvoteRate",
+                                style: TextStyle(
+                                    color: textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: SizeConfig.screenHeight / 45.54),
+                              )
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.heart_broken,
+                                color: textColor,
                               ),
-                            ),
-                            /// 15.0
-                            Padding(
-                              padding:
-                              EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
-                              /// 8.0
-                              child: Text("${upvoteRate + downvoteRate} $reviews_string",
-                                  style: const TextStyle(color: Colors.black26)),
-                            )
-                          ],
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Center();
-                  }
-                }
-              ),
+                              Text(
+                                "$downvoteRate",
+                                style: TextStyle(
+                                    color: textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: SizeConfig.screenHeight / 45.54),
+                              ),
+
+                              /// 15.0
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: SizeConfig.screenWidth / 51.38),
+
+                                /// 8.0
+                                child: Text(
+                                    "${upvoteRate + downvoteRate} $reviews_string",
+                                    style:
+                                        const TextStyle(color: Colors.black26)),
+                              )
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Center();
+                    }
+                  }),
               Container(
                 height: SizeConfig.screenHeight / 34.15,
                 width: SizeConfig.screenWidth / 137,
@@ -101,7 +111,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(10)),
               ),
-              widget.food.getLocationName() == null
+              widget.food.position == null
                   ? const SizedBox.shrink()
                   : GestureDetector(
                       onTap: () async {
@@ -120,8 +130,6 @@ class _ReviewStarsState extends State<ReviewStars> {
                           Padding(
                             padding: EdgeInsets.only(
                                 left: SizeConfig.screenWidth / 51.38),
-
-                            /// 8.0
                             child: Icon(
                               Icons.location_pin,
                               color: freeDelivery,

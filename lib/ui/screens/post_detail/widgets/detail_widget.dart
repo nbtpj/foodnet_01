@@ -35,56 +35,42 @@ class _DetailWidgetState extends State<DetailWidget> {
           ]),
       child: Padding(
         padding: const EdgeInsets.all(30.0),
-        child: Column(
-          children: widget.food.price!=null
-              ? [
-                  Container(
-                    width: SizeConfig.screenWidth / 3.43,
+        child: Column(children:
+            // widget.food.price != null
+            //     ?
+            [
+          Container(
+            width: SizeConfig.screenWidth / 3.43,
 
-                    /// 120.0
-                    height: SizeConfig.screenHeight / 227.67,
+            /// 120.0
+            height: SizeConfig.screenHeight / 227.67,
 
-                    /// 3.0
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black12),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.screenHeight / 34.15,
-                  ),
+            /// 3.0
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.black12),
+          ),
+          SizedBox(
+            height: SizeConfig.screenHeight / 34.15,
+          ),
 
-                  /// 20.0
-                  FoodName(food: widget.food,),
-                  ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food,),
-                  FoodDescription(food: widget.food,),
-                  IncreaseDecrease(food: widget.food),
-                  widget.food.isGood?
-                  AddToCartButton(food: widget.food):SizedBox.shrink()
-                ]
-              : [
-                  Container(
-                    width: SizeConfig.screenWidth / 3.43,
-
-                    /// 120.0
-                    height: SizeConfig.screenHeight / 227.67,
-
-                    /// 3.0
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black12),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.screenHeight / 34.15,
-                  ),
-
-                  /// 20.0
-                  FoodName(food: widget.food,),
-                  ReviewStars(food: widget.food),
-                  FeaturesFood(food: widget.food,),
-                  FoodDescription(food: widget.food,),
-                ],
-        ),
+          /// 20.0
+          FoodName(
+            food: widget.food,
+          ),
+          ReviewStars(food: widget.food),
+          FeaturesFood(
+            food: widget.food,
+          ),
+          FoodDescription(
+            food: widget.food,
+          ),
+          widget.food.price != null
+              ? IncreaseDecrease(food: widget.food)
+              : SizedBox.shrink(),
+          widget.food.isGood
+              ? AddToCartButton(food: widget.food)
+              : SizedBox.shrink()
+        ]),
       ),
     );
   }

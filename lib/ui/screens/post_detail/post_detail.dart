@@ -4,7 +4,6 @@ import 'package:foodnet_01/ui/screens/post_detail/widgets/food_image.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
-// ignore: must_be_immutable
 class PostDetailView extends StatefulWidget {
   final PostData food;
   final Function? notifyParent;

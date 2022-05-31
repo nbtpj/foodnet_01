@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/search_food/search.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/global.dart';
+import 'package:foodnet_01/util/navigate.dart';
 
-import '../../../../util/navigate.dart';
 
 class SearchFood extends StatefulWidget {
   const SearchFood({Key? key}) : super(key: key);

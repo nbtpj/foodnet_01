@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -120,15 +120,11 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                             fontSize:
                                                 SizeConfig.screenHeight / 48.79,
                                             color: Colors.white)),
-
-                                    /// 14
-                                    Text("\$${food.price}",
+                                    Text("${food.price}$current_string",
                                         style: TextStyle(
                                             fontSize:
                                                 SizeConfig.screenHeight / 37.95,
                                             color: Colors.white))
-
-                                    /// 18
                                   ],
                                 )),
                             FutureBuilder<int>(
@@ -138,11 +134,7 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                   final react = snapshot.data!;
                                   return Positioned(
                                       top: SizeConfig.screenHeight / 68.3,
-
-                                      /// 10.0
                                       right: SizeConfig.screenWidth / 41.1,
-
-                                      /// 10.0
                                       child: react == 1
                                           ? const Icon(Icons.favorite,
                                           color: Colors.white)
@@ -154,8 +146,6 @@ class _RecommendFoodsState extends State<RecommendFoods> {
                                 } else {
                                   return Positioned(
                                       top: SizeConfig.screenHeight / 68.3,
-
-                                      /// 10.0
                                       right: SizeConfig.screenWidth / 41.1,
                                       child: loading
                                   );
