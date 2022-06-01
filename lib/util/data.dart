@@ -163,10 +163,12 @@ Stream<PostData> getPosts(Filter filter) async* {
   }
 }
 
-Stream<CommentData> fetch_comments(String foodID, int from, int to) async* {
+Stream<CommentData> fetch_comments(String foodID) async* {
   var commentSnap = await commentsRef.where('postID', isEqualTo: foodID).get();
-  for (var doc in commentSnap.docs) {
-    yield doc.data();
+  List<CommentData> ls = commentSnap.docs.map((e) => e.data()).toList();
+  ls.sort((a,b)=>b.timestamp.compareTo(a.timestamp));
+  for (var doc in ls) {
+    yield doc;
   }
 }
 

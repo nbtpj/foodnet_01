@@ -104,9 +104,15 @@ class CommentData {
 
   bool isEmpty() {
     bool a = comment.isEmpty && mediaUrls.isEmpty;
-    print('current post is empty?' + a.toString());
-    print('____________');
     return a;
+  }
+  Future<bool> delete() async {
+    try {
+      await commentsRef.doc(commentID).delete();
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }
 
