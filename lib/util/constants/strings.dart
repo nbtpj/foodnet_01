@@ -29,7 +29,7 @@ const String search_string = lang=='en'?"Search":"Tìm kiếm";
 const String search_food_hint_string = lang=='en'?"Which food to eat?":"Bạn muốn ăn gì?";
 const String current_string = ".đ";
 const String uploading_string = lang=='en'?'Uploading....':'Đang tải lên...';
-
+const String my_favorite_string = lang=='en'?'Favorite':'Yêu thích';
 
 
 

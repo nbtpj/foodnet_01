@@ -19,6 +19,15 @@ class DetailList extends StatefulWidget {
           yield doc.data();
         }
         break;
+      case my_favorite_string:
+        var foodSnapshot =  await postsRef.get();
+        for (var doc in foodSnapshot.docs) {
+          var d = doc.data();
+          if (await d.getReact()==1){
+            yield d;
+          }
+        }
+        break;
 
       case popular_string:
         var foodSnapshot =

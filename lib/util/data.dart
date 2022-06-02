@@ -4,10 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
-import  'package:string_similarity/string_similarity.dart';
+import 'package:string_similarity/string_similarity.dart';
 import 'entities.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 /// định nghĩa các API sử dụng
+
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
 /// các hàm này nên hỗ trợ cache dữ liệu
 CollectionReference<PostData> postsRef =
     FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
@@ -90,25 +94,26 @@ Future<PostData?> getPost(String id) async {
   // TODO: implement get_post
   return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
 }
-Stream<PostData> pseudoFullTextSearchPost(String key) async*{
+
+Stream<PostData> pseudoFullTextSearchPost(String key) async* {
   /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
   /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
   var foodSnapshot = await postsRef.get();
   List<Tuple2> scores = [];
   for (var doc in foodSnapshot.docs) {
     var post = doc.data();
-    String txt = post.title+post.description;
+    String txt = post.title + post.description;
     var similarity = key.toLowerCase().similarityTo(txt.toLowerCase());
     scores.add(Tuple2(similarity, post));
-
   }
   scores.sort((Tuple2 a, Tuple2 b) {
-    return a.item1.compareTo(b.item1)*-1;
+    return a.item1.compareTo(b.item1) * -1;
   });
-  for(var tuple in scores){
+  for (var tuple in scores) {
     yield tuple.item2 as PostData;
   }
 }
+
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
@@ -131,20 +136,18 @@ Stream<PostData> getPosts(Filter filter) async* {
       break;
     case "base_on_locations":
       // todo
-      print('hi query');
-      print('position query is' +
-          filter.visibleRegion.toString());
-      var begin = GeoHash.fromDecimalDegrees(filter.visibleRegion![2],filter.visibleRegion![0]),
-          end = GeoHash.fromDecimalDegrees(filter.visibleRegion![3],filter.visibleRegion![1]);
-      var foodSnapshot = await postsRef.orderBy("position_hash")
+      var begin = GeoHash.fromDecimalDegrees(
+              filter.visibleRegion![2], filter.visibleRegion![0]),
+          end = GeoHash.fromDecimalDegrees(
+              filter.visibleRegion![3], filter.visibleRegion![1]);
+      var foodSnapshot = await postsRef
+          .orderBy("position_hash")
           .startAt([begin.geohash])
           .endAt([end.geohash])
           .limit(10)
           .get();
-      print('position query rs.len: ' +
-          foodSnapshot.size.toString());
+      print('position query rs.len: ' + foodSnapshot.size.toString());
       for (var doc in foodSnapshot.docs) {
-        debugPrint("get a location result");
         yield doc.data();
       }
       break;
@@ -153,6 +156,26 @@ Stream<PostData> getPosts(Filter filter) async* {
           await postsRef.orderBy('react', descending: true).limit(10).get();
       for (var doc in foodSnapshot.docs) {
         yield doc.data();
+      }
+      break;
+    case 'recommend':
+      //  get all not seen post
+      var foodSnapshot =  await postsRef.get();
+      for (var doc in foodSnapshot.docs) {
+        var d = doc.data();
+        if (await d.getReact()==0){
+          yield d;
+        }
+      }
+      break;
+    case 'favorite':
+    //  get all loved post
+      var foodSnapshot =  await postsRef.get();
+      for (var doc in foodSnapshot.docs) {
+        var d = doc.data();
+        if (await d.getReact()==1){
+          yield d;
+        }
       }
       break;
     default:
@@ -166,7 +189,7 @@ Stream<PostData> getPosts(Filter filter) async* {
 Stream<CommentData> fetch_comments(String foodID) async* {
   var commentSnap = await commentsRef.where('postID', isEqualTo: foodID).get();
   List<CommentData> ls = commentSnap.docs.map((e) => e.data()).toList();
-  ls.sort((a,b)=>b.timestamp.compareTo(a.timestamp));
+  ls.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   for (var doc in ls) {
     yield doc;
   }
@@ -336,7 +359,6 @@ Future<ReactionPostData> getRateByPostId(String postId) {
   });
 }
 
-
 Future<int> getMyReaction(String postId) {
   DocumentReference<ReactionData> myReactionRef =
       reactionRef(postId, getMyProfileId());
@@ -365,8 +387,6 @@ Future<void> removeReaction(String postId, String userId) {
   return reactRef.delete();
 }
 
-
-
 final db = FirebaseFirestore.instance;
 
 Stream<QuerySnapshot> getMessages(String id) {
@@ -374,10 +394,8 @@ Stream<QuerySnapshot> getMessages(String id) {
   /// trả về Stream
   final String myProfileId = getMyProfileId();
 
-  final messageDoc = db
-      .collection("messages")
-      .where("senderId", whereIn: [myProfileId, id])
-      .orderBy("createdAt", descending: true);
+  final messageDoc = db.collection("messages").where("senderId",
+      whereIn: [myProfileId, id]).orderBy("createdAt", descending: true);
   return messageDoc.snapshots();
 }
 
@@ -393,10 +411,13 @@ Stream<QuerySnapshot> getRecentChat() {
 }
 
 Future editRecentChat(String profileId, String userId, Message message) async {
-  var refRecentChat1 = db.collection("recent-users").doc(profileId).collection("recent-chats");
-  var refRecentChat2 = db.collection("recent-users").doc(userId).collection("recent-chats");
+  var refRecentChat1 =
+      db.collection("recent-users").doc(profileId).collection("recent-chats");
+  var refRecentChat2 =
+      db.collection("recent-users").doc(userId).collection("recent-chats");
 
-  String newMessage = message.message.length < 10 ? message.message : message.message;
+  String newMessage =
+      message.message.length < 10 ? message.message : message.message;
 
   try {
     await refRecentChat1.doc(userId).set({
@@ -421,12 +442,11 @@ Future editRecentChat(String profileId, String userId, Message message) async {
 }
 
 Future seenChat(String profileId, String userId) async {
-  var refRecentChat = db.collection("recent-users").doc(profileId).collection("recent-chats");
+  var refRecentChat =
+      db.collection("recent-users").doc(profileId).collection("recent-chats");
 
   try {
-    await refRecentChat.doc(userId).update({
-      "unread": false
-    });
+    await refRecentChat.doc(userId).update({"unread": false});
     print("Seen chat");
   } on FirebaseAuthException catch (e) {
     print(e.message.toString());

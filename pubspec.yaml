@@ -60,6 +60,7 @@ dependencies:
   dropdown_search: ^3.0.1
   dart_geohash: ^2.0.2
   string_similarity: ^2.0.0
+  firebase_analytics: ^9.1.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
