@@ -66,6 +66,7 @@ class _DropDownFieldState extends State<DropDownField> {
             onTap: () {
               if (widget.setonEdit != null) {
                 widget.edit!(selectedItem, "gender", -1);
+                widget.setonEdit!();
               } else {
                 widget.add!(selectedItem, "gender");
               }

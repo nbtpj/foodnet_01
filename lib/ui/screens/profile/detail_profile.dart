@@ -236,7 +236,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.profile.gender != null ?
-            ProfileTitle(subText: "Giới tính ", mainText: widget.profile.gender!, type: widget.type, asset: "0xe491",) :
+            ProfileTitle(subText: "Giới tính ", mainText: widget.profile.gender!, type: widget.type, asset: "0xe491", edit: edit,) :
             widget.type == "me" ? DropDownField(icon: "0xe497", hintText: "Thêm giới tính", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
 
             widget.profile.dayOfBirth != null ?
