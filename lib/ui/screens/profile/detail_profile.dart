@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
+import 'package:foodnet_01/ui/screens/profile/components/date_picker.dart';
 import 'package:foodnet_01/ui/screens/profile/components/dropdown_field.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -7,6 +8,7 @@ import 'package:foodnet_01/util/entities.dart';
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 
+//ignore: must_be_immutable
 class DetailProfile extends StatefulWidget {
   late ProfileData profile;
   final String type;
@@ -37,6 +39,9 @@ class _DetailProfileState extends State<DetailProfile> {
     }
     if (type == "gender" && addContent != "Giới tính") {
       widget.profile.gender = addContent;
+    }
+    if (type == "dayOfBirth") {
+      widget.profile.dayOfBirth = addContent;
     }
     bool success = await widget.profile.update(type);
     if (success) {
@@ -81,6 +86,9 @@ class _DetailProfileState extends State<DetailProfile> {
       } else {
         widget.profile.gender = editContent;
       }
+    }
+    if (type == "dayOfBirth") {
+      widget.profile.dayOfBirth = editContent;
     }
     bool success = await widget.profile.update(type);
     if (success) {
@@ -239,9 +247,11 @@ class _DetailProfileState extends State<DetailProfile> {
             ProfileTitle(subText: "Giới tính ", mainText: widget.profile.gender!, type: widget.type, asset: "0xe491", edit: edit,) :
             widget.type == "me" ? DropDownField(icon: "0xe497", hintText: "Thêm giới tính", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
 
-            widget.profile.dayOfBirth != null ?
+            DateBirth(mainText: widget.profile.dayOfBirth, type: widget.type, add: add, edit: edit,),
+
+            /*widget.profile.dayOfBirth != null ?
             ProfileTitle(subText: "Sinh nhật ", mainText: widget.profile.dayOfBirth!.substring(0, 10), type: widget.type, asset: "0xe120",) :
-            widget.type == "me" ? InputField(icon: "0xef0f", hintText: "Thêm sinh nhật", add: add) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe120",),
+            widget.type == "me" ? DateBirth(icon: "0xef0f", hintText: "Thêm sinh nhật", add: add, type: widget.type, ) : DateBirth(mainText: "Không có thông tin để hiển thị", type: widget.type, icon: "0xe120", hintText: '',),*/
 
             Container(
               width: MediaQuery.of(context).size.width,

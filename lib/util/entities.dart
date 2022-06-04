@@ -520,7 +520,7 @@ class ProfileData {
       "name": name,
       "userAsset": userAsset,
       "wallAsset": wallAsset,
-      "dob": dayOfBirth,
+      "dob": dayOfBirth != null ? Timestamp.fromDate(DateTime.parse(dayOfBirth!)) : null,
       "gender": gender,
       "location": location,
       "works": works,
@@ -562,6 +562,17 @@ class ProfileData {
           profilesRef.doc(id).update(update);
         } else {
           profilesRef.doc(id).update({type: gender});
+        }
+      }
+      if (type == "dayOfBirth") {
+        if (dayOfBirth == null) {
+          final update = <String, dynamic>{
+            "dob": FieldValue.delete(),
+          };
+
+          profilesRef.doc(id).update(update);
+        } else {
+          profilesRef.doc(id).update({"dob": Timestamp.fromDate(DateTime.parse(dayOfBirth!))});
         }
       }
     } catch (e) {
