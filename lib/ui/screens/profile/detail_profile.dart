@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
+import 'package:foodnet_01/ui/screens/profile/components/dropdown_field.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -7,9 +8,9 @@ import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 
 class DetailProfile extends StatefulWidget {
-  final ProfileData profile;
+  late ProfileData profile;
   final String type;
-  const DetailProfile({
+  DetailProfile({
     Key? key,
     required this.profile,
     required this.type,
@@ -21,6 +22,84 @@ class DetailProfile extends StatefulWidget {
 }
 
 class _DetailProfileState extends State<DetailProfile> {
+  Future<void> add(String addContent, String type) async {
+    if (type == "schools" && addContent != "") {
+      widget.profile.schools!.add(addContent);
+    }
+    if (type == "works" && addContent != "") {
+      widget.profile.works!.add(addContent);
+    }
+    if (type == "favorites" && addContent != "") {
+      widget.profile.favorites!.add(addContent);
+    }
+    if (type == "location" && addContent != "") {
+      widget.profile.location = addContent;
+    }
+    if (type == "gender" && addContent != "Giới tính") {
+      widget.profile.gender = addContent;
+    }
+    bool success = await widget.profile.update(type);
+    if (success) {
+      setState(() {
+        widget.profile = widget.profile;
+      });
+    }
+  }
+
+  Future<void> edit(String editContent, String type, int index) async {
+    if (type == "schools") {
+      if (editContent == "") {
+        widget.profile.schools!.removeAt(index);
+      } else {
+        widget.profile.schools![index] = editContent;
+      }
+    }
+    if (type == "works") {
+      if (editContent == "") {
+        widget.profile.works!.removeAt(index);
+      } else {
+        widget.profile.works![index] = editContent;
+      }
+    }
+    if (type == "favorites") {
+      if (editContent == "") {
+        widget.profile.favorites!.removeAt(index);
+      } else {
+        widget.profile.favorites![index] = editContent;
+      }
+    }
+    if (type == "location") {
+      if (editContent == "") {
+        widget.profile.location = null;
+      } else {
+        widget.profile.location = editContent;
+      }
+    }
+    if (type == "gender") {
+      if (editContent == "Giới tính") {
+        widget.profile.gender = null;
+      } else {
+        widget.profile.gender = editContent;
+      }
+    }
+    bool success = await widget.profile.update(type);
+    if (success) {
+      setState(() {
+        widget.profile = widget.profile;
+      });
+    }
+  }
+
+  /*Future<void> deleteSchool(String school) async {
+    widget.profile.schools!.add(school);
+    bool success = await widget.profile.updateSchools();
+    if (success) {
+      setState(() {
+        widget.profile = widget.profile;
+      });
+    }
+  }*/
+
   @override
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
@@ -78,7 +157,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.type == "me" ?
-            const InputField(icon: "0xe6f4", hintText: "Thêm công việc")
+            InputField(icon: "0xe6f4", hintText: "Thêm công việc", add: add,)
                 : const SizedBox(width: 0, height: 0,),
 
             widget.profile.works!.isNotEmpty ?
@@ -88,7 +167,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.works!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type);
+                    return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Làm việc tại ", mainText: widget.profile.works![index], type: widget.type, asset: "0xe6f2",);
                   }
@@ -109,7 +188,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.type == "me" ?
-            const InputField(icon: "0xf33c", hintText: "Thêm trường học")
+            InputField(icon: "0xf33c", hintText: "Thêm trường học", add: add,)
                 : const SizedBox(width: 0, height: 0,),
 
             widget.profile.schools!.isNotEmpty ?
@@ -119,7 +198,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.schools!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type);
+                    return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Học tại ", mainText: widget.profile.schools![index], type: widget.type, asset: "0xe559",);
                   }
@@ -140,8 +219,8 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.profile.location != null ?
-            ProfileTitle(subText: "Đến từ ", mainText: widget.profile.location!, type: widget.type, asset: "0xf7f5",) :
-            widget.type == "me" ? const InputField(icon: "0xf107", hintText: "Thêm nơi sống") : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xf7f5",),
+            ProfileTitle(subText: "Đến từ ", mainText: widget.profile.location!, type: widget.type, asset: "0xf7f5", edit: edit,) :
+            widget.type == "me" ? InputField(icon: "0xf107", hintText: "Thêm nơi sống", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xf7f5",),
 
             Container(
               width: MediaQuery.of(context).size.width,
@@ -158,11 +237,11 @@ class _DetailProfileState extends State<DetailProfile> {
 
             widget.profile.gender != null ?
             ProfileTitle(subText: "Giới tính ", mainText: widget.profile.gender!, type: widget.type, asset: "0xe491",) :
-            widget.type == "me" ? const InputField(icon: "0xe497", hintText: "Thêm giới tính") : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
+            widget.type == "me" ? DropDownField(icon: "0xe497", hintText: "Thêm giới tính", add: add,) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe491",),
 
             widget.profile.dayOfBirth != null ?
             ProfileTitle(subText: "Sinh nhật ", mainText: widget.profile.dayOfBirth!.substring(0, 10), type: widget.type, asset: "0xe120",) :
-            widget.type == "me" ? const InputField(icon: "0xef0f", hintText: "Thêm sinh nhật") : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe120",),
+            widget.type == "me" ? InputField(icon: "0xef0f", hintText: "Thêm sinh nhật", add: add) : ProfileTitle(subText: "", mainText: "Không có thông tin để hiển thị", type: widget.type, asset: "0xe120",),
 
             Container(
               width: MediaQuery.of(context).size.width,
@@ -178,7 +257,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
 
             widget.type == "me" ?
-            const InputField(icon: "0xe25c", hintText: "Thêm sở thích")
+            InputField(icon: "0xe25c", hintText: "Thêm sở thích", add: add,)
                 : const SizedBox(width: 0, height: 0,),
 
             widget.profile.favorites!.isNotEmpty ?
@@ -188,7 +267,7 @@ class _DetailProfileState extends State<DetailProfile> {
                 itemCount: widget.profile.favorites!.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (widget.type == "me") {
-                    return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type);
+                    return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type, edit: edit, index: index,);
                   } else {
                     return ProfileTitle(subText: "Sở thích ", mainText: widget.profile.favorites![index], type: widget.type, asset: "0xe25b",);
                   }

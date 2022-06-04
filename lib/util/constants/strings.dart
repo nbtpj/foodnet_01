@@ -21,8 +21,13 @@ const String add_a_new_post = lang=='en'? "Add a new post":"Tạo một bài đ�
 const String upload_fail = lang=='en'? "Upload fail!":"Cập nhật thất bại!";
 const String upload_success = lang=='en'? "Upload success!":"Cập nhật thành công!";
 const String undefined_user = lang=='en'? "Undefined user":"Người dùng không xác định";
-
-
+const String see_search_result_string = lang=='en'?"See search results for ":"Xem kết quả cho ";
+const String recent_search_string = lang=='en'?"Recent search":"Tìm kiếm gần đây";
+const String delete_all_string = lang=='en'?"Delete all":"Xoá tất cả";
+const String result_string = lang=='en'?"Results":"Kết quả";
+const String search_string = lang=='en'?"Search":"Tìm kiếm";
+const String search_food_hint_string = lang=='en'?"Which food to eat?":"Bạn muốn ăn gì?";
+const String current_string = ".đ";
 
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/chat.dart';
+import 'package:foodnet_01/ui/screens/detailed_list/full_list.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
@@ -50,11 +51,36 @@ class _HomeState extends State<Home> {
             const DiscountCard(),
             FoodPart(partName: tag_string),
             const CategoriesFood(),
-            FoodPart(partName: recommend_string),
+
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return DetailList(name:recommend_string);
+                }));
+              },
+              child: FoodPart(partName: recommend_string),
+            ),
             const RecommendFoods(),
-            FoodPart(partName: popular_string),
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return DetailList(name:popular_string);
+                }));
+              },
+              child: FoodPart(partName: popular_string),
+            ),
             const PopularFoods(),
-            FoodPart(partName: my_post_string),
+
+            GestureDetector(
+                onTap: () async {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return DetailList(name: my_post_string,);
+                  }));
+                },
+                child: FoodPart(partName: my_post_string)),
             getMyProfileId() != null
                 ? const MyFoods()
                 : SizedBox.shrink(), // login requirement

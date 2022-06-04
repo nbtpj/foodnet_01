@@ -31,11 +31,6 @@ class LocationPicker extends StatefulWidget {
 class _LocationPickerState extends State<LocationPicker> {
   late GoogleMapController _controller;
 
-  Future<LatLng> getCurrentPosition() async {
-    return _controller.getLatLng(ScreenCoordinate(
-        x: SizeConfig.screenWidth ~/ 2, y: SizeConfig.screenHeight ~/ 2));
-  }
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +50,7 @@ class _LocationPickerState extends State<LocationPicker> {
               controller.setMapStyle(MapStyle().aubergine);
             },
             onCameraMove: (cam) async{
-              widget._location = await getCurrentPosition();
+              widget._location = cam.target;
             },
             onCameraIdle: () {
               setState(() {});
@@ -86,7 +81,7 @@ class _LocationPickerState extends State<LocationPicker> {
             ],
           ),
           Positioned(
-            left: SizeConfig.screenWidth / 2-25,
+            left: SizeConfig.screenWidth / 2-50,
             top: SizeConfig.screenHeight / 2,
             child: const Icon(
               Icons.place,

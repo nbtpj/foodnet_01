@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 
 import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
@@ -85,11 +86,11 @@ class _SearchListState extends State<SearchList> {
                 widget.type == "recentSearch" ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:  [
-                    Text("Tìm kiếm gần đây", style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),), ///22
-                    Text("Xoá tất cả", style: TextStyle(fontSize: height / 38.77, color: buttonColor, )), ///22
+                    Text(recent_search_string, style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),), ///22
+                    Text(delete_all_string, style: TextStyle(fontSize: height / 38.77, color: buttonColor, )), ///22
                   ],
                 ) : widget.isResult != null && widget.isResult!
-                    ? Text("Kết quả", style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),) ///22
+                    ? Text(result_string, style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),) ///22
                     : const SizedBox(width: 0, height: 0,),
 
                 ListView.builder(
@@ -116,7 +117,7 @@ class _SearchListState extends State<SearchList> {
                   text: TextSpan(
                       children: [
                         TextSpan(
-                          text:  "Xem kết quả cho ",
+                          text:  see_search_result_string,
                           style: TextStyle(
                             fontSize: height / 47.39, ///18
                             color: buttonColor,

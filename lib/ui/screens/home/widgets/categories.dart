@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/category_view/cate_view.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -36,7 +37,13 @@ class _CategoriesFoodState extends State<CategoriesFood> {
                 return Column(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailCateList(cate: category)));
+                      },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(
                           SizeConfig.screenWidth / 34.25,
@@ -69,6 +76,7 @@ class _CategoriesFoodState extends State<CategoriesFood> {
                     Row(children: [
                       Text(
                         category.title,
+                        softWrap: true,
                         style: TextStyle(
                             fontSize: SizeConfig.screenHeight / 52.54,
                             color: Colors.black45),

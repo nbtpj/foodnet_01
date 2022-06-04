@@ -5,9 +5,9 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class FoodImage extends StatefulWidget {
-  PostData food;
+  final PostData food;
   final Function notifyParent;
-  FoodImage({required this.food, required this.notifyParent});
+  const FoodImage({Key? key, required this.food, required this.notifyParent}) : super(key: key);
 
   @override
   _FoodImageState createState() => _FoodImageState();
