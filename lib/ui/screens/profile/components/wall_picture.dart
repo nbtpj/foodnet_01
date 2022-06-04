@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../util/constants/colors.dart';
+import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
+import '../../../components/media_viewer.dart';
 import '../view_photo.dart';
 
 //ignore: must_be_immutable
 class WallPicture extends StatefulWidget {
-  late String picture;
+  late ProfileData profile;
+  final String type;
   final ImagePicker _picker = ImagePicker();
 
   WallPicture({Key? key,
-    required this.picture,
+    required this.profile,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -24,6 +28,7 @@ class _WallPictureState extends State<WallPicture> {
   double height = SizeConfig.screenHeight;
   @override
   Widget build(BuildContext context) {
+    String picture = widget.profile.wallAsset;
     return Positioned(
       left: 0,
       top: 0,
@@ -31,18 +36,15 @@ class _WallPictureState extends State<WallPicture> {
         child: Container(
           color: lightColor,
           height: height / 4.74,
-
+          width: MediaQuery.of(context).size.width,
           ///180
-          child: Image.asset(
-            widget.picture,
-            height: height / 4.74,
-
-            ///180
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
+          child: MediaWidget(
+            url: picture,
+            isNet: true,
           ),
         ),
         onTap: () {
+          widget.type == "me" ?
           showModalBottomSheet(
               context: context,
               builder: (builder) {
@@ -89,7 +91,7 @@ class _WallPictureState extends State<WallPicture> {
                           ],
                         ),
                         onTap: () {
-                          Navigate.pushPageReplacement(context, PhotoPage(picture: widget.picture));
+                          Navigate.pushPageReplacement(context, PhotoPage(picture: picture));
                         },
                       ),
                       SizedBox(height: height / 56.87),
@@ -127,19 +129,28 @@ class _WallPictureState extends State<WallPicture> {
                           ],
                         ),
                         onTap: () async {
-                          Navigator.pop(context);
                           final XFile? image =
                           await widget._picker.pickImage(source: ImageSource.gallery);
-                          setState(() {
-                            widget.picture = "assets/images/avatar-1.png";
-                          });
+                          Navigator.pop(context);
+                          if (image != null) {
+                            String temp = widget.profile.wallAsset;
+                            widget.profile.wallAsset = image.path;
+                            bool success = await widget.profile.update("wallAsset");
+                            if (!success) {
+                              widget.profile.wallAsset = temp;
+                            }
+                            setState(() {
+                              widget.profile.wallAsset = widget.profile.wallAsset;
+                            });
+                          }
+
                         },
                       )
 
                     ],
                   ),
                 );
-              });
+              }) : Navigate.pushPage(context, PhotoPage(picture: picture));
         },
       ),
     );

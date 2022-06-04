@@ -38,10 +38,10 @@ class PhotoPage extends StatelessWidget {
                 }
               ),
 
-              Container(
+              SizedBox(
                 height: height * 0.83,
                 child: Center(
-                  child: Image.asset(
+                  child: Image.network(
                     picture,
                     fit: BoxFit.fitWidth,
                     width: width,

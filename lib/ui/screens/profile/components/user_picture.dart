@@ -4,17 +4,21 @@ import 'package:foodnet_01/AuthWrapperHome.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../util/constants/strings.dart';
+import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
+import '../../../components/media_viewer.dart';
 import '../view_photo.dart';
 
 //ignore: must_be_immutable
 class UserPicture extends StatefulWidget {
-  late String picture;
+  late ProfileData profile;
+  final String type;
   final ImagePicker _picker = ImagePicker();
 
   UserPicture({Key? key,
-    required this.picture,
+    required this.profile,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -24,8 +28,10 @@ class UserPicture extends StatefulWidget {
 class _UserPictureState extends State<UserPicture> {
   double width = SizeConfig.screenWidth;
   double height = SizeConfig.screenHeight;
+
   @override
   Widget build(BuildContext context) {
+    String picture = widget.profile.userAsset;
     return Positioned(
         left: (MediaQuery.of(context).size.width / 2) -
             width / 6.85,
@@ -38,19 +44,18 @@ class _UserPictureState extends State<UserPicture> {
           child: ClipRRect(
             borderRadius:
             BorderRadius.circular(height / 14.22),
-
             ///60
-            child: Image.asset(
-              widget.picture,
+            child: SizedBox(
               height: height / 7.11,
-
-              ///120
               width: width / 3.425,
-
-              ///120
+              child: MediaWidget(
+                url: picture,
+                isNet: true,
+              ),
             ),
           ),
           onTap: () {
+            widget.type == "me" ?
             showModalBottomSheet(
                 context: context,
                 builder: (builder) {
@@ -68,7 +73,7 @@ class _UserPictureState extends State<UserPicture> {
                               ///20
                             ),
                             InkWell(onTap: (){
-                              Navigate.pushPageReplacement(context, PhotoPage(picture: widget.picture));
+                              Navigate.pushPageReplacement(context, PhotoPage(picture: picture));
                             },
                                 child:Row(
                                   children: [
@@ -103,12 +108,20 @@ class _UserPictureState extends State<UserPicture> {
 
                             ///15
                             InkWell(onTap: () async {
-                              Navigator.pop(context);
                               final XFile? image =
                               await widget._picker.pickImage(source: ImageSource.gallery);
-                              setState(() {
-                                widget.picture = "assets/images/avatar-1.png";
-                              });
+                              if (image != null) {
+                                String temp = widget.profile.userAsset;
+                                widget.profile.userAsset = image.path;
+                                bool success = await widget.profile.update("userAsset");
+                                if (!success) {
+                                  widget.profile.userAsset = temp;
+                                }
+                                setState(() {
+                                  widget.profile.userAsset = widget.profile.userAsset;
+                                });
+                              }
+                              Navigator.pop(context);
                             },
                                 child:Row(
                                   children: [
@@ -142,11 +155,11 @@ class _UserPictureState extends State<UserPicture> {
                             SizedBox(height: height / 56.87),
 
                             ///15
-                            GestureDetector(onTap: ()async{
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                              return const AuthWrapperHome();
-                            }));
+                            GestureDetector(onTap: ()async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                                return const AuthWrapperHome();
+                              }));
                             },
                               child:
                               Row(
@@ -181,7 +194,8 @@ class _UserPictureState extends State<UserPicture> {
                           ],
                         ),
                       ));
-                });
+                }) : Navigate.pushPage(context, PhotoPage(picture: picture))
+            ;
           },
         ));
   }

@@ -5,12 +5,9 @@ import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/components/wall_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
-import 'package:foodnet_01/ui/screens/profile/view_photo.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
-import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
@@ -22,7 +19,6 @@ class ProfilePage extends StatefulWidget {
   late String type;
   final String id;
   final String? arriveType;
-  final ImagePicker _picker = ImagePicker();
 
   ProfilePage({
     Key? key,
@@ -40,7 +36,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   double width = SizeConfig.screenWidth;
   double height = SizeConfig.screenHeight;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           ProfileData? profile = snapshot.data;
-          /*if (profile?.schools != null) {
-              print(profile?.schools?.length);
-            }*/
+
           return Column(
             children: [
               Container(
@@ -116,8 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       ///250
                       child: Stack(alignment: Alignment.centerLeft, children: <
                           Widget>[
-                        WallPicture(picture: profile.wallAsset),
-                        UserPicture(picture: profile.userAsset)
+                        WallPicture(profile: profile, type: widget.type,),
+                        UserPicture(profile: profile, type: widget.type,)
                       ]),
                     ),
                     Container(
