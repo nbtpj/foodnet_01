@@ -14,9 +14,6 @@ class MyFavoriteFoods extends StatefulWidget {
 }
 
 class _MyFavoriteFoodsState extends State<MyFavoriteFoods> {
-  // Future<List<PostData>> fetchFavoritePost() async{
-  //   return getPosts(Filter(search_type: 'favorite')).toList();
-  // }
   Stream<QuerySnapshot<ReactionData>> getlist() {
     return flattenReactionRef
         .where('userId', isEqualTo: getMyProfileId())

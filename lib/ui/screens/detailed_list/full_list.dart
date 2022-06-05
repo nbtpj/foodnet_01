@@ -20,11 +20,14 @@ class DetailList extends StatefulWidget {
         }
         break;
       case my_favorite_string:
-        var foodSnapshot =  await postsRef.get();
-        for (var doc in foodSnapshot.docs) {
-          var d = doc.data();
-          if (await d.getReact()==1){
-            yield d;
+        var reactionSnap = await flattenReactionRef
+            .where('userId', isEqualTo: getMyProfileId())
+            .where('type', isEqualTo: 1)
+            .get();
+        for (var react in reactionSnap.docs) {
+          var post = await getPost(react.data().postId);
+          if (post != null) {
+            yield post;
           }
         }
         break;
@@ -51,21 +54,21 @@ class DetailList extends StatefulWidget {
     return _DetailList();
   }
 }
+
 class _DetailList extends ListViewWithTextSearch<DetailList> {
   @override
-  Stream<PostData> pseudoFullTextSearch() async*{
+  Stream<PostData> pseudoFullTextSearch() async* {
     var foodSnapshot = await widget._fetcher().toList();
     List<Tuple2> scores = [];
     for (var doc in foodSnapshot) {
-      String txt = doc.title+doc.description;
+      String txt = doc.title + doc.description;
       var similarity = keyword.toLowerCase().similarityTo(txt.toLowerCase());
       scores.add(Tuple2(similarity, doc));
-
     }
     scores.sort((Tuple2 a, Tuple2 b) {
-      return a.item1.compareTo(b.item1)*-1;
+      return a.item1.compareTo(b.item1) * -1;
     });
-    for(var tuple in scores){
+    for (var tuple in scores) {
       yield tuple.item2 as PostData;
     }
   }
