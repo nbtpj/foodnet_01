@@ -168,6 +168,7 @@ class PostData implements LazyLoadData {
   int i = 0;
 
   Future<int> get numcite async {
+    // todo: Kì vọng đẩy lên cloud function
     return (await postsRef.where('cateList', arrayContains: title).get()).size;
   }
   LatLng positions() {
@@ -219,7 +220,6 @@ class PostData implements LazyLoadData {
   }
 
   void changeReact() {
-    /// todo: thay đổi theo id người dùng hiện tại
     react += 1;
     if (react > 1) {
       react = -1;
@@ -257,6 +257,7 @@ class PostData implements LazyLoadData {
   }
 
   Future<dynamic> getRate() async {
+    // todo: Kì vọng đẩy lên cloud function
     numUpvote = (await flattenReactionRef.where("postId", isEqualTo: id).where(
         'type', isEqualTo: 1).get()).size;
     numDownvote =
