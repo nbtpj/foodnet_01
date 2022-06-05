@@ -59,13 +59,7 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
       fromFirestore: (snapshot, _) {
         var data = snapshot.data()!;
         data["id"] = snapshot.id;
-        print("get a profile");
-        print(data);
-        var a = ProfileData.fromJson(data);
-        print(a.toJson());
-        print('_______');
-
-        return a;
+        return ProfileData.fromJson(data);
       },
       toFirestore: (profileData, _) => profileData.toJson(),
     );
@@ -192,6 +186,10 @@ Stream<ProfileData> getProfiles(Filter filter) async* {
   for (var doc in profileSnapshot.docs) {
     yield doc.data();
   }
+}
+
+Future<void> createNewProfile(ProfileData profile) {
+  return profilesRef.doc(profile.id).set(profile);
 }
 
 Stream<FriendData> getFriend(String? profileId) async* {

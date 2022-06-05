@@ -40,7 +40,7 @@ class _UserPictureState extends State<UserPicture> {
             BorderRadius.circular(height / 14.22),
 
             ///60
-            child: Image.asset(
+            child: Image.network(
               widget.picture,
               height: height / 7.11,
 

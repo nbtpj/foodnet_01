@@ -33,7 +33,7 @@ class _WallPictureState extends State<WallPicture> {
           height: height / 4.74,
 
           ///180
-          child: Image.asset(
+          child: Image.network(
             widget.picture,
             height: height / 4.74,
 

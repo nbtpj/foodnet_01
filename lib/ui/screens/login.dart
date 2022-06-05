@@ -4,6 +4,8 @@ import 'package:foodnet_01/ui/components/custom_button.dart';
 import 'package:foodnet_01/ui/components/custom_text_field.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
+import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/enum.dart';
 import 'package:foodnet_01/util/extensions.dart';
 import 'package:foodnet_01/util/validations.dart';
@@ -52,7 +54,13 @@ class _LoginState extends State<Login> {
             email: email!,
             password: password!
         ).then((result) {
-          return result.user!.updateDisplayName(name!);
+          result.user!.updateDisplayName(name!);
+          ProfileData newProfile = ProfileData(
+              id: result.user!.uid,
+              name: name!,
+              userAsset: "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
+              wallAsset: "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Fwall_default.png?alt=media&token=64c186ba-bf3a-44db-a501-ccfdcc80fa2f");
+          createNewProfile(newProfile);
         }).catchError((e) {
           if (e.code == 'weak-password') {
             print('The password provided is too weak.');
@@ -71,7 +79,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       body: Row(
         children: [
@@ -94,11 +105,18 @@ class _LoginState extends State<Login> {
   }
 
   buildLottieContainer() {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return AnimatedContainer(
       width: screenWidth < 700 ? 0 : screenWidth * 0.5,
       duration: const Duration(milliseconds: 500),
-      color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
+      color: Theme
+          .of(context)
+          .colorScheme
+          .secondary
+          .withOpacity(0.3),
       child: Center(
         child: Lottie.asset(
           AppAnimations.chatAnimation,
@@ -162,7 +180,10 @@ class _LoginState extends State<Login> {
                 },
                 child: Text(
                   'Register',
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(color: Theme
+                      .of(context)
+                      .colorScheme
+                      .secondary),
                 ),
               ),
             ],
@@ -181,7 +202,10 @@ class _LoginState extends State<Login> {
                 },
                 child: Text(
                   'Login',
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(color: Theme
+                      .of(context)
+                      .colorScheme
+                      .secondary),
                 ),
               ),
             ],
