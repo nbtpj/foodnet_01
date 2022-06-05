@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/components/media_list_scroll_view.dart';
 import 'package:foodnet_01/ui/components/media_viewer.dart';
 import 'package:foodnet_01/ui/screens/nav_bar.dart';
@@ -13,6 +14,7 @@ import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostEditPreView extends StatefulWidget {
@@ -115,12 +117,22 @@ class _PostEditForm extends State<PostEditForm> {
                           width: SizeConfig.screenWidth / 10,
                         ),
                         SizedBox(
-                            child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text("${tag.numcite}",
-                                    style: const TextStyle(
-                                        color: Colors.deepOrange,
-                                        fontSize: 18)))),
+                            child: FutureBuilder<int>(
+                              future: tag.numcite,
+                              builder: (context, snap){
+                                if (snap.hasData){
+                                  return FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Text("${snap.data!}",
+                                          softWrap: true,
+                                          style: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 18)));
+                                } else {
+                                  return loading;
+                                }
+                              },
+                            )),
                       ],
                     ),
                   ),
@@ -177,7 +189,7 @@ class _PostEditForm extends State<PostEditForm> {
 
   Widget _select_cover_post() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         height: SizeConfig.screenHeight / 5,
         child: GestureDetector(
@@ -270,11 +282,11 @@ class _PostEditForm extends State<PostEditForm> {
       key: _formKey,
       child: Expanded(
           child: Container(
-            margin: EdgeInsets.only(left: 20.0, right: 20.0),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: ListView(children: [
               _select_cover_post(),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: FormBuilderTextField(
                   textAlign: TextAlign.center,
                   name: "title",
@@ -320,7 +332,7 @@ class _PostEditForm extends State<PostEditForm> {
                 child: FormBuilderTextField(
                     name: "description",
                     initialValue: widget.food.description,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: description_string,
                       border: OutlineInputBorder()
                     ),
