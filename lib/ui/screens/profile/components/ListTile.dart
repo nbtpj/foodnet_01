@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
 import '../../../../util/global.dart';
+import 'dropdown_field.dart';
 
 class ProfileTitle extends StatefulWidget {
   final String? asset;
@@ -38,7 +39,8 @@ class _ProfileTitleState extends State<ProfileTitle> {
   Widget build(BuildContext context) {
     double height = SizeConfig.screenHeight;
     return onEdit
-        ? InputField(icon: widget.asset, hintText: widget.mainText, setonEdit: setonEdit, edit: widget.edit, index: widget.index, subText: widget.subText,)
+        ? (widget.subText != "Giới tính " ? InputField(icon: widget.asset, hintText: widget.mainText, setonEdit: setonEdit, edit: widget.edit, index: widget.index, subText: widget.subText,)
+        : DropDownField(icon: "0xe497", hintText: "Thêm giới tính", edit: widget.edit, setonEdit: setonEdit))
         : ListTile(
       title: RichText(
         overflow: TextOverflow.ellipsis,

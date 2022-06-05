@@ -38,19 +38,19 @@ class _DropDownFieldState extends State<DropDownField> {
       child: DropdownButtonFormField <String>(
         decoration: InputDecoration(
           prefixIcon: Container(
-            margin: EdgeInsets.only(left: width / 82.2, right: width / 51.385,), ///(5, 8)
+            margin: EdgeInsets.only(left: width / 82.2, right: width / 23.385,), ///(5, 8)
             child: CircleAvatar(
               backgroundColor: Colors.grey[300],
               child: Icon(
                 IconData(int.parse(widget.icon != null ? widget.icon! : "0xef8d"), fontFamily: 'MaterialIcons'),
                 size: height / 28.43, ///30
-                color: Colors.black,
+                color: buttonColor,
               ),
             ),
           ),
           suffixIcon: InkWell(
             child: Container(
-              width: 60,
+              width: width / 6.85,
               alignment: Alignment.center,
               padding: EdgeInsets.fromLTRB(0, height / 170.6, 0, height / 170.6), ///(5, 5)
               color: buttonColor,
@@ -66,6 +66,7 @@ class _DropDownFieldState extends State<DropDownField> {
             onTap: () {
               if (widget.setonEdit != null) {
                 widget.edit!(selectedItem, "gender", -1);
+                widget.setonEdit!();
               } else {
                 widget.add!(selectedItem, "gender");
               }

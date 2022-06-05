@@ -460,8 +460,8 @@ class FriendData implements LazyLoadData {
 class ProfileData {
   String? id;
   String name;
-  String userAsset;
-  String wallAsset;
+  late String userAsset;
+  late String wallAsset;
   int? mutualism;
   int friendsNumber = 0;
   String? dayOfBirth;
@@ -475,8 +475,8 @@ class ProfileData {
   ProfileData({
     this.id,
     required this.name,
-    required this.userAsset,
-    required this.wallAsset,
+    this.userAsset = "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
+    this.wallAsset = "gs://mobile-foodnet.appspot.com/profile/wall_default.png",
     this.mutualism,
     this.friendsNumber = 0,
     this.dayOfBirth,
@@ -522,7 +522,7 @@ class ProfileData {
       "name": name,
       "userAsset": userAsset,
       "wallAsset": wallAsset,
-      "dob": dayOfBirth,
+      "dob": dayOfBirth != null ? Timestamp.fromDate(DateTime.parse(dayOfBirth!)) : null,
       "gender": gender,
       "location": location,
       "works": works,
@@ -564,6 +564,45 @@ class ProfileData {
           profilesRef.doc(id).update(update);
         } else {
           profilesRef.doc(id).update({type: gender});
+        }
+      }
+      if (type == "dayOfBirth") {
+        if (dayOfBirth == null) {
+          final update = <String, dynamic>{
+            "dob": FieldValue.delete(),
+          };
+
+          profilesRef.doc(id).update(update);
+        } else {
+          profilesRef.doc(id).update({"dob": Timestamp.fromDate(DateTime.parse(dayOfBirth!))});
+        }
+      }
+
+      if (type == "userAsset") {
+        if (await File(userAsset).exists()) {
+          File f = await File(userAsset).create();
+          String id = getMyProfileId();
+          String temp = "$id-${DateTime.now().toUtc()}";
+          await storage.ref('profile').child(temp).putFile(f);
+          temp =
+          await storage.ref('profile').child(temp).getDownloadURL();
+          print(temp);
+          userAsset = temp;
+          profilesRef.doc(id).update({type: userAsset});
+        }
+      }
+
+      if (type == "wallAsset") {
+        if (await File(wallAsset).exists()) {
+          File f = await File(wallAsset).create();
+          String id = getMyProfileId();
+          String temp = "$id-${DateTime.now().toUtc()}";
+          await storage.ref('profile').child(temp).putFile(f);
+          temp =
+          await storage.ref('profile').child(temp).getDownloadURL();
+          print(temp);
+          wallAsset = temp;
+          profilesRef.doc(id).update({type: wallAsset});
         }
       }
     } catch (e) {
