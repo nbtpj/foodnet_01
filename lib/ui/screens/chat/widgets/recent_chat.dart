@@ -177,8 +177,8 @@ class _RecentChatsState extends State<RecentChats> {
                               ));
                         });
                   } else {
-                    return const CircularProgressIndicator();
-                    // return const Center();
+                    // return CircularProgressIndicator();
+                    return const Center();
                   }
                 }),
           )),

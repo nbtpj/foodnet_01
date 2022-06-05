@@ -8,6 +8,7 @@ import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 
 class ChatScreens extends StatefulWidget {
   final String userId;
@@ -309,7 +310,7 @@ class _ChatScreensState extends State<ChatScreens> {
                                       }),
                                 ));
                           } else {
-                            // return const CircularProgressIndicator();
+                            // return CircularProgressIndicator();
                             return const Center();
                           }
                         },
@@ -321,8 +322,7 @@ class _ChatScreensState extends State<ChatScreens> {
               ),
             );
           } else {
-            return const CircularProgressIndicator();
-            // return const Center();
+            return const Center();
           }
         });
   }
