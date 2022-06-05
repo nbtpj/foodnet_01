@@ -16,7 +16,7 @@ class ReviewStars extends StatefulWidget {
 }
 
 class _ReviewStarsState extends State<ReviewStars> {
-  Future<ReactionPostData>? _futureReaction;
+  Future<dynamic>? _futureReaction;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _ReviewStarsState extends State<ReviewStars> {
                           fontWeight: FontWeight.bold),
                     )
                   : const Center(),
-              FutureBuilder<ReactionPostData>(
+              FutureBuilder<dynamic>(
                   future: _futureReaction,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {

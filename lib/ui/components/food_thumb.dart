@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 Widget build_a_food_thumb(BuildContext context, PostData food) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PostDetailView(food: food)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => PostDetailView(food: food)));
     },
     child: Stack(
       children: [
@@ -20,8 +20,7 @@ Widget build_a_food_thumb(BuildContext context, PostData food) {
               SizeConfig.screenWidth / 34.25,
               SizeConfig.screenHeight / 113.84,
               SizeConfig.screenWidth / 34.25,
-              SizeConfig.screenHeight / 22.77
-          ),
+              SizeConfig.screenHeight / 22.77),
           height: SizeConfig.screenHeight / 3.105,
           width: SizeConfig.screenWidth / 2.74,
           decoration: BoxDecoration(
@@ -73,29 +72,28 @@ Widget build_a_food_thumb(BuildContext context, PostData food) {
                             future: food.getOwner(),
                             builder: (context, snap) => snap.hasData
                                 ? FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(snap.data?.name ?? None,
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize:
-                                        SizeConfig.screenHeight / 40,
-                                        fontFamily: "Roboto")))
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(snap.data?.name ?? None,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            fontSize:
+                                                SizeConfig.screenHeight / 40,
+                                            fontFamily: "Roboto")))
                                 : const SizedBox.shrink()),
                         food.cateList.isNotEmpty
                             ? FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              food.cateList.join(','),
-                              softWrap: true,
-                              style: TextStyle(
-                                  color: Colors.black38,
-                                  fontSize:
-                                  SizeConfig.screenHeight / 42.69,
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  food.cateList.join(','),
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.black38,
+                                      fontSize: SizeConfig.screenHeight / 42.69,
 
-                                  /// 16
-                                  fontWeight: FontWeight.w400),
-                            ))
+                                      /// 16
+                                      fontWeight: FontWeight.w400),
+                                ))
                             : SizedBox.shrink(),
                         Padding(
                           padding: EdgeInsets.only(
@@ -116,32 +114,48 @@ Widget build_a_food_thumb(BuildContext context, PostData food) {
               ),
               food.isGood
                   ? Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  height: SizeConfig.screenHeight / 13.66,
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        height: SizeConfig.screenHeight / 13.66,
 
-                  /// 50.0
-                  width: SizeConfig.screenWidth / 8.22,
+                        /// 50.0
+                        width: SizeConfig.screenWidth / 8.22,
 
-                  /// 50.0
-                  decoration: BoxDecoration(
-                      color: buttonColor,
-                      borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(30.0),
-                        topLeft: Radius.circular(30.0),
-                      )),
-                  child: const Icon(
-                    Icons.shopping_cart_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              )
+                        /// 50.0
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(30.0),
+                              topLeft: Radius.circular(30.0),
+                            )),
+                        child: const Icon(
+                          Icons.shopping_cart_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
                   : const SizedBox.shrink(),
             ],
           ),
         ),
       ],
     ),
+  );
+}
+
+Widget build_a_food_thumb_by_id(BuildContext context, String postId) {
+  return FutureBuilder<PostData?>(
+    future: getPost(postId),
+    builder: (context, snapshot) {
+      if (snapshot.hasData && snapshot.data != null) {
+        return build_a_food_thumb(context, snapshot.data!);
+      } else {
+        if (snapshot.data==null){
+          return const SizedBox.shrink();
+        }
+        return loading;
+      }
+    },
   );
 }

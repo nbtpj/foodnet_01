@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'entities.dart';
@@ -74,20 +72,25 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
       toFirestore: (profileData, _) => profileData.toJson(),
     );
 
-CollectionReference<ReactionPostData> postReactionRef =
-    FirebaseFirestore.instance.collection("reactions-posts").withConverter(
-        fromFirestore: ReactionPostData.fromJson,
-        toFirestore: (reactionPostData, _) => reactionPostData.toJson());
+// CollectionReference<ReactionPostData> postReactionRef =
+//     FirebaseFirestore.instance.collection("reactions-posts").withConverter(
+//         fromFirestore: ReactionPostData.fromJson,
+//         toFirestore: (reactionPostData, _) => reactionPostData.toJson());
 
-DocumentReference<ReactionData> reactionRef(String postId, String userId) {
-  return postReactionRef
-      .doc(postId)
-      .collection("reactions")
-      .doc(userId)
-      .withConverter(
-          fromFirestore: ReactionData.fromJson,
-          toFirestore: (reactionData, _) => reactionData.toJson());
-}
+CollectionReference<ReactionData> flattenReactionRef =
+FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
+    fromFirestore: ReactionData.fromJson,
+    toFirestore: (reactionData, _) => reactionData.toJson());
+
+// DocumentReference<ReactionData> reactionRef(String postId, String userId) {
+//   return postReactionRef
+//       .doc(postId)
+//       .collection("reactions")
+//       .doc(userId)
+//       .withConverter(
+//           fromFirestore: ReactionData.fromJson,
+//           toFirestore: (reactionData, _) => reactionData.toJson());
+// }
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -135,7 +138,6 @@ Stream<PostData> getPosts(Filter filter) async* {
       }
       break;
     case "base_on_locations":
-      // todo
       var begin = GeoHash.fromDecimalDegrees(
               filter.visibleRegion![2], filter.visibleRegion![0]),
           end = GeoHash.fromDecimalDegrees(
@@ -146,7 +148,6 @@ Stream<PostData> getPosts(Filter filter) async* {
           .endAt([end.geohash])
           .limit(10)
           .get();
-      print('position query rs.len: ' + foodSnapshot.size.toString());
       for (var doc in foodSnapshot.docs) {
         yield doc.data();
       }
@@ -346,45 +347,6 @@ Stream<Tuple2<double, Object>?> search(Filter filter) async* {
 String file_type(String url) {
   var fileName = (url.split('/').last);
   return fileName.split('.').last.toLowerCase();
-}
-
-Future<ReactionPostData> getRateByPostId(String postId) {
-  DocumentReference<ReactionPostData> docRef = postReactionRef.doc(postId);
-  return docRef.get().then((snapshot) {
-    if (snapshot.exists) {
-      return snapshot.data()!;
-    } else {
-      return ReactionPostData();
-    }
-  });
-}
-
-Future<int> getMyReaction(String postId) {
-  DocumentReference<ReactionData> myReactionRef =
-      reactionRef(postId, getMyProfileId());
-  return myReactionRef.get().then((snapshot) {
-    if (!snapshot.exists) {
-      return 0;
-    } else {
-      ReactionData data = snapshot.data()!;
-      if (data.type == "upvote") {
-        return 1;
-      } else {
-        return -1;
-      }
-    }
-  });
-}
-
-Future<void> addReaction(String postId, ReactionData reactionData) {
-  DocumentReference<ReactionData> reactRef =
-      reactionRef(postId, reactionData.userId);
-  return reactRef.set(reactionData);
-}
-
-Future<void> removeReaction(String postId, String userId) {
-  DocumentReference<ReactionData> reactRef = reactionRef(postId, userId);
-  return reactRef.delete();
 }
 
 final db = FirebaseFirestore.instance;

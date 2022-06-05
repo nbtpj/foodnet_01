@@ -181,10 +181,6 @@ class PostData implements LazyLoadData {
     // TODO: implement loadMore
   }
 
-  // CommentData getPreviousComment() {
-  //   return CommentData(timestamp: DateTime.now());
-  // }
-
   List<List<String>> getFeatures() {
     return features;
   }
@@ -211,7 +207,12 @@ class PostData implements LazyLoadData {
   }
 
   Future<int> getReact() async {
-    react = await getMyReaction(id);
+    var snap = await flattenReactionRef.doc('$id-${getMyProfileId()}').get();
+    if (snap.exists){
+      react = snap.data()!.type;
+    } else {
+      react = 0;
+    }
     return react;
   }
 
@@ -241,31 +242,26 @@ class PostData implements LazyLoadData {
   Future<void> commitReaction() {
     switch (react) {
       case 0:
-        return removeReaction(id, getMyProfileId());
-      case 1:
-        return addReaction(
-            id,
-            ReactionData(
-                userId: getMyProfileId(),
-                type: "upvote",
-                time: DateTime.now()));
-      case -1:
-        return addReaction(
-            id,
-            ReactionData(
-                userId: getMyProfileId(),
-                type: "downvote",
-                time: DateTime.now()));
+        return flattenReactionRef.doc('$id-${getMyProfileId()}').delete();
+
       default:
-        return Future<void>(() {});
+        return flattenReactionRef.doc('$id-${getMyProfileId()}').set(
+            ReactionData(
+                userId: getMyProfileId(),
+                postId: id,
+                type: react,
+                time: DateTime.now()));;
     }
   }
 
-  Future<ReactionPostData> getRate() async {
-    ReactionPostData data = await getRateByPostId(id);
-    numUpvote = data.numUpvote;
-    numDownvote = data.numDownvote;
-    return data;
+  Future<dynamic> getRate() async {
+
+    numUpvote = (await flattenReactionRef.where("postId", isEqualTo:id).where('type', isEqualTo: 1).get()).size;
+    numDownvote = (await flattenReactionRef.where("postId", isEqualTo:id).where('type', isEqualTo: -1).get()).size;
+    return {
+      "numUpvote":numUpvote,
+      "numDownvote":numDownvote,
+    };
   }
 
   PostData.fromJson(Map<String, Object?> json)
@@ -611,58 +607,29 @@ class Filter {
 
 class ReactionData implements LazyLoadData {
   String userId;
-  String type;
+  String postId;
+  int type;
   DateTime time;
 
-  ReactionData({required this.userId, required this.type, required this.time});
+  ReactionData({required this.userId, required this.postId, required this.type, required this.time});
 
   factory ReactionData.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options) {
     final data = snapshot.data();
-    if (data == null) {
-      return ReactionData(userId: "", type: "", time: DateTime.now());
-    }
     return ReactionData(
-        userId: snapshot.id,
+        userId: data!['userId'],
+        postId: data['postId'],
         type: data["type"],
         time: DateTime.parse((data["time"] as Timestamp).toDate().toString()));
   }
 
   Map<String, dynamic> toJson() {
-    return {"type": type, "time": Timestamp.fromDate(time)};
+    return {"type": type, "time": Timestamp.fromDate(time), 'userId':userId, 'postId':postId};
   }
 
   @override
   void loadMore() {
     // TODO: implement loadMore
-  }
-}
-
-class ReactionPostData {
-  int numUpvote;
-  int numDownvote;
-
-  ReactionPostData({
-    this.numUpvote = 0,
-    this.numDownvote = 0,
-  });
-
-  factory ReactionPostData.fromJson(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options) {
-    final data = snapshot.data();
-    if (data == null) {
-      return ReactionPostData();
-    } else {
-      return ReactionPostData(
-        numUpvote: data["upvote"],
-        numDownvote: data["downvote"],
-      );
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {"upvote": numUpvote, "downvote": numDownvote};
   }
 }
 
