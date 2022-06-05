@@ -507,10 +507,10 @@ class ProfileData {
             schools: (json["schools"] as List).map((e) => e as String).toList(),
             favorites:
                 (json["favorites"] as List).map((e) => e as String).toList(),
-            friendReferences: (json["friends"]! as List)
+            friendReferences: json.containsKey("friends")&&json["friends"]!=null?(json["friends"]! as List)
                 .map((e) => e.path as String)
-                .toList(),
-            friendsNumber: (json["friends"] as List).length
+                .toList():[],
+            friendsNumber: (json.containsKey("friends")&&json["friends"]!=null?(json["friends"]! as List):[]).length
             // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
             );
 

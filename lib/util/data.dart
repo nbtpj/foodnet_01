@@ -66,25 +66,11 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
       toFirestore: (profileData, _) => profileData.toJson(),
     );
 
-// CollectionReference<ReactionPostData> postReactionRef =
-//     FirebaseFirestore.instance.collection("reactions-posts").withConverter(
-//         fromFirestore: ReactionPostData.fromJson,
-//         toFirestore: (reactionPostData, _) => reactionPostData.toJson());
-
 CollectionReference<ReactionData> flattenReactionRef =
 FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
     fromFirestore: ReactionData.fromJson,
     toFirestore: (reactionData, _) => reactionData.toJson());
 
-// DocumentReference<ReactionData> reactionRef(String postId, String userId) {
-//   return postReactionRef
-//       .doc(postId)
-//       .collection("reactions")
-//       .doc(userId)
-//       .withConverter(
-//           fromFirestore: ReactionData.fromJson,
-//           toFirestore: (reactionData, _) => reactionData.toJson());
-// }
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
