@@ -2,22 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/util/entities.dart';
-
-
-import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
-import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 Widget _build_food(BuildContext context, PostData food) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PostDetailView(food: food)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => PostDetailView(food: food)));
     },
     child: Stack(
       children: [
@@ -77,27 +71,26 @@ Widget _build_food(BuildContext context, PostData food) {
                             future: food.getOwner(),
                             builder: (context, snap) => snap.hasData
                                 ? FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(snap.data?.name ?? None,
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize:
-                                        SizeConfig.screenHeight / 40,
-                                        fontFamily: "Roboto")))
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(snap.data?.name ?? None,
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            fontSize:
+                                                SizeConfig.screenHeight / 40,
+                                            fontFamily: "Roboto")))
                                 : const Center()),
                         food.cateList.isNotEmpty
                             ? FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              food.cateList.join(','),
-                              style: TextStyle(
-                                  color: Colors.black38,
-                                  fontSize:
-                                  SizeConfig.screenHeight / 42.69,
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  food.cateList.join(','),
+                                  style: TextStyle(
+                                      color: Colors.black38,
+                                      fontSize: SizeConfig.screenHeight / 42.69,
 
-                                  /// 16
-                                  fontWeight: FontWeight.w400),
-                            ))
+                                      /// 16
+                                      fontWeight: FontWeight.w400),
+                                ))
                             : const SizedBox.shrink(),
                         Padding(
                           padding: EdgeInsets.only(
@@ -121,27 +114,27 @@ Widget _build_food(BuildContext context, PostData food) {
               ),
               food.isGood
                   ? Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  height: SizeConfig.screenHeight / 13.66,
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        height: SizeConfig.screenHeight / 13.66,
 
-                  /// 50.0
-                  width: SizeConfig.screenWidth / 8.22,
+                        /// 50.0
+                        width: SizeConfig.screenWidth / 8.22,
 
-                  /// 50.0
-                  decoration: BoxDecoration(
-                      color: buttonColor,
-                      borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(30.0),
-                        topLeft: Radius.circular(30.0),
-                      )),
-                  child: const Icon(
-                    Icons.shopping_cart_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              )
+                        /// 50.0
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(30.0),
+                              topLeft: Radius.circular(30.0),
+                            )),
+                        child: const Icon(
+                          Icons.shopping_cart_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
                   : const SizedBox.shrink(),
             ],
           ),
@@ -156,19 +149,19 @@ Widget build_pair(BuildContext context, List<PostData> foods) {
     children: [for (var food in foods) _build_food(context, food)],
   );
 }
-abstract class ListViewWithTextSearch<T extends StatefulWidget> extends State<T>{
+
+abstract class ListViewWithTextSearch<T extends StatefulWidget>
+    extends State<T> {
   String keyword = "";
+  final ScrollController _controller = ScrollController();
+
   Widget _build_header(BuildContext context) {
     return Row(
-      children: [
-        const ArrowBack(),
-        _build_search(context)
-      ],
+      children: [const ArrowBack(), _build_search(context)],
     );
   }
 
-
-  Stream<PostData> pseudoFullTextSearch() ;
+  Stream<PostData> pseudoFullTextSearch();
 
   Widget _build_list(BuildContext context) {
     return FutureBuilder<List<PostData>>(
@@ -183,6 +176,7 @@ abstract class ListViewWithTextSearch<T extends StatefulWidget> extends State<T>
                   i, i + chunkSize > ls.length ? ls.length : i + chunkSize));
             }
             return ListView.builder(
+                controller: _controller,
                 itemCount: rows.length,
                 itemBuilder: (context, index) {
                   return build_pair(context, rows[index]);
@@ -218,8 +212,14 @@ abstract class ListViewWithTextSearch<T extends StatefulWidget> extends State<T>
             isDense: true,
             hintText: search_food_hint_string),
         onChanged: (text) {
-
-          setState(() {keyword=text;});
+          setState(() {
+            keyword = text;
+          });
+          _controller.animateTo(
+            _controller.position.minScrollExtent,
+            duration: const Duration(seconds: 1),
+            curve: Curves.fastOutSlowIn,
+          );
         },
       ),
     );
