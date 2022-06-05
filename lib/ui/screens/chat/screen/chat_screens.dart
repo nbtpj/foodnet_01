@@ -81,7 +81,7 @@ class _ChatScreensState extends State<ChatScreens> {
           ),
           CircleAvatar(
               radius: 20.0,
-              backgroundImage: AssetImage(userAsset)),
+              backgroundImage: NetworkImage(userAsset)),
           const SizedBox(
             width: 10.0,
           ),
@@ -255,7 +255,7 @@ class _ChatScreensState extends State<ChatScreens> {
                   children: [
                     CircleAvatar(
                         radius: 25.0,
-                        backgroundImage: AssetImage(user!.userAsset)),
+                        backgroundImage: NetworkImage(user!.userAsset)),
                     const SizedBox(width: 10.0,),
                     Text(
                       user.name,

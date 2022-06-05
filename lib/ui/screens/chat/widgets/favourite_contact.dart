@@ -72,7 +72,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
                                 CircleAvatar(
                                   radius: 35.0,
                                   backgroundImage:
-                                      AssetImage(favourites[index].userAsset),
+                                      NetworkImage(favourites[index].userAsset),
                                 ),
                                 Text(
                                   favourites[index].name,

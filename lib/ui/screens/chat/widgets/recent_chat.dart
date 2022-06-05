@@ -77,7 +77,7 @@ class _RecentChatsState extends State<RecentChats> {
                                               children: <Widget>[
                                                 CircleAvatar(
                                                     radius: 35.0,
-                                                    backgroundImage: AssetImage(
+                                                    backgroundImage: NetworkImage(
                                                         user!.userAsset)),
                                                 const SizedBox(
                                                   width: 10.0,
