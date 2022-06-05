@@ -15,6 +15,8 @@ const String my_post_string = lang=='en'? "My Post":"Bài đăng của tôi";
 const String recommend_string = lang=='en'? "Recommend":"Đề xuất bởi FoodNet";
 const String reviews_string = lang=='en'? "reviews":"đánh giá";
 const String features_string = lang=='en'? "Features":"Đặc điểm";
+const String name_string = lang=='en' ? "Name":"Tên";
+const String description_string = lang=='en' ? "Description":"Mô tả";
 const String friend_string = lang=='en'? "friends":"bạn bè";
 const String logout_string = lang=='en'? "Log out":"Đăng xuất";
 const String add_a_new_post = lang=='en'? "Add a new post":"Tạo một bài đăng mới";

@@ -310,8 +310,8 @@ class _ChatScreensState extends State<ChatScreens> {
                                       }),
                                 ));
                           } else {
-                            return CircularProgressIndicator();
-                            // return const Center();
+                            // return CircularProgressIndicator();
+                            return const Center();
                           }
                         },
                       ),
