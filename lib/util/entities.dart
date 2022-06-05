@@ -518,7 +518,6 @@ class ProfileData {
 
   Map<String, Object?> toJson() {
     return {
-      "id": id,
       "name": name,
       "userAsset": userAsset,
       "wallAsset": wallAsset,
@@ -549,7 +548,6 @@ class ProfileData {
           final update = <String, dynamic>{
             "location": FieldValue.delete(),
           };
-
           profilesRef.doc(id).update(update);
         } else {
           profilesRef.doc(id).update({type: location});
