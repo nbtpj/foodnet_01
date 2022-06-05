@@ -250,7 +250,7 @@ class PostData implements LazyLoadData {
                 userId: getMyProfileId(),
                 postId: id,
                 type: react,
-                time: DateTime.now()));;
+                time: DateTime.now()));
     }
   }
 
@@ -265,8 +265,6 @@ class PostData implements LazyLoadData {
   }
 
   PostData.fromJson(Map<String, Object?> json)
-
-      /// todo: cài đặt có thể khởi tạo các position có kiểu Latng
       : this(
             author_id: json['author_uid']! as String,
             id: json['id']! as String,
