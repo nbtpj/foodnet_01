@@ -81,7 +81,7 @@ class _DateBirthState extends State<DateBirth> {
                     ),
                   ),
                   child: child!,
-                )
+                );
               }
             );
             setState(() {
@@ -121,7 +121,7 @@ class _DateBirthState extends State<DateBirth> {
                     ),
                   ),
                   child: child!,
-                )
+                );
               }
           );
           setState(() {

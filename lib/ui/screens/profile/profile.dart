@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/components/wall_picture.dart';
@@ -271,30 +272,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height: height / 22.45,
 
                                   ///38
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.message,
-                                        color: widget.type == "other"
-                                            ? Colors.black
-                                            : Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: width / 137,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      seenChat(getMyProfileId(), widget.id);
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => ChatScreens(
+                                            userId: widget.id,
+                                          )));
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.message,
+                                          color: widget.type == "other"
+                                              ? Colors.black
+                                              : Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: width / 137,
 
-                                        ///3
-                                      ),
-                                      Text(
-                                        "Nhắn tin",
-                                        style: TextStyle(
-                                            color: widget.type == "other"
-                                                ? Colors.black
-                                                : Colors.white),
-                                      ),
-                                    ],
+                                          ///3
+                                        ),
+                                        Text(
+                                          "Nhắn tin",
+                                          style: TextStyle(
+                                              color: widget.type == "other"
+                                                  ? Colors.black
+                                                  : Colors.white),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(

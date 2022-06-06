@@ -44,7 +44,7 @@ class Friend extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(height / 85.3), ///10
                         topRight: Radius.circular(height / 85.3)), ///10
-                    child: Image.asset(
+                    child: Image.network(
                       userAsset,
                       width: width / 4.567, ///90
                       height: height / 8.36, ///102
