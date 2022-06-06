@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
-import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/ui/screens/search_food/components/build_components.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -22,7 +21,7 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
   String keyword = "";
 
   Widget _build_result_list(BuildContext context) {
-    Stream<PostData> snap = pseudoFullTextSearchPost(keyword);
+    Stream<PostData> snap = pseudoFullTextSearchPost(keyword, null);
     return FutureBuilder<List<PostData>>(
         future: snap.toList(),
         builder: (context, snapshot) {

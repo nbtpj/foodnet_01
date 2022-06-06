@@ -32,6 +32,7 @@ const String search_food_hint_string = lang=='en'?"Which food to eat?":"Bạn mu
 const String current_string = ".đ";
 const String uploading_string = lang=='en'?'Uploading....':'Đang tải lên...';
 const String my_favorite_string = lang=='en'?'Favorite':'Yêu thích';
-
-
-
+const String message_string = lang=='en'?"Message":"Tin nhắn";
+const String add2cart_string = lang=='en'?"Add to Cart":"Thêm vào giỏ hàng";
+const String developing_option_string = lang=='en'?"Function is being developed!":"Tính năng đang được phát triển!";
+const String total_string = lang=='en'?"Total":"Tổng";

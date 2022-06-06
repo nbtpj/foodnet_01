@@ -15,6 +15,7 @@ import '../../../util/navigate.dart';
 import '../search/search.dart';
 import 'components/friend.dart';
 
+/// todo: Thêm danh sách bài đăng vào trang cá nhân, sort theo rate
 //ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
   late String type;
@@ -52,8 +53,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.only(
                     top: height / 21.325, bottom: height / 85.3),
-
-                ///(40, 10)
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -152,7 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ///38
 
                                 child: GestureDetector(onTap: (){
-                                  /// todo: checkpoint
                                   Navigate.pushPage(
                                       context,
                                       DetailProfile(

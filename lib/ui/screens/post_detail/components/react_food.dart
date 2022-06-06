@@ -66,7 +66,6 @@ class _FavoriteFoodState extends State<FavoriteFood> {
         widget.food.isEditable()
             ? IconButton(
                 onPressed: () {
-                  /// todo: điều hướng đến trang chỉnh sửa
                   Navigator.push(
                       context,
                       MaterialPageRoute(

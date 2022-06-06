@@ -8,7 +8,6 @@ import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/popular.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/recommend.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/search_food.dart';
-import 'package:foodnet_01/ui/screens/post_detail/components/react_food.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';

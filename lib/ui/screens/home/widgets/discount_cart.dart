@@ -21,7 +21,6 @@ class _DiscountCardState extends State<DiscountCard> {
   ];
 
   Future<List<PostData>> fetchDiscountGood() async {
-    //todo: implement get discount post (categorical post)
     return getPosts(Filter(search_type: 'food')).toList();
   }
 

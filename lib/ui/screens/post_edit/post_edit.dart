@@ -9,12 +9,12 @@ import 'package:foodnet_01/ui/screens/nav_bar.dart';
 import 'package:foodnet_01/ui/screens/post_edit//widgets/food_image.dart';
 import 'package:foodnet_01/ui/screens/post_edit/map_picker.dart';
 import 'package:foodnet_01/ui/screens/post_edit/widgets/detail_widget.dart';
+import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostEditPreView extends StatefulWidget {
@@ -153,13 +153,7 @@ class _PostEditForm extends State<PostEditForm> {
                 onChanged: (newValue) {
                   setState(() {
                     if (food.cateList.contains(newValue!)) {
-                      Fluttertoast.showToast(
-                          msg: already_chosen,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      notify(already_chosen);
                       return;
                     }
                     if (newValue == None) {
@@ -226,13 +220,7 @@ class _PostEditForm extends State<PostEditForm> {
                       temp.addAll(widget.food.mediaUrls);
                       temp.remove(element);
                       widget.food.mediaUrls = temp;
-                      Fluttertoast.showToast(
-                          msg: delete_success,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      notify(delete_success);
                     });
                   },
                 ),
@@ -462,31 +450,17 @@ class _PostEditForm extends State<PostEditForm> {
                         _formKey.currentState?.save();
                         bool t = await widget.food.commit_changes();
                         if (t) {
-                          Fluttertoast.showToast(
-                              msg: upload_success,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                          notify(upload_success);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MyHomePage()));
                         } else {
-                          Fluttertoast.showToast(
-                              msg: upload_fail,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                          // Navigator.pop(context);
+                          notify(upload_fail);
                         }
                       },
                       icon: Icon(
                         Icons.check,
-                        // size: SizeConfig.screenWidth / 10.28,
                         color: freeDelivery,
                       ))),
               Container(
@@ -501,25 +475,13 @@ class _PostEditForm extends State<PostEditForm> {
                       onPressed: () async {
                         bool t = await widget.food.delete();
                         if (t) {
-                          Fluttertoast.showToast(
-                              msg: upload_success,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                          notify(upload_success);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MyHomePage()));
                         } else {
-                          Fluttertoast.showToast(
-                              msg: upload_fail,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
+                          notify(upload_fail);
                         }
                       },
                       icon: const Icon(
@@ -532,6 +494,5 @@ class _PostEditForm extends State<PostEditForm> {
           _build_form(),
         ]));
 
-    // TODO: implement build
   }
 }

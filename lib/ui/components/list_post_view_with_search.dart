@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
-import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
 Widget _build_food(BuildContext context, PostData food) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -36,14 +39,14 @@ class AddToCartButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
             shadowColor: MaterialStateProperty.all(Colors.transparent),
           ),
-          onPressed: () {},
+          onPressed: () {
+            notify(developing_option_string);
+          },
           child: Wrap(
             children: [
               Padding(
                 padding: EdgeInsets.only(right: SizeConfig.screenWidth / 51.38),
-
-                /// 8.0
-                child: Icon(
+                child: const Icon(
                   Icons.shopping_cart_rounded,
                   color: Colors.white,
                 ),
@@ -51,7 +54,7 @@ class AddToCartButton extends StatelessWidget {
               FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    "Add to Cart",
+                    add2cart_string,
                     style: TextStyle(
                       fontSize: SizeConfig.screenHeight / 34.15,
                       fontWeight: FontWeight.w700,

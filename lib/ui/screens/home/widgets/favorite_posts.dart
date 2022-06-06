@@ -14,17 +14,12 @@ class MyFavoriteFoods extends StatefulWidget {
 }
 
 class _MyFavoriteFoodsState extends State<MyFavoriteFoods> {
-  Stream<QuerySnapshot<ReactionData>> getlist() {
-    return flattenReactionRef
-        .where('userId', isEqualTo: getMyProfileId())
-        .where('type', isEqualTo: 1)
-        .snapshots();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<ReactionData>>(
-      stream: getlist(),
+      stream: get_my_reaction_list(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<ReactionData> postReactions =

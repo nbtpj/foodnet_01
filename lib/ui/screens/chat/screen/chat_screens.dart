@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
-import 'package:foodnet_01/ui/screens/chat/widgets/messages_selector.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
-import 'package:foodnet_01/util/global.dart';
 
 class ChatScreens extends StatefulWidget {
   final String userId;
@@ -35,7 +31,7 @@ class _ChatScreensState extends State<ChatScreens> {
         child: Align(
           alignment: Alignment.centerRight,
           child: DecoratedBox(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.lightBlueAccent,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15.0),
@@ -92,7 +88,7 @@ class _ChatScreensState extends State<ChatScreens> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.black12,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15.0),
@@ -150,13 +146,13 @@ class _ChatScreensState extends State<ChatScreens> {
               icon: Icon(
                 Icons.photo,
                 size: 29.0,
-                color: Theme.of(context).primaryColor,
+                color: buttonColor,
               )),
           Expanded(
             child: TextField(
               controller: messageController,
               textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(hintText: "Message"),
+              decoration: const InputDecoration(hintText: message_string),
             )
           ),
           IconButton(
@@ -170,7 +166,7 @@ class _ChatScreensState extends State<ChatScreens> {
               icon: Icon(
                 Icons.send,
                 size: 29.0,
-                color: Theme.of(context).primaryColor,
+                color: buttonColor,
               )),
         ],
       ),
@@ -204,17 +200,17 @@ class _ChatScreensState extends State<ChatScreens> {
               child:  Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text("Message", style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
-                  SizedBox(height: 15,),
-                  Text(res["message"], style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
-                  SizedBox(height: 22,),
+                  const Text("Message", style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+                  const SizedBox(height: 15,),
+                  Text(res["message"], style: const TextStyle(fontSize: 14),textAlign: TextAlign.center,),
+                  const SizedBox(height: 22,),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: TextButton(
                         onPressed: (){
                           Navigator.of(context).pop();
                         },
-                        child: Text("Ok", style: TextStyle(fontSize: 18, color: Color(0xFF99a4f3)),)
+                        child: const Text("Ok", style: TextStyle(fontSize: 18, color: Color(0xFF99a4f3)),)
                         ),
                   ),
                 ],
@@ -227,9 +223,6 @@ class _ChatScreensState extends State<ChatScreens> {
 
   @override
   Widget build(BuildContext context) {
-    // Future<List<Message>> fetchMessages() async {
-    //   return getMessages(widget.userId).toList();
-    // }
 
     return FutureBuilder<ProfileData?>(
         future: getProfile(widget.userId),
@@ -241,7 +234,7 @@ class _ChatScreensState extends State<ChatScreens> {
               backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.white,
-                iconTheme: IconThemeData(
+                iconTheme: const IconThemeData(
                   color: Colors.black, //change your color here
                 ),
                 leading: IconButton (
@@ -259,7 +252,7 @@ class _ChatScreensState extends State<ChatScreens> {
                     const SizedBox(width: 10.0,),
                     Text(
                       user.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                       ),
                     ),
@@ -267,12 +260,12 @@ class _ChatScreensState extends State<ChatScreens> {
                 ),
                 elevation: 0.0,
                 actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(
-                      Icons.more_horiz,
-                    ),
-                    onPressed: () {},
-                  ),
+                  // todo: IconButton(
+                  //   icon: const Icon(
+                  //     Icons.more_horiz,
+                  //   ),
+                  //   onPressed: () {},
+                  // ),
                 ],
               ),
               body: GestureDetector(

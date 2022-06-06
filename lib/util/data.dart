@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_geohash/dart_geohash.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tuple/tuple.dart';
-import 'package:string_similarity/string_similarity.dart';
-import 'entities.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:string_similarity/string_similarity.dart';
+import 'package:tuple/tuple.dart';
+
+import 'entities.dart';
 
 /// định nghĩa các API sử dụng
 
@@ -67,21 +69,19 @@ CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     );
 
 CollectionReference<ReactionData> flattenReactionRef =
-FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
-    fromFirestore: ReactionData.fromJson,
-    toFirestore: (reactionData, _) => reactionData.toJson());
-
+    FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
+        fromFirestore: ReactionData.fromJson,
+        toFirestore: (reactionData, _) => reactionData.toJson());
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
-  // TODO: implement get_post
   return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
 }
 
-Stream<PostData> pseudoFullTextSearchPost(String key) async* {
+Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
   /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
   /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
-  var foodSnapshot = await postsRef.get();
+  var foodSnapshot = await postsRef.limit(limit??100).get();
   List<Tuple2> scores = [];
   for (var doc in foodSnapshot.docs) {
     var post = doc.data();
@@ -100,71 +100,50 @@ Stream<PostData> pseudoFullTextSearchPost(String key) async* {
 Stream<PostData> getPosts(Filter filter) async* {
   /// lấy 1 danh sách post theo điều kiệu lọc
   /// trả về dạng stream
+  Query<PostData> querySnap;
   switch (filter.search_type) {
     case null:
     case "category":
-      var categorySnapshot = await categoriesRef.orderBy("title").get();
-      for (var doc in categorySnapshot.docs) {
-        yield doc.data();
-      }
+      querySnap = categoriesRef.orderBy("title");
       break;
+
     case "my_food":
-      var foodSnapshot = await postsRef
-          .where('author_uid', isEqualTo: getMyProfileId())
-          .limit(10)
-          .get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
+      querySnap = postsRef.where('author_uid', isEqualTo: getMyProfileId());
       break;
     case "base_on_locations":
       var begin = GeoHash.fromDecimalDegrees(
               filter.visibleRegion![2], filter.visibleRegion![0]),
           end = GeoHash.fromDecimalDegrees(
               filter.visibleRegion![3], filter.visibleRegion![1]);
-      var foodSnapshot = await postsRef
+      querySnap = postsRef
           .orderBy("position_hash")
-          .startAt([begin.geohash])
-          .endAt([end.geohash])
-          .limit(10)
-          .get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
+          .startAt([begin.geohash]).endAt([end.geohash]);
       break;
     case 'popular_food':
-      var foodSnapshot =
-          await postsRef.orderBy('react', descending: true).limit(10).get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
-      break;
-    case 'recommend':
-      //  get all not seen post
-      var foodSnapshot =  await postsRef.get();
-      for (var doc in foodSnapshot.docs) {
-        var d = doc.data();
-        if (await d.getReact()==0){
-          yield d;
-        }
-      }
-      break;
-    case 'favorite':
-    //  get all loved post
-      var foodSnapshot =  await postsRef.get();
-      for (var doc in foodSnapshot.docs) {
-        var d = doc.data();
-        if (await d.getReact()==1){
-          yield d;
-        }
-      }
+      querySnap = postsRef.orderBy('react', descending: true);
       break;
     default:
-      var foodSnapshot = await postsRef.limit(10).get();
-      for (var doc in foodSnapshot.docs) {
+      querySnap = postsRef;
+  }
+  if (filter.search_type == 'favorite'){
+    var reactionSnap = await flattenReactionRef
+        .where('userId', isEqualTo: getMyProfileId())
+        .where('type', isEqualTo: 1)
+        .get();
+    for (var react in reactionSnap.docs) {
+      var post = await getPost(react.data().postId);
+      if (post != null) {
+        yield post;
+      }
+    }
+  } else {
+    for (var doc in (await querySnap.limit(filter.limit ?? 100).get()).docs) {
+      if (filter.search_type != 'recommend'||(filter.search_type == 'recommend'&& await doc.data().getReact() == 0)) {
         yield doc.data();
       }
+    }
   }
+
 }
 
 Stream<CommentData> fetch_comments(String foodID) async* {
@@ -182,18 +161,13 @@ String getMyProfileId() {
 
 Future<ProfileData?> getProfile(String id) async {
   /// hàm lấy một đối tượng UserData dựa trên id
-  // TODO: implement get_user
   var a = (await profilesRef.doc(id).get()).data();
-  print('get!' + id.toString());
-  print(a);
-  print('_______________');
   return a;
 }
 
 Stream<ProfileData> getProfiles(Filter filter) async* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
-  // TODO: implement get_users
   var profileSnapshot = await profilesRef.get();
   for (var doc in profileSnapshot.docs) {
     yield doc.data();
@@ -294,7 +268,6 @@ Stream<SearchData> getSearchData(Filter filter) async* {
     yield SearchData(
       id: "2",
       name: "Minh Quang",
-      //asset: "assets/friend/tarek.jpg"
     );
     yield SearchData(
         id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
@@ -321,11 +294,48 @@ Stream<SearchData> getSearchData(Filter filter) async* {
   }
 }
 
-Stream<Tuple2<double, Object>?> search(Filter filter) async* {
-  /// hàm tìm kiếm một tập các Object theo filter và trả về 1 stream các object tìm kiếm được
-  /// cùng với một số double thể hiện độ 'matching' với filter
-  // TODO: implement search
-  yield null;
+Stream<QuerySnapshot<ReactionData>> get_my_reaction_list() {
+  return flattenReactionRef
+      .where('userId', isEqualTo: getMyProfileId())
+      .where('type', isEqualTo: 1)
+      .snapshots();
+}
+
+Stream<PostData> detail_list_fetcher(String name) async* {
+  switch (name) {
+    case my_post_string:
+      var foodSnapshot =
+          await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+      break;
+    case my_favorite_string:
+      var reactionSnap = await flattenReactionRef
+          .where('userId', isEqualTo: getMyProfileId())
+          .where('type', isEqualTo: 1)
+          .get();
+      for (var react in reactionSnap.docs) {
+        var post = await getPost(react.data().postId);
+        if (post != null) {
+          yield post;
+        }
+      }
+      break;
+
+    case popular_string:
+      var foodSnapshot =
+          await postsRef.orderBy('react', descending: true).limit(10).get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+      break;
+    default:
+      var foodSnapshot = await postsRef.get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+  }
 }
 
 String file_type(String url) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/post_detail/components/separator.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
@@ -45,7 +46,7 @@ class _IncreaseDecreaseState extends State<IncreaseDecrease> {
             padding: EdgeInsets.only(top: SizeConfig.screenHeight/68.3, bottom: SizeConfig.screenHeight/34.15),   /// 10.0 - 20.0
             child: MySeparator(color: Colors.grey,),
           ),
-          Text("Total", style: TextStyle(color: Colors.black54, fontSize: SizeConfig.screenHeight/42.69),),    /// 16
+          Text(total_string, style: TextStyle(color: Colors.black54, fontSize: SizeConfig.screenHeight/42.69),),    /// 16
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +55,7 @@ class _IncreaseDecreaseState extends State<IncreaseDecrease> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("\$${(widget.food.price??0)* _counter}", style: TextStyle(color: Colors.black, fontSize: SizeConfig.screenHeight/27.32),)  /// 25
+                  Text("${(widget.food.price??0)* _counter}${current_string}", style: TextStyle(color: Colors.black, fontSize: SizeConfig.screenHeight/27.32),)  /// 25
                 ],
               ),
               Container(

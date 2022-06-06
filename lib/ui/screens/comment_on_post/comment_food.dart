@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
+import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +28,6 @@ class CommentFood extends StatefulWidget {
   @override
   CommentFoodState createState() => CommentFoodState();
 }
-// todo: update realtime + sort by time
 
 class CommentFoodState extends State<CommentFood> {
   _buildCommentComposer() {
@@ -64,25 +64,13 @@ class CommentFoodState extends State<CommentFood> {
           )),
           IconButton(
               onPressed: () {
-                Fluttertoast.showToast(
-                    msg: uploading_string,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
+                notify(uploading_string);
                 widget.comment.timestamp = DateTime.now();
                 widget.comment.post().then((t) {
                   if (t) {
                     setState(() {
                       widget.editor.clear();
-                      Fluttertoast.showToast(
-                          msg: upload_success,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      notify(upload_success);
                       widget.comment = CommentData(
                           postID: widget.food.id,
                           userID: getMyProfileId(),
@@ -164,13 +152,7 @@ class CommentFoodState extends State<CommentFood> {
                           bool t = await data.delete();
                           setState(() {
                             if (t) {
-                              Fluttertoast.showToast(
-                                  msg: delete_success,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.grey,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
+                              notify(delete_success);
                             }
                           });
                         }

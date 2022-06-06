@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/discovery//map_style.dart';

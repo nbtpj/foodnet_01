@@ -45,14 +45,13 @@ class CommentData {
       : commentID = json['commentID'] as String,
         comment = json['comment'] as String,
         mediaUrls =
-        (json['mediaUrls'] as List).map((e) => e as String).toList(),
+            (json['mediaUrls'] as List).map((e) => e as String).toList(),
         timestamp = (json['timestamp'] as Timestamp).toDate(),
         react = json['react'] as int,
         postID = json['postID'] as String,
         userID = json['userID'] as String;
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'comment': comment,
         'mediaUrls': mediaUrls,
         'timestamp': Timestamp.fromDate(timestamp),
@@ -135,35 +134,36 @@ class PostData implements LazyLoadData {
   int numUpvote;
   int numDownvote;
 
-  PostData({this.author_id,
-    this.id = "new",
-    this.title = "",
-    this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing"
-        "Lorem ipsum dolor sit amet, consectetur adipiscing",
-    this.mediaUrls = const [
-      "assets/food/HeavenlyPizza.jpg",
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-    ],
-    this.outstandingIMGURL = '',
-    this.price,
-    this.isGood = true,
-    this.react = 0,
-    this.cateList = const [],
-    this.features = const [
-      ["200+", "Calories"],
-      ["%10", "Fat"],
-      ["%40", "Proteins"],
-      ["200+", "Calories"]
-    ],
-    this.position,
-    this.numUpvote = 0,
-    this.numDownvote = 0});
+  PostData(
+      {this.author_id,
+      this.id = "new",
+      this.title = "",
+      this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing",
+      this.mediaUrls = const [
+        "assets/food/HeavenlyPizza.jpg",
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+      ],
+      this.outstandingIMGURL = '',
+      this.price,
+      this.isGood = true,
+      this.react = 0,
+      this.cateList = const [],
+      this.features = const [
+        ["200+", "Calories"],
+        ["%10", "Fat"],
+        ["%40", "Proteins"],
+        ["200+", "Calories"]
+      ],
+      this.position,
+      this.numUpvote = 0,
+      this.numDownvote = 0});
 
   int i = 0;
 
@@ -171,6 +171,7 @@ class PostData implements LazyLoadData {
     // todo: Kì vọng đẩy lên cloud function
     return (await postsRef.where('cateList', arrayContains: title).get()).size;
   }
+
   LatLng positions() {
     return position ?? LatLng(0, 0);
   }
@@ -180,9 +181,7 @@ class PostData implements LazyLoadData {
   }
 
   @override
-  void loadMore() {
-    // TODO: implement loadMore
-  }
+  void loadMore() {}
 
   List<List<String>> getFeatures() {
     return features;
@@ -193,7 +192,7 @@ class PostData implements LazyLoadData {
       return None;
     }
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(position!.latitude, position!.longitude);
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
     Placemark place = placemarks[0];
     List<String?> add_names = [
       place.name,
@@ -258,11 +257,16 @@ class PostData implements LazyLoadData {
 
   Future<dynamic> getRate() async {
     // todo: Kì vọng đẩy lên cloud function
-    numUpvote = (await flattenReactionRef.where("postId", isEqualTo: id).where(
-        'type', isEqualTo: 1).get()).size;
-    numDownvote =
-        (await flattenReactionRef.where("postId", isEqualTo: id).where(
-            'type', isEqualTo: -1).get()).size;
+    numUpvote = (await flattenReactionRef
+            .where("postId", isEqualTo: id)
+            .where('type', isEqualTo: 1)
+            .get())
+        .size;
+    numDownvote = (await flattenReactionRef
+            .where("postId", isEqualTo: id)
+            .where('type', isEqualTo: -1)
+            .get())
+        .size;
     return {
       "numUpvote": numUpvote,
       "numDownvote": numDownvote,
@@ -271,28 +275,28 @@ class PostData implements LazyLoadData {
 
   PostData.fromJson(Map<String, Object?> json)
       : this(
-      author_id: json['author_uid']! as String,
-      id: json['id']! as String,
-      description: json['description']! as String,
-      mediaUrls:
-      (json['mediaUrls'] as List).map((e) => e as String).toList(),
-      cateList:
-      (json['cateList'] as List).map((e) => e as String).toList(),
-      price: json['price']! as int,
-      isGood: json['isGood']! as bool,
-      react: json['react']! as int,
-      outstandingIMGURL: json['outstandingIMGURL']! as String,
-      title: json['title']! as String,
-      position: json['position'] != null
-          ? LatLng((json['position']! as GeoPoint).latitude,
-          (json['position']! as GeoPoint).longitude)
-          : null);
+            author_id: json['author_uid']! as String,
+            id: json['id']! as String,
+            description: json['description']! as String,
+            mediaUrls:
+                (json['mediaUrls'] as List).map((e) => e as String).toList(),
+            cateList:
+                (json['cateList'] as List).map((e) => e as String).toList(),
+            price: json['price']! as int,
+            isGood: json['isGood']! as bool,
+            react: json['react']! as int,
+            outstandingIMGURL: json['outstandingIMGURL']! as String,
+            title: json['title']! as String,
+            position: json['position'] != null
+                ? LatLng((json['position']! as GeoPoint).latitude,
+                    (json['position']! as GeoPoint).longitude)
+                : null);
 
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
-      id: json['id']! as String,
-      title: json['title']! as String,
-      outstandingIMGURL: json['outstandingIMGURL']! as String);
+            id: json['id']! as String,
+            title: json['title']! as String,
+            outstandingIMGURL: json['outstandingIMGURL']! as String);
 
   Map<String, Object?> toJson() {
     return {
@@ -309,9 +313,8 @@ class PostData implements LazyLoadData {
           : null,
       "outstandingIMGURL": outstandingIMGURL,
       "position_hash": position != null
-          ? GeoHash
-          .fromDecimalDegrees(position!.longitude, position!.latitude)
-          .geohash
+          ? GeoHash.fromDecimalDegrees(position!.longitude, position!.latitude)
+              .geohash
           : null,
     };
   }
@@ -326,7 +329,6 @@ class PostData implements LazyLoadData {
   }
 
   Future<bool> commit_changes() async {
-    /// todo lưu lại toàn bộ thay đổi, return false nếu fail
     /// lưu ý rằng, sẽ có một số url vẫn còn là local, nên bước này sẽ bao gồm cả việc
     /// upload các media này lên
     ///
@@ -341,7 +343,7 @@ class PostData implements LazyLoadData {
         outstandingIMGURL = "$author_id-${DateTime.now().toUtc()}";
         await storage.ref('food').child(outstandingIMGURL).putFile(f);
         outstandingIMGURL =
-        await storage.ref('food').child(outstandingIMGURL).getDownloadURL();
+            await storage.ref('food').child(outstandingIMGURL).getDownloadURL();
       } catch (e) {
         debugPrint(
             "error: can not upload: " + outstandingIMGURL + e.toString());
@@ -355,7 +357,7 @@ class PostData implements LazyLoadData {
           mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
           await storage.ref('food').child(mediaUrls[i]).putFile(f);
           mediaUrls[i] =
-          await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
+              await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
         } catch (e) {
           debugPrint("error: can not upload: " + mediaUrls[i] + e.toString());
           return false;
@@ -446,11 +448,11 @@ class FriendData implements LazyLoadData {
 
   FriendData.fromJson(Map<String, Object?> json)
       : this(
-      id: json["id"]! as String,
-      name: json["name"]! as String,
-      userAsset: json["userAsset"] as String,
-      time: (json['time'] as Timestamp).toDate(),
-      mutualism: 0);
+            id: json["id"]! as String,
+            name: json["name"]! as String,
+            userAsset: json["userAsset"] as String,
+            time: (json['time'] as Timestamp).toDate(),
+            mutualism: 0);
 
   String get time_string {
     return timeago.format(time);
@@ -479,7 +481,8 @@ class ProfileData {
   ProfileData({
     this.id,
     required this.name,
-    this.userAsset = "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
+    this.userAsset =
+        "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
     this.wallAsset = "gs://mobile-foodnet.appspot.com/profile/wall_default.png",
     this.mutualism,
     this.friendsNumber = 0,
@@ -499,38 +502,42 @@ class ProfileData {
 
   ProfileData.fromJson(Map<String, Object?> json)
       : this(
-      id: json["id"]! as String,
-      name: json["name"]! as String,
-      userAsset: json["userAsset"]! as String,
-      wallAsset: json["wallAsset"]! as String,
-      dayOfBirth: json["dob"] != null
-          ? (json["dob"]! as Timestamp).toDate().toString()
-          : null,
-      gender: json["gender"] != null ? json["gender"]! as String : null,
-      location:
-      json["location"] != null ? json["location"] as String : null,
-      works: (json["works"] as List).map((e) => e as String).toList(),
-      schools: (json["schools"] as List).map((e) => e as String).toList(),
-      favorites:
-      (json["favorites"] as List).map((e) => e as String).toList(),
-      friendReferences: json.containsKey("friends") && json["friends"] != null
-          ? (json["friends"]! as List)
-          .map((e) => e.path as String)
-          .toList()
-          : [],
-      friendsNumber: (json.containsKey("friends") && json["friends"] != null
-          ? (json["friends"]! as List)
-          : []).length
-    // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
-  );
+            id: json["id"]! as String,
+            name: json["name"]! as String,
+            userAsset: json["userAsset"]! as String,
+            wallAsset: json["wallAsset"]! as String,
+            dayOfBirth: json["dob"] != null
+                ? (json["dob"]! as Timestamp).toDate().toString()
+                : null,
+            gender: json["gender"] != null ? json["gender"]! as String : null,
+            location:
+                json["location"] != null ? json["location"] as String : null,
+            works: (json["works"] as List).map((e) => e as String).toList(),
+            schools: (json["schools"] as List).map((e) => e as String).toList(),
+            favorites:
+                (json["favorites"] as List).map((e) => e as String).toList(),
+            friendReferences: json.containsKey("friends") &&
+                    json["friends"] != null
+                ? (json["friends"]! as List)
+                    .map((e) => e.path as String)
+                    .toList()
+                : [],
+            friendsNumber:
+                (json.containsKey("friends") && json["friends"] != null
+                        ? (json["friends"]! as List)
+                        : [])
+                    .length
+            // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
+            );
 
   Map<String, Object?> toJson() {
     return {
       "name": name,
       "userAsset": userAsset,
       "wallAsset": wallAsset,
-      "dob": dayOfBirth != null ? Timestamp.fromDate(
-          DateTime.parse(dayOfBirth!)) : null,
+      "dob": dayOfBirth != null
+          ? Timestamp.fromDate(DateTime.parse(dayOfBirth!))
+          : null,
       "gender": gender,
       "location": location,
       "works": works,
@@ -581,8 +588,9 @@ class ProfileData {
 
           profilesRef.doc(id).update(update);
         } else {
-          profilesRef.doc(id).update(
-              {"dob": Timestamp.fromDate(DateTime.parse(dayOfBirth!))});
+          profilesRef
+              .doc(id)
+              .update({"dob": Timestamp.fromDate(DateTime.parse(dayOfBirth!))});
         }
       }
 
@@ -592,8 +600,7 @@ class ProfileData {
           String id = getMyProfileId();
           String temp = "$id-${DateTime.now().toUtc()}";
           await storage.ref('profile').child(temp).putFile(f);
-          temp =
-          await storage.ref('profile').child(temp).getDownloadURL();
+          temp = await storage.ref('profile').child(temp).getDownloadURL();
           print(temp);
           userAsset = temp;
           profilesRef.doc(id).update({type: userAsset});
@@ -606,8 +613,7 @@ class ProfileData {
           String id = getMyProfileId();
           String temp = "$id-${DateTime.now().toUtc()}";
           await storage.ref('profile').child(temp).putFile(f);
-          temp =
-          await storage.ref('profile').child(temp).getDownloadURL();
+          temp = await storage.ref('profile').child(temp).getDownloadURL();
           print(temp);
           wallAsset = temp;
           profilesRef.doc(id).update({type: wallAsset});
@@ -640,25 +646,32 @@ class SearchData implements LazyLoadData {
 
 class Filter {
   /// lớp đại diện cho các điều kiện lọc cho tìm kiếm
-  late String? search_type;
-  late String? keyword;
-  late double? scoreThreshold;
+  String? search_type;
+  String? keyword;
+  double? scoreThreshold;
+  int? limit;
   List<double>? visibleRegion;
 
-  Filter({this.search_type,
-    this.keyword,
-    this.scoreThreshold,
-    this.visibleRegion});
+  Filter(
+      {this.search_type,
+      this.keyword,
+      this.scoreThreshold,
+      this.visibleRegion,
+      this.limit});
 }
 
 class ReactionData implements LazyLoadData {
+  // todo: thêm trigger để mỗi lần cập nhật sẽ update biến react trong post tương ứng
   String userId;
   String postId;
   int type;
   DateTime time;
 
   ReactionData(
-      {required this.userId, required this.postId, required this.type, required this.time});
+      {required this.userId,
+      required this.postId,
+      required this.type,
+      required this.time});
 
   factory ReactionData.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options) {
@@ -692,14 +705,14 @@ class Message {
   final bool unread;
   final DateTime createdAt;
 
-  Message({required this.senderId,
-    required this.receiverId,
-    required this.message,
-    required this.unread,
-    required this.createdAt});
+  Message(
+      {required this.senderId,
+      required this.receiverId,
+      required this.message,
+      required this.unread,
+      required this.createdAt});
 
-  static Message fromJson(Map<String, dynamic> json) =>
-      Message(
+  static Message fromJson(Map<String, dynamic> json) => Message(
         senderId: json["senderId"],
         receiverId: json["receiverId"],
         message: json["message"],
@@ -707,8 +720,7 @@ class Message {
         createdAt: json["createdAt"]?.toDate(),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "senderId": senderId,
         "receiverId": receiverId,
         "message": message,
