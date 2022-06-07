@@ -93,7 +93,7 @@ class _UserPictureState extends State<UserPicture> {
 
                                   ///10
                                   Text(
-                                    "Xem ảnh đại diện",
+                                    viewProfilePictureString,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: height / 56.87,
@@ -141,7 +141,7 @@ class _UserPictureState extends State<UserPicture> {
 
                                   ///10
                                   Text(
-                                    "Chọn ảnh đại diện",
+                                    selectProfilePictureString,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: height / 56.87,

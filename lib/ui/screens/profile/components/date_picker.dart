@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 
 import '../../../../util/constants/colors.dart';
 import '../../../../util/global.dart';
@@ -29,7 +30,7 @@ class _DateBirthState extends State<DateBirth> {
 
   @override
   Widget build(BuildContext context) {
-    String hintText = widget.mainText != null ? 'Sinh nhật ' : widget.type == "me" ? 'Chưa có thông tin' : 'Không có thông tin để hiển thị';
+    String hintText = widget.mainText != null ? dayOfBirthString : widget.type == "me" ? noInformationString : noInfoString;
     return ListTile(
       contentPadding: EdgeInsets.only(right: width / 41.1, left: width / 24.176, top: height / 284.33),
       title: RichText(
@@ -100,7 +101,7 @@ class _DateBirthState extends State<DateBirth> {
           padding: EdgeInsets.fromLTRB(0, height / 170.6, 0, height / 170.6), ///(5, 5)
           color: buttonColor,
           child: const Text(
-            "Thêm",
+            addString,
             style: TextStyle(
               color: Colors.white,
             ),
@@ -110,7 +111,7 @@ class _DateBirthState extends State<DateBirth> {
         onTap: () async {
           DateTime? d = await showDatePicker(
               context: context,
-              initialDate: DateTime.parse('1990-01-01'),
+              initialDate: DateTime.parse(defaultBirthdayString),
               firstDate: DateTime(DateTime.now().year - 70),
               lastDate: DateTime(DateTime.now().year),
               builder: (context, child) {

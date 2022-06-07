@@ -155,7 +155,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ///38
 
                                 child: GestureDetector(onTap: (){
-                                  /// todo: checkpoint
                                   Navigate.pushPage(
                                       context,
                                       DetailProfile(
@@ -177,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ///3
                                     ),
                                     const Text(
-                                      "Chỉnh sửa trang cá nhân",
+                                      editProfileString,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ],
@@ -244,8 +243,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       Text(
                                         widget.type == "other"
-                                            ? "Thêm bạn bè"
-                                            : "Bạn bè",
+                                            ? addFriendString
+                                            : friendString,
                                         style: TextStyle(
                                             color: widget.type == "other"
                                                 ? Colors.white
@@ -292,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ///3
                                       ),
                                       Text(
-                                        "Nhắn tin",
+                                        messageString,
                                         style: TextStyle(
                                             color: widget.type == "other"
                                                 ? Colors.black
@@ -363,7 +362,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         maxLines: 2,
                                         text: TextSpan(children: [
                                           TextSpan(
-                                            text: "Làm việc tại ",
+                                            text: worksAtString,
                                             style: TextStyle(
                                                 fontSize: height / 47.398,
 
@@ -427,7 +426,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         maxLines: 2,
                                         text: TextSpan(children: [
                                           TextSpan(
-                                            text: "Học tại ",
+                                            text: studyAtString,
                                             style: TextStyle(
                                                 fontSize: height / 47.398,
 
@@ -491,7 +490,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         maxLines: 2,
                                         text: TextSpan(children: [
                                           TextSpan(
-                                            text: "Sở thích ",
+                                            text: favoriteString,
                                             style: TextStyle(
                                                 fontSize: height / 47.398,
 
@@ -546,7 +545,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     maxLines: 2,
                                     text: TextSpan(children: [
                                       TextSpan(
-                                        text: "Đến từ ",
+                                        text: liveAtString,
                                         style: TextStyle(
                                             fontSize: height / 47.398,
 
@@ -600,7 +599,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 maxLines: 2,
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text: "Xem thông tin giới thiệu của ",
+                                    text: viewInfoString,
                                     style: TextStyle(
                                         fontSize: height / 47.398,
 
@@ -647,7 +646,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Bạn bè",
+                                  friendString,
                                   style: TextStyle(
                                       fontSize: height / 32.81,
 
@@ -696,7 +695,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ///38
                                 child: const Center(
                                   child: Text(
-                                    "Xem tất cả bạn bè",
+                                    viewAllFriendsString,
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ),

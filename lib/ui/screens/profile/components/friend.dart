@@ -4,6 +4,7 @@ import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
 
+//ignore:must_be_immutable
 class Friend extends StatelessWidget {
   final String userAsset;
   final String? firstName;
@@ -72,12 +73,6 @@ class Friend extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          /*Text(
-                      firstName!,
-                      style: const TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    Text(lastName!,
-                        style: const TextStyle(fontSize: 12, color: Colors.black)),*/
                           Text(
                             name!,
                             textAlign: TextAlign.center,

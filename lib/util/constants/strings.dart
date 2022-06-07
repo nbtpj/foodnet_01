@@ -32,6 +32,38 @@ const String search_food_hint_string = lang=='en'?"Which food to eat?":"Bạn mu
 const String current_string = ".đ";
 const String uploading_string = lang=='en'?'Uploading....':'Đang tải lên...';
 const String my_favorite_string = lang=='en'?'Favorite':'Yêu thích';
-
-
-
+const String introductionString = lang=='en'?'Introduction ' : 'Giới thiệu ';
+const String worksString = lang=='en'?'Works ':'Công việc ';
+const String addWorkString = lang=='en'?'Add Work':'Thêm công việc';
+const String worksAtString = lang=='en'?'Works at ':'Làm việc tại ';
+const String noInfoString = lang=='en'?'There is no information to show':"Không có thông tin để hiển thị";
+const String educationString = lang=='en'?'Education ':"Học vấn ";
+const String addEducationString = lang=='en'?'Add Education':"Thêm trường học";
+const String studyAtString = lang=='en'?'Studies at ':'Học tại ';
+const String locationString = lang=='en'?'Place lived  ':"Nơi sống ";
+const String addPlaceString = lang=='en'?'Add Place':"Thêm nơi sống";
+const String liveAtString = lang=='en'?'Live at ':'Đến từ ';
+const String basicInfoString = lang=='en'?'Basic info ':"Thông tin cơ bản ";
+const String genderString = lang=='en'?'Gender ':"Giới tính ";
+const String addGenderString = lang=='en'?'Add Gender':"Thêm giới tính";
+const String favoriteString = lang=='en'?'Favorite ':"Sở thích ";
+const String addFavoriteString = lang=='en'?'Add Favorite':"Thêm sở thích";
+const String editProfileString = lang=='en'?'Edit profile':"Chỉnh sửa trang cá nhân";
+const String addFriendString = lang=='en'?'Add Friend':"Thêm bạn bè";
+const String friendString = lang=='en'?'Friends':"Bạn bè";
+const String messageString = lang=='en'?'Message':"Nhắn tin";
+const String viewInfoString = lang=='en'?'See Info of ':"Xem thông tin giới thiệu của ";
+const String viewAllFriendsString = lang=='en'?'See all friends':"Xem tất cả bạn bè";
+const String dayOfBirthString = lang=='en'?'Birthday ':'Sinh nhật ';
+const String noInformationString = lang=='en'?'There is no information':'Chưa có thông tin';
+const String addString = lang=='en'?'Add':'Thêm';
+const String saveString = lang=='en'?'Save':'Lưu';
+const String defaultBirthdayString = '1990-01-01';
+const String defaultGender = lang=='en'?'Gender':'Giới tính';
+const String maleString = lang=='en'?'Male':'Nam';
+const String femaleString = lang=='en'?'Female':"Nữ";
+const String differentString = lang=='en'?'Others':"Khác";
+const String viewProfilePictureString = lang=='en'?'View Profile Picture':"Xem ảnh đại diện";
+const String selectProfilePictureString = lang=='en'?'Select profile picture':"Chọn ảnh đại diện";
+const String seeCoverPhotoString = lang=='en'?'See cover photo':"Xem ảnh bìa";
+const String uploadCoverPhotoString = lang=='en'?'Upload cover photo':"Chọn ảnh bìa";
