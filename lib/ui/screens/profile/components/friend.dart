@@ -44,11 +44,23 @@ class Friend extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(height / 85.3), ///10
                         topRight: Radius.circular(height / 85.3)), ///10
-                    child: Image.asset(
+                    child: Image.network(
                       userAsset,
                       width: width / 4.567, ///90
                       height: height / 8.36, ///102
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   )),
               Positioned(

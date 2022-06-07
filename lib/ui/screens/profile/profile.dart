@@ -651,6 +651,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 Text(
+                                  ///todo: So ban va so ban chung
                                   "864 (3 bạn chung)",
                                   style: TextStyle(
                                     color: const Color(0xffacacae),
