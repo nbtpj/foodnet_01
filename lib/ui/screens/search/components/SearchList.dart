@@ -51,7 +51,7 @@ class _SearchListState extends State<SearchList> {
       }
     }
     if (type == "add") {
-      RecentUserSearchData data = RecentUserSearchData(userAsset: editContent!.userAsset, profileId: editContent.id, name: editContent.name, id: '') ;
+      RecentUserSearchData data = RecentUserSearchData(userAsset: editContent!.userAsset, profileId: editContent.id, name: editContent.name, id: '', createAt: DateTime.now(),) ;
       await checkEqualRecentUsers(getMyProfileId(), data);
       bool success = await addRecentUsers(getMyProfileId(), data);
       if (!success) {

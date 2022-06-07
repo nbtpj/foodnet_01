@@ -284,7 +284,7 @@ Future<ProfileData?> getProfile(String id) async {
 Stream<RecentUserSearchData> getRecentUsers(String id) async* {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
-  var a = await recentUsersRef(id).get();
+  var a = await recentUsersRef(id).orderBy("createAt", descending: true,).get();
   print('get!' + id.toString());
   print(a);
   print('_______________');
@@ -321,6 +321,7 @@ Future<bool> addRecentUsers(String id, RecentUserSearchData data) async {
   /// hàm lấy một đối tượng UserData dựa trên id
   // TODO: implement get_user
   try {
+    print(data);
     await recentUsersRef(id).add(data).then((documentSnapshot) =>
       recentUsersRef(id).doc(documentSnapshot.id).update({"id": documentSnapshot.id}));
     return true;

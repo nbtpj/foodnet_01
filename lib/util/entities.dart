@@ -727,12 +727,14 @@ class RecentUserSearchData implements LazyLoadData {
   final String userAsset;
   final String? profileId;
   final String name;
+  late DateTime createAt;
 
   RecentUserSearchData({
     required this.userAsset,
     required this.id,
     required this.name,
     this.profileId,
+    required this.createAt,
   });
 
   static RecentUserSearchData fromJson(Map<String, dynamic> json) =>
@@ -741,6 +743,7 @@ class RecentUserSearchData implements LazyLoadData {
         id: json["id"],
         name: json["name"],
         profileId: json["profileId"],
+        createAt: json["createAt"].toDate(),
       );
 
   Map<String, dynamic> toJson() =>
@@ -749,6 +752,7 @@ class RecentUserSearchData implements LazyLoadData {
         "id": id,
         "name": name,
         "profileId": profileId,
+        "createAt": createAt.toUtc(),
       };
 
   @override
