@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../../util/constants/strings.dart';
 import '../../../../util/global.dart';
 
 class FriendListItem extends StatefulWidget {
@@ -114,7 +115,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       ),
                                       SizedBox(width: width / 41.1), ///10
                                       Text(
-                                        "Nhắn tin cho " + widget.name,
+                                        sentMessageString + widget.name,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height / 56.867, ///15
@@ -137,7 +138,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       ),
                                       SizedBox(width: width / 41.1), ///10
                                       Text(
-                                        "Huỷ kết bạn với " + widget.name,
+                                        unFriendString + widget.name,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height / 56.867, ///15
@@ -167,7 +168,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                     backgroundImage: AssetImage(widget.userAsset),
                   ),
                 ),
-                subtitle: Text(widget.mutualFriends.toString() + " bạn chung"),
+                subtitle: Text(widget.mutualFriends.toString() + " " + mutualismFriendString),
               ),
               onTap: () {
                 // todo: Navigate.pushPage(context, ProfilePage(id: "2"));

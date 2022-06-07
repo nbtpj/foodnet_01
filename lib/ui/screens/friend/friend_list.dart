@@ -16,7 +16,7 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
-  Widget buildfriendlist(AsyncSnapshot<List<FriendData>> snapshot) {
+  Widget buildFriendList(AsyncSnapshot<List<FriendData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
       return ListView.builder(
@@ -72,7 +72,7 @@ class _FriendListState extends State<FriendList> {
                   ///30
                 ),
                 Text(
-                  "Bạn bè ",
+                  friendString + " ",
                   style: TextStyle(
                       fontSize: height / 28.43, fontWeight: FontWeight.bold),
 
@@ -112,7 +112,7 @@ class _FriendListState extends State<FriendList> {
                 filled: true,
 
                 fillColor: Colors.grey[300],
-                hintText: 'Tìm kiếm bạn bè',
+                hintText: searchFriendString,
                 contentPadding: EdgeInsets.only(top: height / 60.93),
 
                 ///14
@@ -163,7 +163,7 @@ class _FriendListState extends State<FriendList> {
                         ],
                       ),
                     ),
-                    buildfriendlist(snapshot)
+                    buildFriendList(snapshot)
                   ],
                 ),
               );

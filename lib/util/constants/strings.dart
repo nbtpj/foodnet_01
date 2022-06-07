@@ -69,3 +69,14 @@ const String seeCoverPhotoString = lang=='en'?'See cover photo':"Xem ảnh bìa"
 const String uploadCoverPhotoString = lang=='en'?'Upload cover photo':"Chọn ảnh bìa";
 const String searchUser = lang=='en'?'Search User':"Tìm kiếm người dùng";
 const String searchConversation = lang=='en'?'Search Conversation':"Tìm kiếm cuộc trò chuyện";
+const String searchFriendString = lang=='en'?'Search Friend':'Tìm kiếm bạn bè';
+const String friendInvitation = lang=='en'?'Friend Requests':"Lời mời kết bạn";
+const String suggestionString = lang=='en'?'Suggestions':"Gợi ý";
+const String friendMayKnowString = lang=='en'?'People You May Know':"Những người bạn có thể biết";
+const String mutualismFriendString = lang=='en'?'mutual friends':"bạn chung";
+const String confirmString = lang=='en'?'Confirm':"Xác nhận";
+const String deleteString = lang=='en'?'Delete':"Xoá";
+const String sayHiString = lang=='en'?'  Say Hi':"  Gửi lời chào";
+const String requestSentString = lang=='en'?'Request sent':"Đã gửi yêu cầu";
+const String sentMessageString = lang=='en'?'Message ':"Nhắn tin cho ";
+const String unFriendString = lang=='en'?'Unfriend ':"Huỷ kết bạn với ";

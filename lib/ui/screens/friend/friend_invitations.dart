@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_suggestions.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../util/constants/strings.dart';
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
 import '../../../util/global.dart';
@@ -98,7 +99,7 @@ class _FriendsState extends State<Friends> {
                             width: width / 5.87, ///70
                             height: height / 28.43, ///30
                             child: const Text(
-                                "Bạn bè",
+                                friendString,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -121,7 +122,7 @@ class _FriendsState extends State<Friends> {
                       child: Row(
                         children: [
                           Text(
-                            "Lời mời kết bạn",
+                            friendInvitation,
                             style: TextStyle(
                                 fontSize: height / 34.12, ///25
                                 fontWeight: FontWeight.bold),

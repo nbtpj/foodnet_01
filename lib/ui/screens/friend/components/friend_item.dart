@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
+import '../../../../util/constants/strings.dart';
 import '../../../../util/global.dart';
 
 class FriendItem extends StatefulWidget {
@@ -102,7 +103,7 @@ class _FriendItemState extends State<FriendItem> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          widget.mutualism.toString() + " bạn chung",
+                          widget.mutualism.toString() + ' ' + mutualismFriendString,
                           style: TextStyle(fontSize: height / 56.867) ///15,
                       ),
                       FittedBox(
@@ -158,7 +159,7 @@ class UnConfirm extends StatelessWidget {
               height: height / 28.43, ///30
               alignment: Alignment.center,
               child: Text(
-                type == "invitation" ? "Xác nhận" : "Thêm bạn bè",
+                type == "invitation" ? confirmString : addFriendString,
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -181,7 +182,7 @@ class UnConfirm extends StatelessWidget {
             height: height / 28.43, ///30
             alignment: Alignment.center,
             child: const Text(
-                "Xoá",
+                deleteString,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -227,12 +228,12 @@ class Confirmed extends StatelessWidget {
                         color: Colors.yellow,
                       ),
                       const Text(
-                        "  Gửi lời chào",
+                        sayHiString,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ) : const Text(
-                        "Đã gửi yêu cầu",
+                        requestSentString,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
 
