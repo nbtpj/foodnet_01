@@ -9,8 +9,12 @@ import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 
+import '../../../util/constants/strings.dart';
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
+import '../detailed_list/full_list.dart';
+import '../home/components/food_part.dart';
+import '../home/widgets/my_posts.dart';
 import '../search/search.dart';
 import 'components/friend.dart';
 
@@ -737,6 +741,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             return const Center();
                           }
                         }),
+                    SizedBox(height: height / 75,),
+                    GestureDetector(
+                        onTap: () async {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return DetailList(
+                              name: my_post_string,
+                            );
+                          }));
+                        },
+                        child: FoodPart(partName: my_post_string)),
+                    const MyFoods(),
                   ],
                 ),
               )),
