@@ -3,6 +3,7 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../util/constants/strings.dart';
 import '../../../util/global.dart';
 import 'components/SearchList.dart';
 
@@ -60,8 +61,8 @@ class _SearchPageState extends State<SearchPage> {
                       contentPadding: EdgeInsets.only(left: width / 27.4 ,top: height / 85.3, bottom: height / 85.3), ///(15, 10, 10)
                       border: InputBorder.none,
                       isDense: true,
-                      hintText: widget.type == "user" ? "Tìm kiếm người dùng"
-                          : widget.type == "chat" ? "Tìm kiếm cuộc trò chuyện" : "Bạn muốn ăn gì?"
+                      hintText: widget.type == "user" ? searchUser
+                          : searchConversation,
                   ),
                   onChanged: (text) {
                     keyword = text;
