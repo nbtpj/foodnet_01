@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodnet_01/ui/screens/search/searchResult.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/navigate.dart';
@@ -27,8 +26,13 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
-    Future<List<SearchData>> fetchData(String type, String keyword) {
-      return getSearchData(Filter(search_type: type, keyword: keyword)).toList();
+
+    Stream<RecentUserSearchData> fetchRecentUserData() {
+        return getRecentUsers(getMyProfileId());
+    }
+
+    Stream<ProfileData> fetchData(String type, String keyword) {
+        return pseudoSearchUser(keyword);
     }
 
     return Scaffold(
@@ -71,24 +75,28 @@ class _SearchPageState extends State<SearchPage> {
                       });
                     }
                   },
-                  onSubmitted: (text) {
-                    if (text != "") {
-                      Navigate.pushPage(context, SearchResult(keyWord: text, type: widget.type));
-                    }
-                  },
                 ),
               )
             ],
           ),
 
-          FutureBuilder <List<SearchData>>(
-              future: fetchData((isTextFieldEmpty && widget.type == "user") ? "recentUser" : widget.type,
-                  keyword),
+          (isTextFieldEmpty == true && widget.type == "user") ?
+          FutureBuilder <List<RecentUserSearchData>?> (
+              future: fetchRecentUserData().toList(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var searchList = snapshot.data ?? [];
-                  return isTextFieldEmpty ? SearchList(searchList: searchList, type: "recentSearch",)
-                      : SearchList(searchList: searchList, type: widget.type, keyword: keyword,);
+                  return SearchList(recentData: searchList);
+                } else {
+                  return const SizedBox(width: 0, height: 0,);
+                }
+              }
+          ) : FutureBuilder <List<ProfileData>?>(
+              future: fetchData(widget.type, keyword).toList(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var searchList = snapshot.data ?? [];
+                  return SearchList(searchList: searchList, keyword: keyword);
                 } else {
                   return const SizedBox(width: 0, height: 0,);
                 }

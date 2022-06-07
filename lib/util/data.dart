@@ -55,6 +55,20 @@ CollectionReference<FriendData> friendsRef(String profileId) {
           toFirestore: (friendData, _) => friendData.toJson());
 }
 
+CollectionReference<RecentUserSearchData> recentUsersRef(String profileId) {
+  return FirebaseFirestore.instance
+      .collection('reccentUserSearch')
+      .doc(profileId)
+      .collection("recentList")
+      .withConverter(
+      fromFirestore: (snapshot, _) {
+        var data = snapshot.data()!;
+        data["id"] = snapshot.id;
+        return RecentUserSearchData.fromJson(data);
+      },
+      toFirestore: (recentUserData, _) => recentUserData.toJson());
+}
+
 CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     .collection('profiles')
     .withConverter<ProfileData>(
@@ -70,6 +84,15 @@ CollectionReference<ReactionData> flattenReactionRef =
 FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
     fromFirestore: ReactionData.fromJson,
     toFirestore: (reactionData, _) => reactionData.toJson());
+
+CollectionReference<RecentUserSearchData> recentUserRef =
+FirebaseFirestore.instance.collection('reccentUserSearch').withConverter<RecentUserSearchData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return RecentUserSearchData.fromJson(data);
+    },
+    toFirestore: (recentUser, _) => recentUser.toJson());
 
 
 Future<PostData?> getPost(String id) async {
@@ -94,6 +117,64 @@ Stream<PostData> pseudoFullTextSearchPost(String key) async* {
   });
   for (var tuple in scores) {
     yield tuple.item2 as PostData;
+  }
+}
+
+String standard(String s) {
+  for (int i = 0; i < s.length; i++) {
+    if (s[i] == 'á' || s[i] == 'à' || s[i] == 'ả' || s[i] == 'ạ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'ă' || s[i] == 'ằ' || s[i] == 'ẳ' || s[i] == 'ặ' || s[i] == 'ắ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'â' || s[i] == 'ầ' || s[i] == 'ẩ' || s[i] == 'ậ' || s[i] == 'ấ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'đ') {
+      s = s.replaceRange(i, i+1, 'd');
+    }
+    if (s[i] == 'ê' || s[i] == 'ề' || s[i] == 'ể' || s[i] == 'ệ' || s[i] == 'ế') {
+      s = s.replaceRange(i, i+1, 'e');
+    }
+    if (s[i] == 'í' || s[i] == 'ì' || s[i] == 'ỉ' || s[i] == 'ị') {
+      s = s.replaceRange(i, i+1, 'i');
+    }
+    if (s[i] == 'ó' || s[i] == 'ò' || s[i] == 'ỏ' || s[i] == 'ọ') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ô' || s[i] == 'ồ' || s[i] == 'ổ' || s[i] == 'ộ' || s[i] == 'ố') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ơ' || s[i] == 'ờ' || s[i] == 'ở' || s[i] == 'ợ' || s[i] == 'ớ') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ú' || s[i] == 'ù' || s[i] == 'ủ' || s[i] == 'ụ') {
+      s = s.replaceRange(i, i+1, 'u');
+    }
+    if (s[i] == 'ứ' || s[i] == 'ừ' || s[i] == 'ử' || s[i] == 'ự' || s[i] == 'ư') {
+      s = s.replaceRange(i, i+1, 'u');
+    }
+  }
+  return s;
+}
+
+Stream<ProfileData> pseudoSearchUser(String key) async* {
+  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
+  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
+  print(standard("lương"));
+  var profileSnapshot = await profilesRef.get();
+  List<ProfileData> profiles = [];
+  for (var doc in profileSnapshot.docs) {
+    var profile = doc.data();
+    String txt = standard(profile.name.toLowerCase());
+    if (txt.contains(standard(key.toLowerCase()))) {
+      profiles.add(profile);
+    }
+  }
+
+  for (var profile in profiles) {
+    yield profile;
   }
 }
 
@@ -190,7 +271,93 @@ Future<ProfileData?> getProfile(String id) async {
   return a;
 }
 
-Stream<ProfileData> getProfiles(Filter filter) async* {
+/*Future<RecentUserSearchData?> getRecentUser(String id) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  var a = (await recentUserRef.doc(id).get()).data();
+  print('get!' + id.toString());
+  print(a);
+  print('_______________');
+  return a;
+}*/
+
+Stream<RecentUserSearchData> getRecentUsers(String id) async* {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  var a = await recentUsersRef(id).get();
+  print('get!' + id.toString());
+  print(a);
+  print('_______________');
+  for (var doc in a.docs) {
+    yield doc.data();
+  }
+}
+
+Future<bool> checkEqualRecentUsers(String id, RecentUserSearchData temp) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  try {
+    var a = await recentUsersRef(id).get();
+    print('get!' + id.toString());
+    print(a);
+    print('_______________');
+    for (var doc in a.docs) {
+      if (temp.profileId == doc.data().profileId) {
+        bool success = await deleteRecentUsers(id, doc.data().id);
+        if (!success) {
+          return false;
+        }
+      }
+    }
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+
+}
+
+Future<bool> addRecentUsers(String id, RecentUserSearchData data) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  try {
+    await recentUsersRef(id).add(data).then((documentSnapshot) =>
+      recentUsersRef(id).doc(documentSnapshot.id).update({"id": documentSnapshot.id}));
+    return true;
+  } catch (e) {
+    print("Cannot add doc");
+    return false;
+  }
+}
+
+Future<bool> deleteRecentUsers(String id, String deleteId) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  try {
+    await recentUsersRef(id).doc(deleteId).delete();
+    return true;
+  } catch (e) {
+    print("Cannot delete doc");
+    return false;
+  }
+}
+
+Future<bool> deleteAllRecentUsers(String id) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  // TODO: implement get_user
+  try {
+    var a = await recentUsersRef(id).get();
+    for (var doc in a.docs) {
+      recentUsersRef(id).doc(doc.id).delete();
+    }
+    return true;
+  } catch (e) {
+    print("Cannot delete doc");
+    return false;
+  }
+}
+
+Stream<ProfileData> getProfiles() async* {
   /// lấy 1 danh sách user theo điều kiệu lọc
   /// trả về dạng stream
   // TODO: implement get_users

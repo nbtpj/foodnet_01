@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_geohash/dart_geohash.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -461,7 +462,7 @@ class FriendData implements LazyLoadData {
   }
 }
 
-class ProfileData {
+class ProfileData extends Equatable {
   String? id;
   String name;
   late String userAsset;
@@ -619,6 +620,10 @@ class ProfileData {
     }
     return true;
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id];
 }
 
 class SearchData implements LazyLoadData {
@@ -715,4 +720,40 @@ class Message {
         "unread": unread,
         "createdAt": createdAt.toUtc(),
       };
+}
+
+class RecentUserSearchData implements LazyLoadData {
+  late String id;
+  final String userAsset;
+  final String? profileId;
+  final String name;
+
+  RecentUserSearchData({
+    required this.userAsset,
+    required this.id,
+    required this.name,
+    this.profileId,
+  });
+
+  static RecentUserSearchData fromJson(Map<String, dynamic> json) =>
+      RecentUserSearchData(
+        userAsset: json["userAsset"],
+        id: json["id"],
+        name: json["name"],
+        profileId: json["profileId"],
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "userAsset": userAsset,
+        "id": id,
+        "name": name,
+        "profileId": profileId,
+      };
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }
+
 }

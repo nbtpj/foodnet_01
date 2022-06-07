@@ -3,21 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
 
 import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
+import '../../../../util/navigate.dart';
+import '../../profile/profile.dart';
 
+//ignore: must_be_immutable
 class SearchList extends StatefulWidget {
-  final List<SearchData> searchList;
-  final String type;
+  late List<ProfileData>? searchList;
   final String? keyword;
-  final bool? isResult;
-  const SearchList({
+  late List<RecentUserSearchData>? recentData;
+
+  SearchList({
     Key? key,
-    required this.searchList,
-    required this.type,
+    this.searchList,
     this.keyword,
-    this.isResult,
+    this.recentData,
   }) : super(key: key);
 
   @override
@@ -26,49 +29,60 @@ class SearchList extends StatefulWidget {
 
 class _SearchListState extends State<SearchList> {
 
-  buildListItem(String asset, String name, String type) {
+  Future<void> edit(ProfileData? editContent, String type, String? id, int? index) async {
+    if (type == "erase") {
+      bool success = await deleteRecentUsers(getMyProfileId(), id!);
+      if (!success) {
+        debugPrint("error");
+      } else {
+        setState(() {
+          widget.recentData!.removeAt(index!);
+        });
+      }
+    }
+    if (type == "eraseAll") {
+      bool success = await deleteAllRecentUsers(getMyProfileId());
+      if (!success) {
+        debugPrint("error");
+      } else {
+        setState(() {
+          widget.recentData!.clear();
+        });
+      }
+    }
+    if (type == "add") {
+      RecentUserSearchData data = RecentUserSearchData(userAsset: editContent!.userAsset, profileId: editContent.id, name: editContent.name, id: '') ;
+      await checkEqualRecentUsers(getMyProfileId(), data);
+      bool success = await addRecentUsers(getMyProfileId(), data);
+      if (!success) {
+        debugPrint("error");
+      }
+    }
+  }
+
+  buildListItem(ProfileData? data, int index, RecentUserSearchData? rdata) {
     double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: asset == "icon" ? Icon(Icons.access_time, size: height / 21.325,) ///40
-        : CircleAvatar(
+        leading: CircleAvatar(
           radius: height / 42.65, ///20
-          backgroundImage: AssetImage(asset),
+          backgroundImage: NetworkImage(data != null ? data.userAsset : rdata!.userAsset),
         ),
-        title: Text(name),
+        title: Text(data!= null ? data.name : rdata!.name),
         trailing: IconButton(
-          icon: Icon(type == "recentSearch" ? Icons.clear : Icons.arrow_forward),
-          onPressed: () {},
+          icon: Icon(widget.keyword != null ? Icons.forward : Icons.clear),
+          onPressed: () {
+            if (widget.keyword == null) {
+              edit(null, "erase", rdata!.id, index);
+            }
+          },
         ),
       ),
       onTap: () {
-        if (widget.type == "user" || (widget.type == "recentSearch" && asset != "icon")) {
-          // todo: Navigate.pushPage(context, ProfilePage(id: '1',));
-        }
+        edit(data, "add", null, null);
+        Navigate.pushPage(context, ProfilePage(id: data != null ? data.id! : rdata!.profileId!,));
       },
-    );
-  }
-
-  buildResultItem(String asset, String name, String type) {
-    double height = SizeConfig.screenHeight;
-    return InkWell(
-      child: ListTile(
-        isThreeLine: true,
-        contentPadding: EdgeInsets.zero,
-        leading: asset == "icon" ?  Icon(Icons.access_time, size: height / 21.325,) ///40
-            : CircleAvatar(
-          radius: height / 28.43, ///30
-          backgroundImage: AssetImage(asset),
-        ),
-        title: Text(
-            name,
-            style: TextStyle(
-              fontSize: height / 42.65, ///20
-            ),
-        ),
-        subtitle: const Text("Bạn bè - Trường Đại học Công nghệ Đại học quốc gia Hà Nội - Sống tại Hà Nội"),
-      ),
     );
   }
 
@@ -83,58 +97,31 @@ class _SearchListState extends State<SearchList> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                widget.type == "recentSearch" ? Row(
+                widget.keyword == null ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:  [
                     Text(recent_search_string, style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),), ///22
-                    Text(delete_all_string, style: TextStyle(fontSize: height / 38.77, color: buttonColor, )), ///22
+                    InkWell(
+                      child: Text(delete_all_string, style: TextStyle(fontSize: height / 38.77, color: buttonColor, )), ///22,
+                      onTap: () {
+                        edit(null, "eraseAll", null, null);
+                      },
+                    ),
                   ],
-                ) : widget.isResult != null && widget.isResult!
-                    ? Text(result_string, style: TextStyle(fontSize: height / 38.77, fontWeight: FontWeight.bold),) ///22
-                    : const SizedBox(width: 0, height: 0,),
+                ) : const SizedBox(width: 0, height: 0,),
 
                 ListView.builder(
-                    padding: EdgeInsets.only(top: height / 85.3), ///10
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.searchList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (widget.isResult != null && widget.isResult!) {
-                        return buildResultItem(widget.searchList[index].asset!, widget.searchList[index].name, widget.type);
-                      } else {
-                        return buildListItem(widget.searchList[index].asset == null ? "icon" : widget.searchList[index].asset!, widget.searchList[index].name, widget.type);
-                      }
-                    },
+                  padding: EdgeInsets.only(top: height / 85.3), ///10
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.searchList != null ? widget.searchList!.length : widget.recentData!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return buildListItem(widget.searchList != null ? widget.searchList![index] : null, index, widget.recentData != null ? widget.recentData![index] : null);
+                  },
                 ),
 
                 SizedBox(height: height / 85.3,), ///10
-
-                widget.keyword == null ? const SizedBox(width: 0, height: 0,)
-                    : RichText(
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  textAlign: TextAlign.left,
-                  text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text:  see_search_result_string,
-                          style: TextStyle(
-                            fontSize: height / 47.39, ///18
-                            color: buttonColor,
-                          ),
-                        ),
-                        TextSpan(
-                          text: widget.keyword,
-                          style: TextStyle(
-                            fontSize: height / 47.39, ///18
-                            fontWeight: FontWeight.w500,
-                            color: buttonColor,
-                          ),
-                        )
-                      ]
-                  ),
-                )
-              ],
+              ]
             ),
           ),
         )
