@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
+import 'package:foodnet_01/ui/screens/home/widgets/others_posts.dart';
 import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/components/wall_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
@@ -746,12 +747,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             return DetailList(
-                              name: my_post_string,
+                              name: widget.type == "me" ? my_post_string : postString,
+                              id: widget.type == "me" ? null : profile.id,
                             );
                           }));
                         },
-                        child: FoodPart(partName: my_post_string)),
-                    const MyFoods(),
+                        child: FoodPart(partName: widget.type == "me" ? my_post_string : postString)),
+                    widget.type == 'me' ? const MyFoods() : OtherFoods(id: profile.id),
                   ],
                 ),
               )),

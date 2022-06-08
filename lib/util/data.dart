@@ -240,6 +240,15 @@ Stream<PostData> getPosts(Filter filter) async* {
         }
       }
       break;
+    case 'others':
+      var foodSnapshot = await postsRef
+          .where('author_uid', isEqualTo: filter.keyword)
+          .limit(10)
+          .get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+      break;
     default:
       var foodSnapshot = await postsRef.limit(10).get();
       for (var doc in foodSnapshot.docs) {

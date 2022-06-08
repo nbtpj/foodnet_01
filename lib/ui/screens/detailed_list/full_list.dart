@@ -8,6 +8,7 @@ import 'package:tuple/tuple.dart';
 
 class DetailList extends StatefulWidget {
   late String name;
+  final String? id;
 
   Stream<PostData> _fetcher() async* {
     switch (name) {
@@ -39,6 +40,15 @@ class DetailList extends StatefulWidget {
           yield doc.data();
         }
         break;
+      case postString:
+        var foodSnapshot = await postsRef
+            .where('author_uid', isEqualTo: id)
+            .limit(10)
+            .get();
+        for (var doc in foodSnapshot.docs) {
+          yield doc.data();
+        }
+        break;
       default:
         var foodSnapshot = await postsRef.get();
         for (var doc in foodSnapshot.docs) {
@@ -47,7 +57,7 @@ class DetailList extends StatefulWidget {
     }
   }
 
-  DetailList({Key? key, required this.name}) : super(key: key);
+  DetailList({Key? key, required this.name, this.id}) : super(key: key);
 
   @override
   _DetailList createState() {

@@ -80,3 +80,4 @@ const String sayHiString = lang=='en'?'  Say Hi':"  Gửi lời chào";
 const String requestSentString = lang=='en'?'Request sent':"Đã gửi yêu cầu";
 const String sentMessageString = lang=='en'?'Message ':"Nhắn tin cho ";
 const String unFriendString = lang=='en'?'Unfriend ':"Huỷ kết bạn với ";
+const String postString = lang=='en'? "Post":"Bài đăng";
