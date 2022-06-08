@@ -432,6 +432,18 @@ Future<bool> acceptFriendRequest(String profileId) async{
   }
 }
 
+Future<bool> cancelFriend(String profileId) async{
+  try {
+    final friendCollectionRef1 = friendsRef(profileId);
+    final friendCollectionRef2 = friendsRef(getMyProfileId());
+    await friendCollectionRef1.doc(getMyProfileId()).delete();
+    await friendCollectionRef2.doc(profileId).delete();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);

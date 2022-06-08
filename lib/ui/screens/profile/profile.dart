@@ -267,22 +267,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ],
                                             ),
                                             onTap: () async {
-                                              if (widget.type == "none") {
-                                                bool success = await addFriendRequest(profile);
-                                                print(success);
-                                                if (success) {
-                                                  setState(() {
-                                                    widget.type = "requests";
-                                                  });
-                                                }
-                                              }
-                                              if (widget.type == "invitations") {
-                                                bool success = await acceptFriendRequest(profile.id!);
-                                                if (success) {
-                                                  setState(() {
-                                                    widget.type = "friends";
-                                                  });
-                                                }
+                                              switch (widget.type) {
+                                                case "none":
+                                                  bool success = await addFriendRequest(profile);
+                                                  if (success) {
+                                                    setState(() {
+                                                      widget.type = "requests";
+                                                    });
+                                                  }
+                                                  break;
+                                                case "invitations":
+                                                  bool success = await acceptFriendRequest(profile.id!);
+                                                  if (success) {
+                                                    setState(() {
+                                                      widget.type = "friends";
+                                                    });
+                                                  }
+                                                  break;
+                                                case "requests":
+                                                  bool success = await cancelFriend(profile.id!);
+                                                  if (success) {
+                                                    setState(() {
+                                                      widget.type = "none";
+                                                    });
+                                                  }
+                                                  break;
                                               }
                                             },
                                           ),
