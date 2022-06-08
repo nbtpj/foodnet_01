@@ -430,6 +430,7 @@ class FriendData implements LazyLoadData {
   String name;
   DateTime time;
   String userAsset;
+  String type;
   int mutualism;
 
   FriendData({
@@ -437,6 +438,7 @@ class FriendData implements LazyLoadData {
     required this.name,
     required this.time,
     required this.userAsset,
+    required this.type,
     required this.mutualism,
   });
 
@@ -451,6 +453,7 @@ class FriendData implements LazyLoadData {
       name: json["name"]! as String,
       userAsset: json["userAsset"] as String,
       time: (json['time'] as Timestamp).toDate(),
+      type: json['type'] as String,
       mutualism: 0);
 
   String get time_string {
@@ -458,7 +461,7 @@ class FriendData implements LazyLoadData {
   }
 
   Map<String, Object?> toJson() {
-    return {"id": id, "name": name, "time": time, "userAsset": userAsset};
+    return {"id": id, "name": name, "time": time, "userAsset": userAsset, "type": type};
   }
 }
 

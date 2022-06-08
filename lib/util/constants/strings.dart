@@ -81,3 +81,4 @@ const String requestSentString = lang=='en'?'Request sent':"Đã gửi yêu cầ
 const String sentMessageString = lang=='en'?'Message ':"Nhắn tin cho ";
 const String unFriendString = lang=='en'?'Unfriend ':"Huỷ kết bạn với ";
 const String postString = lang=='en'? "Post":"Bài đăng";
+const String cancelRequestString = lang=='en' ? "Cancel Request":"Huỷ yêu cầu";
