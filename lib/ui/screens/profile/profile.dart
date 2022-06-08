@@ -600,7 +600,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 maxLines: 2,
                                 text: TextSpan(children: [
                                   TextSpan(
-                                    text: viewInfoString,
+                                    text: widget.type == "me" ? editProfileString : viewInfoString,
                                     style: TextStyle(
                                         fontSize: height / 47.398,
 
@@ -608,7 +608,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: Colors.black),
                                   ),
                                   TextSpan(
-                                    text: profile.name,
+                                    text: widget.type == "me" ? "" : profile.name,
                                     style: TextStyle(
                                       fontSize: height / 47.398,
 
@@ -656,7 +656,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 Text(
                                   ///todo: So ban va so ban chung
-                                  "864 (3 bạn chung)",
+                                  profile.friendsNumber.toString() +  " " + friend_string,
                                   style: TextStyle(
                                     color: const Color(0xffacacae),
                                     fontSize: height / 53.3125,
