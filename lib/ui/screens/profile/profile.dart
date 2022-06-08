@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/others_posts.dart';
 import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
@@ -212,23 +213,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: widget.type == "friends"
-                                                ? Colors.grey.shade300
-                                                : buttonColor,
-                                            borderRadius:
-                                            BorderRadius.circular(height / 47.39),
+                                        InkWell(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: widget.type == "friends"
+                                                  ? Colors.grey.shade300
+                                                  : buttonColor,
+                                              borderRadius:
+                                              BorderRadius.circular(height / 47.39),
 
-                                            ///18
-                                          ),
-                                          width: width / 2.834,
+                                              ///18
+                                            ),
+                                            width: width / 2.834,
 
-                                          ///145
-                                          height: height / 22.45,
+                                            ///145
+                                            height: height / 22.45,
 
-                                          ///38
-                                          child: InkWell(
+                                            ///38
                                             child: Row(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -266,127 +267,132 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                               ],
                                             ),
-                                            onTap: () async {
-                                              switch (widget.type) {
-                                                case "none":
-                                                  bool success = await addFriendRequest(profile);
-                                                  if (success) {
-                                                    setState(() {
-                                                      widget.type = "requests";
-                                                    });
-                                                  }
-                                                  break;
-                                                case "invitations":
-                                                  bool success = await acceptFriendRequest(profile.id!);
-                                                  if (success) {
-                                                    setState(() {
-                                                      widget.type = "friends";
-                                                    });
-                                                  }
-                                                  break;
-                                                case "requests":
-                                                  bool success = await cancelFriend(profile.id!);
-                                                  if (success) {
-                                                    setState(() {
-                                                      widget.type = "none";
-                                                    });
-                                                  }
-                                                  break;
-                                                case "friends":
-                                                  showModalBottomSheet(
-                                                      context: context,
-                                                      builder: (builder) {
-                                                        return SizedBox(
-                                                          height: height / 10.7087,
-                                                          child: Column(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: height / 56.87, ///15
-                                                              ),
-                                                              InkWell(
-                                                                child: Row(
-                                                                  children: [
-                                                                    SizedBox(width: width / 27.5), ///15
-                                                                    CircleAvatar(
-                                                                      backgroundColor: Colors.grey[350],
-                                                                      child: const Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
-                                                                    ),
-                                                                    SizedBox(width: width / 41.1), ///10
-                                                                    Text(
-                                                                      unFriendString + profile.name,
-                                                                      style: TextStyle(
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontSize: height / 56.867, ///15
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                onTap: () async {
-                                                                  bool success = await cancelFriend(widget.id);
-                                                                  if (success) {
-                                                                    setState(() {
-                                                                      widget.type = "none";
-                                                                    });
-                                                                    Navigate.popPage(context);
-                                                                  }
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      }
-                                                  );
-                                                  break;
-                                              }
-                                            },
                                           ),
+                                          onTap: () async {
+                                            switch (widget.type) {
+                                              case "none":
+                                                bool success = await addFriendRequest(profile);
+                                                if (success) {
+                                                  setState(() {
+                                                    widget.type = "requests";
+                                                  });
+                                                }
+                                                break;
+                                              case "invitations":
+                                                bool success = await acceptFriendRequest(profile.id!);
+                                                if (success) {
+                                                  setState(() {
+                                                    widget.type = "friends";
+                                                  });
+                                                }
+                                                break;
+                                              case "requests":
+                                                bool success = await cancelFriend(profile.id!);
+                                                if (success) {
+                                                  setState(() {
+                                                    widget.type = "none";
+                                                  });
+                                                }
+                                                break;
+                                              case "friends":
+                                                showModalBottomSheet(
+                                                    context: context,
+                                                    builder: (builder) {
+                                                      return SizedBox(
+                                                        height: height / 10.7087,
+                                                        child: Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height: height / 56.87, ///15
+                                                            ),
+                                                            InkWell(
+                                                              child: Row(
+                                                                children: [
+                                                                  SizedBox(width: width / 27.5), ///15
+                                                                  CircleAvatar(
+                                                                    backgroundColor: Colors.grey[350],
+                                                                    child: const Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                                  ),
+                                                                  SizedBox(width: width / 41.1), ///10
+                                                                  Text(
+                                                                    unFriendString + profile.name,
+                                                                    style: TextStyle(
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: height / 56.867, ///15
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              onTap: () async {
+                                                                bool success = await cancelFriend(widget.id);
+                                                                if (success) {
+                                                                  setState(() {
+                                                                    widget.type = "none";
+                                                                  });
+                                                                  Navigate.popPage(context);
+                                                                }
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }
+                                                );
+                                                break;
+                                            }
+                                          },
                                         ),
                                         SizedBox(
                                           width: width / 51.375,
 
                                           ///8
                                         ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: widget.type == "friends"
-                                                ? buttonColor
-                                                : Colors.grey.shade300,
-                                            borderRadius:
-                                            BorderRadius.circular(height / 47.39),
+                                        InkWell(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: widget.type == "friends"
+                                                  ? buttonColor
+                                                  : Colors.grey.shade300,
+                                              borderRadius:
+                                              BorderRadius.circular(height / 47.39),
 
-                                            ///18
+                                              ///18
+                                            ),
+                                            width: width / 2.834,
+
+                                            ///145
+                                            height: height / 22.45,
+
+                                            ///38
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.message,
+                                                  color: widget.type == "friends"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: width / 137,
+
+                                                  ///3
+                                                ),
+                                                Text(
+                                                  messageString,
+                                                  style: TextStyle(
+                                                      color: widget.type == "friends"
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          width: width / 2.834,
-
-                                          ///145
-                                          height: height / 22.45,
-
-                                          ///38
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.message,
-                                                color: widget.type == "friends"
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                              SizedBox(
-                                                width: width / 137,
-
-                                                ///3
-                                              ),
-                                              Text(
-                                                messageString,
-                                                style: TextStyle(
-                                                    color: widget.type == "friends"
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              ),
-                                            ],
-                                          ),
+                                          onTap: () {
+                                            Navigate.pushPage(context, ChatScreens(userId: profile.id!));
+                                          },
                                         ),
                                         SizedBox(
                                           width: width / 51.375,

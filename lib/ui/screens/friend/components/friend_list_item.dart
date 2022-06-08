@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
 import '../../../../util/constants/strings.dart';
@@ -128,7 +129,8 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                     ],
                                   ),
                                   onTap: () {
-                                    ///todo: Navigate to chat
+                                    Navigate.popPage(context);
+                                    Navigate.pushPage(context, ChatScreens(userId: widget.id));
                                   },
                                 ),
                                 SizedBox(height: height / 56.867), ///15
