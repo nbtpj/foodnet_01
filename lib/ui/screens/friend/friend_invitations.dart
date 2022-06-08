@@ -88,7 +88,7 @@ class _FriendsState extends State<Friends> {
 
                         GestureDetector(
                           onTap: () {
-                            Navigate.pushPage(context, const FriendList());
+                            Navigate.pushPage(context, FriendList(id: getMyProfileId(),));
                           },
                           child: Container(
                             decoration: BoxDecoration(

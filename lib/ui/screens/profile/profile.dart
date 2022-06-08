@@ -795,7 +795,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                             ),
                                             onTap: () {
-                                              Navigate.pushPage(context, const FriendList());
+                                              Navigate.pushPage(context, FriendList(id: profile.id!, name: profile.name));
                                             },
                                           ),
                                         ],

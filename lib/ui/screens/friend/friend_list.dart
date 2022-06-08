@@ -9,7 +9,13 @@ import '../search/search.dart';
 import 'components/friend_list_item.dart';
 
 class FriendList extends StatefulWidget {
-  const FriendList({Key? key}) : super(key: key);
+  final String id;
+  final String? name;
+  const FriendList({
+    Key? key,
+    required this.id,
+    this.name,
+  }) : super(key: key);
 
   @override
   _FriendListState createState() => _FriendListState();
@@ -46,13 +52,13 @@ class _FriendListState extends State<FriendList> {
     double height = SizeConfig.screenHeight;
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
-      return getFriends(Filter(search_type: "friend_list"), getMyProfileId())
+      return getFriends(Filter(search_type: "friend_list"), widget.id)
           .toList();
     }
 
     Future<List<FriendData>> fetchRootFriendByKey(String key) async {
       //todo: implement get root post (categorical post)
-      return pseudoSearchFriend(getMyProfileId(), key)
+      return pseudoSearchFriend(widget.id, key)
           .toList();
     }
 
@@ -82,7 +88,8 @@ class _FriendListState extends State<FriendList> {
                   ///30
                 ),
                 Text(
-                  friendString + " ",
+                  friendString + " " + (widget.name != null ? "của " +
+                      widget.name!.split(' ')[widget.name!.split(' ').length - 1] : ""),
                   style: TextStyle(
                       fontSize: height / 28.43, fontWeight: FontWeight.bold),
 
