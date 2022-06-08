@@ -23,7 +23,7 @@ class _FriendsState extends State<Friends> {
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
     return getFriends(
-              Filter(search_type: "friend_invitations"), "getMyProfileId()"
+              Filter(search_type: "friend_invitations"), getMyProfileId()
           ).toList();
   }
 
@@ -143,6 +143,7 @@ class _FriendsState extends State<Friends> {
                               itemBuilder: (BuildContext context, int index) {
                                 FriendData friendItem = friendList[index];
                                 return FriendItem(
+                                  id: friendItem.id,
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
                                   time: friendItem.time_string,

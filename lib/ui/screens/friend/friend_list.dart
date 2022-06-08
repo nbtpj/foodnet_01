@@ -26,6 +26,7 @@ class _FriendListState extends State<FriendList> {
           itemBuilder: (BuildContext context, int index) {
             var friendItem = friendList[index];
             return FriendListItem(
+              id: friendItem.id,
               userAsset: friendItem.userAsset,
               name: friendItem.name,
               mutualFriends: friendItem.mutualism,

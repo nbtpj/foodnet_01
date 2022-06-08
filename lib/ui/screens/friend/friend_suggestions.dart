@@ -102,6 +102,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                                 itemBuilder: (BuildContext context, int index) {
                                   var friendItem = friendSuggestions[index];
                                   return FriendItem(
+                                    id: friendItem.id,
                                     userAsset: friendItem.userAsset,
                                     name: friendItem.name,
                                     time: friendItem.time_string,
