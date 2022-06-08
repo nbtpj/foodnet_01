@@ -292,6 +292,51 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     });
                                                   }
                                                   break;
+                                                case "friends":
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (builder) {
+                                                        return SizedBox(
+                                                          height: height / 10.7087,
+                                                          child: Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: height / 56.87, ///15
+                                                              ),
+                                                              InkWell(
+                                                                child: Row(
+                                                                  children: [
+                                                                    SizedBox(width: width / 27.5), ///15
+                                                                    CircleAvatar(
+                                                                      backgroundColor: Colors.grey[350],
+                                                                      child: const Icon(IconData(0xe49a, fontFamily: 'MaterialIcons'), color: Colors.black,),
+                                                                    ),
+                                                                    SizedBox(width: width / 41.1), ///10
+                                                                    Text(
+                                                                      unFriendString + profile.name,
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize: height / 56.867, ///15
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                onTap: () async {
+                                                                  bool success = await cancelFriend(widget.id);
+                                                                  if (success) {
+                                                                    setState(() {
+                                                                      widget.type = "none";
+                                                                    });
+                                                                    Navigate.popPage(context);
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      }
+                                                  );
+                                                  break;
                                               }
                                             },
                                           ),
