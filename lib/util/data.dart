@@ -162,7 +162,6 @@ String standard(String s) {
 Stream<ProfileData> pseudoSearchUser(String key) async* {
   /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
   /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
-  print(standard("lương"));
   var profileSnapshot = await profilesRef.get();
   List<ProfileData> profiles = [];
   for (var doc in profileSnapshot.docs) {
@@ -441,6 +440,27 @@ Future<bool> cancelFriend(String profileId) async{
     return true;
   } catch (e) {
     return false;
+  }
+}
+
+Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
+  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
+  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
+  final friendCollectionRef = friendsRef(id);
+  final friendDocumentRef =
+  friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+  final friendDocument = await friendDocumentRef.get();
+  List<FriendData> friends = [];
+  for (var doc in friendDocument.docs) {
+    var friend = doc.data();
+    String txt = standard(friend.name.toLowerCase());
+    if (txt.contains(standard(key.toLowerCase()))) {
+      friends.add(friend);
+    }
+  }
+
+  for (var friend in friends) {
+    yield friend;
   }
 }
 

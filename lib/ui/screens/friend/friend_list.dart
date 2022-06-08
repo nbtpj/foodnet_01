@@ -16,6 +16,9 @@ class FriendList extends StatefulWidget {
 }
 
 class _FriendListState extends State<FriendList> {
+  bool isEmpty = true;
+  String keyword = "";
+
   Widget buildFriendList(AsyncSnapshot<List<FriendData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
@@ -44,6 +47,12 @@ class _FriendListState extends State<FriendList> {
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
       return getFriends(Filter(search_type: "friend_list"), getMyProfileId())
+          .toList();
+    }
+
+    Future<List<FriendData>> fetchRootFriendByKey(String key) async {
+      //todo: implement get root post (categorical post)
+      return pseudoSearchFriend(getMyProfileId(), key)
           .toList();
     }
 
@@ -131,6 +140,18 @@ class _FriendListState extends State<FriendList> {
                 ),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
               ),
+              onChanged: (text) {
+                keyword = text;
+                if (text == "") {
+                  setState(() {
+                    isEmpty = true;
+                  });
+                } else {
+                  setState(() {
+                    isEmpty = false;
+                  });
+                }
+              },
             ),
           ),
           SizedBox(
@@ -138,7 +159,7 @@ class _FriendListState extends State<FriendList> {
           ),
           Expanded(
               child: FutureBuilder<List<FriendData>>(
-            future: fetchRootFriend(),
+            future: isEmpty == true ? fetchRootFriend() : fetchRootFriendByKey(keyword),
             builder: (context, snapshot) {
               return SingleChildScrollView(
                 child: Column(
