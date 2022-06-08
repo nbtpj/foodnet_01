@@ -238,7 +238,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   widget.type == "none"
                                                       ? Icons.person_add_rounded :
                                                   widget.type == "friends"
-                                                      ? Icons.person
+                                                      ? Icons.person :
+                                                  widget.type == "invitations"
+                                                      ? Icons.check
                                                       : Icons.person_add_disabled,
                                                   color: widget.type == "friends"
                                                       ? Colors.black
@@ -253,7 +255,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   widget.type == "none"
                                                       ? addFriendString :
                                                   widget.type == "friends"
-                                                      ? friendString
+                                                      ? friendString :
+                                                  widget.type == "invitations"
+                                                      ? acceptString
                                                       : cancelRequestString,
                                                   style: TextStyle(
                                                       color: widget.type == "friends"
@@ -262,8 +266,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                               ],
                                             ),
-                                            onTap: () {
-
+                                            onTap: () async {
+                                              if (widget.type == "none") {
+                                                bool success = await addFriendRequest(profile);
+                                                print(success);
+                                                if (success) {
+                                                  setState(() {
+                                                    widget.type = "requests";
+                                                  });
+                                                }
+                                              }
+                                              if (widget.type == "invitations") {
+                                                bool success = await acceptFriendRequest(profile.id!);
+                                                if (success) {
+                                                  setState(() {
+                                                    widget.type = "friends";
+                                                  });
+                                                }
+                                              }
                                             },
                                           ),
                                         ),

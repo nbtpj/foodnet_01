@@ -403,6 +403,35 @@ Future<String> checkFriend(String myId, String otherId) async {
   return "none";
 }
 
+Future<bool> addFriendRequest(ProfileData profile) async{
+  try {
+    final friendCollectionRef = friendsRef(getMyProfileId());
+    FriendData friendData = FriendData(id: profile.id!, name: profile.name, time: DateTime.now(),
+        userAsset: profile.userAsset, type: "requests", mutualism: 0);
+    ProfileData? myProfile = await getProfile(getMyProfileId());
+    FriendData friendData1 = FriendData(id: myProfile!.id!, name: myProfile.name, time: DateTime.now(),
+        userAsset: myProfile.userAsset, type: "invitations", mutualism: 0);
+    await friendCollectionRef.doc(profile.id!).set(friendData);
+    await friendsRef(profile.id!).doc(getMyProfileId()).set(friendData1);
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
+
+Future<bool> acceptFriendRequest(String profileId) async{
+  try {
+    final friendCollectionRef1 = friendsRef(profileId);
+    final friendCollectionRef2 = friendsRef(getMyProfileId());
+    await friendCollectionRef1.doc(getMyProfileId()).update({"type": "friends"});
+    await friendCollectionRef2.doc(profileId).update({"type": "friends"});
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);
