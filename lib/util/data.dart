@@ -107,11 +107,13 @@ Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
   /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
   /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
   var foodSnapshot = await postsRef.limit(limit??100).get();
+  key = normalize(key.toLowerCase());
   List<Tuple2> scores = [];
   for (var doc in foodSnapshot.docs) {
     var post = doc.data();
     String txt = post.title + post.description;
-    var similarity = key.toLowerCase().similarityTo(txt.toLowerCase());
+    txt = normalize(txt);
+    var similarity = key.similarityTo(txt.toLowerCase());
     scores.add(Tuple2(similarity, post));
   }
   scores.sort((Tuple2 a, Tuple2 b) {
@@ -149,6 +151,9 @@ Stream<PostData> getPosts(Filter filter) async* {
       break;
     default:
       querySnap = postsRef;
+      if (filter.author_id!=null){
+        querySnap = postsRef.where('author_uid', isEqualTo: filter.author_id!);
+      }
   }
   if (filter.search_type == 'favorite'){
     var reactionSnap = await flattenReactionRef
@@ -215,76 +220,6 @@ Stream<FriendData> getFriend(String? profileId) async* {
   }
 }
 
-Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
-  if (profileId == null) throw Exception("Require login");
-  final friendCollectionRef = friendsRef(profileId);
-  if (filter.search_type! == "friend_invitations") {
-    final invitationDocumentRef = friendCollectionRef
-        .where("type", isEqualTo: "invitations")
-        .orderBy("time");
-    final invitationDocument = await invitationDocumentRef.get();
-    for (var doc in invitationDocument.docs) {
-      yield doc.data();
-    }
-  } else if (filter.search_type! == "friend_list") {
-    final friendCollectionRef = friendsRef(profileId);
-    final friendDocumentRef =
-    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
-    final friendDocument = await friendDocumentRef.get();
-    for (var doc in friendDocument.docs) {
-      yield doc.data();
-    }
-  } else if (filter.search_type! == "friend_suggestions") {
-    yield FriendData(
-        id: '1',
-        time: DateTime.now(),
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 8);
-    yield FriendData(
-        id: '2',
-        time: DateTime.now(),
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 8);
-    yield FriendData(
-        id: '3',
-        time: DateTime.now(),
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '4',
-        time: DateTime.now(),
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '5',
-        time: DateTime.now(),
-        name: "Luong Dat",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '6',
-        time: DateTime.now(),
-        name: "Minh Quang",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '7',
-        time: DateTime.now(),
-        name: "Dao Tuan",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '8',
-        time: DateTime.now(),
-        name: "Pham Trong",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-  }
-}
 
 Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {
@@ -372,7 +307,7 @@ String file_type(String url) {
 final db = FirebaseFirestore.instance;
 
 
-String standard(String s) {
+String normalize(String s) {
   for (int i = 0; i < s.length; i++) {
     if (s[i] == 'á' || s[i] == 'à' || s[i] == 'ả' || s[i] == 'ạ') {
       s = s.replaceRange(i, i+1, 'a');
@@ -418,8 +353,8 @@ Stream<ProfileData> pseudoSearchUser(String key) async* {
   List<ProfileData> profiles = [];
   for (var doc in profileSnapshot.docs) {
     var profile = doc.data();
-    String txt = standard(profile.name.toLowerCase());
-    if (txt.contains(standard(key.toLowerCase()))) {
+    String txt = normalize(profile.name.toLowerCase());
+    if (txt.contains(normalize(key.toLowerCase()))) {
       profiles.add(profile);
     }
   }
@@ -489,8 +424,8 @@ Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
   List<FriendData> friends = [];
   for (var doc in friendDocument.docs) {
     var friend = doc.data();
-    String txt = standard(friend.name.toLowerCase());
-    if (txt.contains(standard(key.toLowerCase()))) {
+    String txt = normalize(friend.name.toLowerCase());
+    if (txt.contains(normalize(key.toLowerCase()))) {
       friends.add(friend);
     }
   }
@@ -579,37 +514,72 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   }
 }
 
-Stream<SearchData> getSearchData(Filter filter) async* {
-  if (filter.search_type == "recentUser") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-      id: "2",
-      name: "Minh Quang",
-      //asset: "assets/friend/tarek.jpg"
-    );
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+Stream<RecentUserSearchData> getRecentUsers(String id) async* {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  var a = await recentUsersRef(id).orderBy("createAt", descending: true,).get();
+  print('get!' + id.toString());
+  print(a);
+  print('_______________');
+  for (var doc in a.docs) {
+    yield doc.data();
   }
-  if (filter.search_type == "user" && filter.keyword == "a") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+}
+
+
+Future<bool> checkEqualRecentUsers(String id, RecentUserSearchData temp) async {
+  try {
+    var a = await recentUsersRef(id).get();
+    print('get!' + id.toString());
+    print(a);
+    print('_______________');
+    for (var doc in a.docs) {
+      if (temp.profileId == doc.data().profileId) {
+        bool success = await deleteRecentUsers(id, doc.data().id);
+        if (!success) {
+          return false;
+        }
+      }
+    }
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+
+}
+
+Future<bool> addRecentUsers(String id, RecentUserSearchData data) async {
+  try {
+    print(data);
+    await recentUsersRef(id).add(data).then((documentSnapshot) =>
+        recentUsersRef(id).doc(documentSnapshot.id).update({"id": documentSnapshot.id}));
+    return true;
+  } catch (e) {
+    print("Cannot add doc");
+    return false;
+  }
+}
+
+Future<bool> deleteRecentUsers(String id, String deleteId) async {
+  try {
+    await recentUsersRef(id).doc(deleteId).delete();
+    return true;
+  } catch (e) {
+    print("Cannot delete doc");
+    return false;
+  }
+}
+
+Future<bool> deleteAllRecentUsers(String id) async {
+  try {
+    var a = await recentUsersRef(id).get();
+    for (var doc in a.docs) {
+      recentUsersRef(id).doc(doc.id).delete();
+    }
+    return true;
+  } catch (e) {
+    print("Cannot delete doc");
+    return false;
   }
 }
 

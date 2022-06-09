@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
                   }));
                 },
                 child: FoodPart(partName: my_post_string)),
-            getMyProfileId() != null ? const MyFoods() : const SizedBox.shrink(),
+            getMyProfileId() != null ?  PostByAuthor() : const SizedBox.shrink(),
             GestureDetector(
                 onTap: () async {
                   Navigator.of(context)

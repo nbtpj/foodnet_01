@@ -6,17 +6,23 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
-class MyFoods extends StatefulWidget {
-  const MyFoods({Key? key}) : super(key: key);
+class PostByAuthor extends StatefulWidget {
+  Filter? filter;
+  PostByAuthor({Key? key, this.filter}) : super(key: key);
+  bool isMe(){
+    return filter==null || filter!.search_type=='my_food';
+  }
 
   @override
-  _MyFoodsState createState() => _MyFoodsState();
+  _PostByAuthorState createState() => _PostByAuthorState();
 }
 
-class _MyFoodsState extends State<MyFoods> {
+class _PostByAuthorState extends State<PostByAuthor> {
   Future<List<PostData>> fetchMyPost() async {
-    return getPosts(Filter(search_type: 'my_food')).toList();
+    var filter = widget.filter?? Filter(search_type: 'my_food');
+    return getPosts(filter).toList();
   }
+
 
   Widget _build_add_new(BuildContext context) {
     return GestureDetector(
@@ -116,16 +122,19 @@ class _MyFoodsState extends State<MyFoods> {
           var foodList = snapshot.data ?? [];
           return SizedBox(
             height: SizeConfig.screenHeight / 2.28,
-
-            /// 300.0
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: foodList.length + 1,
+              itemCount: widget.isMe()?foodList.length + 1:foodList.length,
               itemBuilder: (context, index) {
-                if (index == 0) {
-                  return _build_add_new(context);
+                if (widget.isMe()){
+                  if (index == 0) {
+                    return _build_add_new(context);
+                  } else {
+                    var food = foodList[index - 1];
+                    return build_a_food_thumb(context, food);
+                  }
                 } else {
-                  var food = foodList[index - 1];
+                  var food = foodList[index];
                   return build_a_food_thumb(context, food);
                 }
               },

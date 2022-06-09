@@ -7,7 +7,8 @@ import 'package:tuple/tuple.dart';
 
 class DetailList extends StatefulWidget {
   late String name;
-  DetailList({Key? key, required this.name}) : super(key: key);
+  final Filter? filter;
+  DetailList({Key? key, required this.name, this.filter}) : super(key: key);
 
   @override
   _DetailList createState() {
@@ -18,7 +19,7 @@ class DetailList extends StatefulWidget {
 class _DetailList extends ListViewWithTextSearch<DetailList> {
   @override
   Stream<PostData> pseudoFullTextSearch() async* {
-    var foodSnapshot = await detail_list_fetcher(widget.name).toList();
+    var foodSnapshot = widget.filter!=null ? await getPosts(widget.filter!).toList():await detail_list_fetcher(widget.name).toList();
     List<Tuple2> scores = [];
     for (var doc in foodSnapshot) {
       String txt = doc.title + doc.description;

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
-import 'package:foodnet_01/ui/screens/home/widgets/others_posts.dart';
 import 'package:foodnet_01/ui/screens/profile/components/user_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/components/wall_picture.dart';
 import 'package:foodnet_01/ui/screens/profile/detail_profile.dart';
@@ -841,12 +840,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                             .push(MaterialPageRoute(builder: (context) {
                                           return DetailList(
                                             name: widget.type == "me" ? my_post_string : postString,
-                                            id: widget.type == "me" ? null : profile.id,
+                                            filter: Filter(search_type: "personal_post", author_id: widget.type == "me" ? getMyProfileId() : profile.id)
+                                            // id: widget.type == "me" ? null : profile.id,
                                           );
                                         }));
                                       },
                                       child: FoodPart(partName: widget.type == "me" ? my_post_string : postString)),
-                                  widget.type == 'me' ? const MyFoods() : OtherFoods(id: profile.id),
+                                  PostByAuthor(filter: Filter(search_type: 'all_posts_of',author_id: profile.id),),
                                 ],
                               ),
                             )),

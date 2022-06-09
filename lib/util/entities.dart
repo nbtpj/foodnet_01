@@ -629,6 +629,10 @@ class ProfileData extends Equatable {
     }
     return true;
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
 class SearchData implements LazyLoadData {
@@ -655,13 +659,14 @@ class Filter {
   double? scoreThreshold;
   int? limit;
   List<double>? visibleRegion;
+  String? author_id;
 
   Filter(
       {this.search_type,
         this.keyword,
         this.scoreThreshold,
         this.visibleRegion,
-        this.limit});
+        this.limit, this.author_id});
 }
 
 class ReactionData implements LazyLoadData {
@@ -731,4 +736,44 @@ class Message {
     "unread": unread,
     "createdAt": createdAt.toUtc(),
   };
+}
+
+class RecentUserSearchData implements LazyLoadData {
+  late String id;
+  final String userAsset;
+  final String? profileId;
+  final String name;
+  late DateTime createAt;
+
+  RecentUserSearchData({
+    required this.userAsset,
+    required this.id,
+    required this.name,
+    this.profileId,
+    required this.createAt,
+  });
+
+  static RecentUserSearchData fromJson(Map<String, dynamic> json) =>
+      RecentUserSearchData(
+        userAsset: json["userAsset"],
+        id: json["id"],
+        name: json["name"],
+        profileId: json["profileId"],
+        createAt: json["createAt"].toDate(),
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "userAsset": userAsset,
+        "id": id,
+        "name": name,
+        "profileId": profileId,
+        "createAt": createAt.toUtc(),
+      };
+
+  @override
+  void loadMore() {
+    // TODO: implement loadMore
+  }
+
 }
