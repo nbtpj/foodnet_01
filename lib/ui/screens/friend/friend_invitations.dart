@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_suggestions.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../util/constants/strings.dart';
 import '../../../util/data.dart';
 import '../../../util/entities.dart';
 import '../../../util/global.dart';
@@ -22,7 +23,7 @@ class _FriendsState extends State<Friends> {
   Future<List<FriendData>> fetchRootFriend() async {
     //todo: implement get root post (categorical post)
     return getFriends(
-              Filter(search_type: "friend_invitations"), "getMyProfileId()"
+              Filter(search_type: "friend_invitations"), getMyProfileId()
           ).toList();
   }
 
@@ -87,7 +88,7 @@ class _FriendsState extends State<Friends> {
 
                         GestureDetector(
                           onTap: () {
-                            Navigate.pushPage(context, const FriendList());
+                            Navigate.pushPage(context, FriendList(id: getMyProfileId(),));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -98,7 +99,7 @@ class _FriendsState extends State<Friends> {
                             width: width / 5.87, ///70
                             height: height / 28.43, ///30
                             child: const Text(
-                                "Bạn bè",
+                                friendString,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -121,7 +122,7 @@ class _FriendsState extends State<Friends> {
                       child: Row(
                         children: [
                           Text(
-                            "Lời mời kết bạn",
+                            friendInvitation,
                             style: TextStyle(
                                 fontSize: height / 34.12, ///25
                                 fontWeight: FontWeight.bold),
@@ -142,6 +143,7 @@ class _FriendsState extends State<Friends> {
                               itemBuilder: (BuildContext context, int index) {
                                 FriendData friendItem = friendList[index];
                                 return FriendItem(
+                                  id: friendItem.id,
                                   userAsset: friendItem.userAsset,
                                   name: friendItem.name,
                                   time: friendItem.time_string,

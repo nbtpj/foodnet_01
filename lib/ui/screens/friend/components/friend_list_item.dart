@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
+import '../../../../util/constants/strings.dart';
+import '../../../../util/data.dart';
 import '../../../../util/global.dart';
+import '../../profile/profile.dart';
 
 class FriendListItem extends StatefulWidget {
+  final String id;
   final String userAsset;
   final String name;
   final int mutualFriends;
 
   const FriendListItem({
     Key? key,
+    required this.id,
     required this.userAsset,
     required this.name,
     required this.mutualFriends,
@@ -95,7 +101,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                     radius: height / 28.43, ///30
                                     child: CircleAvatar(
                                       radius: height / 28.43, ///30
-                                      backgroundImage: AssetImage(widget.userAsset),
+                                      backgroundImage: NetworkImage(widget.userAsset),
                                     ),
                                   ),
                                 ),
@@ -114,7 +120,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       ),
                                       SizedBox(width: width / 41.1), ///10
                                       Text(
-                                        "Nhắn tin cho " + widget.name,
+                                        sentMessageString + widget.name,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height / 56.867, ///15
@@ -123,7 +129,8 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                     ],
                                   ),
                                   onTap: () {
-                                    ///todo: Navigate to chat
+                                    Navigate.popPage(context);
+                                    Navigate.pushPage(context, ChatScreens(userId: widget.id));
                                   },
                                 ),
                                 SizedBox(height: height / 56.867), ///15
@@ -137,7 +144,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       ),
                                       SizedBox(width: width / 41.1), ///10
                                       Text(
-                                        "Huỷ kết bạn với " + widget.name,
+                                        unFriendString + widget.name,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height / 56.867, ///15
@@ -145,12 +152,15 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       ),
                                     ],
                                   ),
-                                  onTap: () {
-                                    setState(() {
-                                      _delete = true;
-                                      sizeController.forward();
-                                      Navigate.popPage(context);
-                                    });
+                                  onTap: () async {
+                                    bool success = await cancelFriend(widget.id);
+                                    if (success) {
+                                      setState(() {
+                                        _delete = true;
+                                        sizeController.forward();
+                                        Navigate.popPage(context);
+                                      });
+                                    }
                                   },
                                 ),
                               ],
@@ -164,13 +174,13 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                   radius: height / 28.43, ///30
                   child: CircleAvatar(
                     radius: height / 28.43, ///30
-                    backgroundImage: AssetImage(widget.userAsset),
+                    backgroundImage: NetworkImage(widget.userAsset),
                   ),
                 ),
-                subtitle: Text(widget.mutualFriends.toString() + " bạn chung"),
+                subtitle: Text(widget.mutualFriends.toString() + " " + mutualismFriendString),
               ),
               onTap: () {
-                // todo: Navigate.pushPage(context, ProfilePage(id: "2"));
+                Navigate.pushPage(context, ProfilePage(id: widget.id));
               },
             ),
             SizedBox(height: height / 85.3,) ///10

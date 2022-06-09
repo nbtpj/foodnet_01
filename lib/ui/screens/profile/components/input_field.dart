@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
 
 import '../../../../util/global.dart';
 
@@ -78,8 +79,8 @@ class _InputFieldState extends State<InputField>{
               padding: EdgeInsets.fromLTRB(0, height / 170.6, 0, height / 170.6), ///(5, 5)
               color: buttonColor,
               child: Text(
-                widget.setonEdit != null ? "Lưu" :
-                "Thêm",
+                widget.setonEdit != null ? saveString :
+                addString,
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -88,30 +89,30 @@ class _InputFieldState extends State<InputField>{
             ),
             onTap: () {
               if (widget.setonEdit != null) {
-                if (widget.subText == "Học tại ") {
+                if (widget.subText == studyAtString) {
                   widget.edit!(textController.text, "schools", widget.index!);
                 }
-                if (widget.subText == "Làm việc tại ") {
+                if (widget.subText == worksAtString) {
                   widget.edit!(textController.text, "works", widget.index!);
                 }
-                if (widget.subText == "Sở thích ") {
+                if (widget.subText == favoriteString) {
                   widget.edit!(textController.text, "favorites", widget.index!);
                 }
-                if (widget.subText == "Đến từ ") {
+                if (widget.subText == liveAtString) {
                   widget.edit!(textController.text, "location", -1);
                 }
                 widget.setonEdit!();
               } else {
-                if (widget.hintText == "Thêm trường học") {
+                if (widget.hintText == addEducationString) {
                   widget.add!(textController.text, "schools");
                 }
-                if (widget.hintText == "Thêm công việc") {
+                if (widget.hintText == addWorkString) {
                   widget.add!(textController.text, "works");
                 }
-                if (widget.hintText == "Thêm sở thích") {
+                if (widget.hintText == addFavoriteString) {
                   widget.add!(textController.text, "favorites");
                 }
-                if (widget.hintText == "Thêm nơi sống") {
+                if (widget.hintText == addPlaceString) {
                   widget.add!(textController.text, "location");
                 }
                 textController.text = '';

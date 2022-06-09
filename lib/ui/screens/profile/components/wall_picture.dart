@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../util/constants/colors.dart';
+import '../../../../util/constants/strings.dart';
 import '../../../../util/entities.dart';
 import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
@@ -80,7 +81,7 @@ class _WallPictureState extends State<WallPicture> {
 
                             ///10
                             Text(
-                              "Xem ảnh bìa",
+                              seeCoverPhotoString,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: height / 56.87,
@@ -118,7 +119,7 @@ class _WallPictureState extends State<WallPicture> {
 
                             ///10
                             Text(
-                              "Chọn ảnh bìa",
+                              uploadCoverPhotoString,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: height / 56.87,

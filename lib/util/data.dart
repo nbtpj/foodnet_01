@@ -14,34 +14,34 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 /// các hàm này nên hỗ trợ cache dữ liệu
 CollectionReference<PostData> postsRef =
-    FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["id"] = snapshot.id;
-          return PostData.fromJson(data);
-        },
-        toFirestore: (postData, _) => postData.toJson());
+FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return PostData.fromJson(data);
+    },
+    toFirestore: (postData, _) => postData.toJson());
 
 CollectionReference<PostData> categoriesRef =
-    FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["id"] = snapshot.id;
-          return PostData.categoryFromJson(data);
-        },
-        toFirestore: (postData, _) => postData.categoryToJson());
+FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return PostData.categoryFromJson(data);
+    },
+    toFirestore: (postData, _) => postData.categoryToJson());
 
 CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
     .collection('comments')
     .withConverter<CommentData>(
-        fromFirestore: (snapshot, _) {
-          var data = snapshot.data()!;
-          data["commentID"] = snapshot.id;
-          print("data is");
-          print(data);
-          return CommentData.fromJson(data);
-        },
-        toFirestore: (commentData, _) => commentData.toJson());
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["commentID"] = snapshot.id;
+      print("data is");
+      print(data);
+      return CommentData.fromJson(data);
+    },
+    toFirestore: (commentData, _) => commentData.toJson());
 
 CollectionReference<FriendData> friendsRef(String profileId) {
   return FirebaseFirestore.instance
@@ -49,29 +49,54 @@ CollectionReference<FriendData> friendsRef(String profileId) {
       .doc(profileId)
       .collection("profiles")
       .withConverter(
-          fromFirestore: (snapshot, _) {
-            var data = snapshot.data()!;
-            data["id"] = snapshot.id;
-            return FriendData.fromJson(data);
-          },
-          toFirestore: (friendData, _) => friendData.toJson());
+      fromFirestore: (snapshot, _) {
+        var data = snapshot.data()!;
+        data["id"] = snapshot.id;
+        return FriendData.fromJson(data);
+      },
+      toFirestore: (friendData, _) => friendData.toJson());
 }
 
 CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
     .collection('profiles')
     .withConverter<ProfileData>(
+  fromFirestore: (snapshot, _) {
+    var data = snapshot.data()!;
+    data["id"] = snapshot.id;
+    return ProfileData.fromJson(data);
+  },
+  toFirestore: (profileData, _) => profileData.toJson(),
+);
+
+CollectionReference<RecentUserSearchData> recentUsersRef(String profileId) {
+  return FirebaseFirestore.instance
+      .collection('reccentUserSearch')
+      .doc(profileId)
+      .collection("recentList")
+      .withConverter(
       fromFirestore: (snapshot, _) {
         var data = snapshot.data()!;
         data["id"] = snapshot.id;
-        return ProfileData.fromJson(data);
+        return RecentUserSearchData.fromJson(data);
       },
-      toFirestore: (profileData, _) => profileData.toJson(),
-    );
+      toFirestore: (recentUserData, _) => recentUserData.toJson());
+}
+
 
 CollectionReference<ReactionData> flattenReactionRef =
-    FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
-        fromFirestore: ReactionData.fromJson,
-        toFirestore: (reactionData, _) => reactionData.toJson());
+FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
+    fromFirestore: ReactionData.fromJson,
+    toFirestore: (reactionData, _) => reactionData.toJson());
+
+CollectionReference<RecentUserSearchData> recentUserRef =
+FirebaseFirestore.instance.collection('reccentUserSearch').withConverter<RecentUserSearchData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return RecentUserSearchData.fromJson(data);
+    },
+    toFirestore: (recentUser, _) => recentUser.toJson());
+
 
 Future<PostData?> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
@@ -112,7 +137,7 @@ Stream<PostData> getPosts(Filter filter) async* {
       break;
     case "base_on_locations":
       var begin = GeoHash.fromDecimalDegrees(
-              filter.visibleRegion![2], filter.visibleRegion![0]),
+          filter.visibleRegion![2], filter.visibleRegion![0]),
           end = GeoHash.fromDecimalDegrees(
               filter.visibleRegion![3], filter.visibleRegion![1]);
       querySnap = postsRef
@@ -182,7 +207,7 @@ Stream<FriendData> getFriend(String? profileId) async* {
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);
   final friendDocumentRef =
-      friendCollectionRef.where("type", isEqualTo: "friends");
+  friendCollectionRef.where("type", isEqualTo: "friends");
   final firstPage = friendDocumentRef.orderBy("time").limit(4);
   final friendDocument = await firstPage.get();
   for (var doc in friendDocument.docs) {
@@ -204,7 +229,7 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
   } else if (filter.search_type! == "friend_list") {
     final friendCollectionRef = friendsRef(profileId);
     final friendDocumentRef =
-        friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
     final friendDocument = await friendDocumentRef.get();
     for (var doc in friendDocument.docs) {
       yield doc.data();
@@ -305,7 +330,7 @@ Stream<PostData> detail_list_fetcher(String name) async* {
   switch (name) {
     case my_post_string:
       var foodSnapshot =
-          await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
+      await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
       for (var doc in foodSnapshot.docs) {
         yield doc.data();
       }
@@ -325,7 +350,7 @@ Stream<PostData> detail_list_fetcher(String name) async* {
 
     case popular_string:
       var foodSnapshot =
-          await postsRef.orderBy('react', descending: true).limit(10).get();
+      await postsRef.orderBy('react', descending: true).limit(10).get();
       for (var doc in foodSnapshot.docs) {
         yield doc.data();
       }
@@ -338,12 +363,256 @@ Stream<PostData> detail_list_fetcher(String name) async* {
   }
 }
 
+
 String file_type(String url) {
   var fileName = (url.split('/').last);
   return fileName.split('.').last.toLowerCase();
 }
 
 final db = FirebaseFirestore.instance;
+
+
+String standard(String s) {
+  for (int i = 0; i < s.length; i++) {
+    if (s[i] == 'á' || s[i] == 'à' || s[i] == 'ả' || s[i] == 'ạ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'ă' || s[i] == 'ằ' || s[i] == 'ẳ' || s[i] == 'ặ' || s[i] == 'ắ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'â' || s[i] == 'ầ' || s[i] == 'ẩ' || s[i] == 'ậ' || s[i] == 'ấ') {
+      s = s.replaceRange(i, i+1, 'a');
+    }
+    if (s[i] == 'đ') {
+      s = s.replaceRange(i, i+1, 'd');
+    }
+    if (s[i] == 'ê' || s[i] == 'ề' || s[i] == 'ể' || s[i] == 'ệ' || s[i] == 'ế') {
+      s = s.replaceRange(i, i+1, 'e');
+    }
+    if (s[i] == 'í' || s[i] == 'ì' || s[i] == 'ỉ' || s[i] == 'ị') {
+      s = s.replaceRange(i, i+1, 'i');
+    }
+    if (s[i] == 'ó' || s[i] == 'ò' || s[i] == 'ỏ' || s[i] == 'ọ') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ô' || s[i] == 'ồ' || s[i] == 'ổ' || s[i] == 'ộ' || s[i] == 'ố') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ơ' || s[i] == 'ờ' || s[i] == 'ở' || s[i] == 'ợ' || s[i] == 'ớ') {
+      s = s.replaceRange(i, i+1, 'o');
+    }
+    if (s[i] == 'ú' || s[i] == 'ù' || s[i] == 'ủ' || s[i] == 'ụ') {
+      s = s.replaceRange(i, i+1, 'u');
+    }
+    if (s[i] == 'ứ' || s[i] == 'ừ' || s[i] == 'ử' || s[i] == 'ự' || s[i] == 'ư') {
+      s = s.replaceRange(i, i+1, 'u');
+    }
+  }
+  return s;
+}
+
+Stream<ProfileData> pseudoSearchUser(String key) async* {
+  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
+  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
+  var profileSnapshot = await profilesRef.get();
+  List<ProfileData> profiles = [];
+  for (var doc in profileSnapshot.docs) {
+    var profile = doc.data();
+    String txt = standard(profile.name.toLowerCase());
+    if (txt.contains(standard(key.toLowerCase()))) {
+      profiles.add(profile);
+    }
+  }
+
+  for (var profile in profiles) {
+    yield profile;
+  }
+}
+Future<String> checkFriend(String myId, String otherId) async {
+  final friendCollectionRef = friendsRef(myId);
+  final friendDocumentRef = await
+  friendCollectionRef.where("id", isEqualTo: otherId).get();
+  for (var doc in friendDocumentRef.docs) {
+    return doc.data().type;
+  }
+  return "none";
+}
+
+Future<bool> addFriendRequest(ProfileData profile) async{
+  try {
+    final friendCollectionRef = friendsRef(getMyProfileId());
+    FriendData friendData = FriendData(id: profile.id!, name: profile.name, time: DateTime.now(),
+        userAsset: profile.userAsset, type: "requests", mutualism: 0);
+    ProfileData? myProfile = await getProfile(getMyProfileId());
+    FriendData friendData1 = FriendData(id: myProfile!.id!, name: myProfile.name, time: DateTime.now(),
+        userAsset: myProfile.userAsset, type: "invitations", mutualism: 0);
+    await friendCollectionRef.doc(profile.id!).set(friendData);
+    await friendsRef(profile.id!).doc(getMyProfileId()).set(friendData1);
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
+
+Future<bool> acceptFriendRequest(String profileId) async{
+  try {
+    final friendCollectionRef1 = friendsRef(profileId);
+    final friendCollectionRef2 = friendsRef(getMyProfileId());
+    await friendCollectionRef1.doc(getMyProfileId()).update({"type": "friends"});
+    await friendCollectionRef2.doc(profileId).update({"type": "friends"});
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> cancelFriend(String profileId) async{
+  try {
+    final friendCollectionRef1 = friendsRef(profileId);
+    final friendCollectionRef2 = friendsRef(getMyProfileId());
+    await friendCollectionRef1.doc(getMyProfileId()).delete();
+    await friendCollectionRef2.doc(profileId).delete();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
+  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
+  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
+  final friendCollectionRef = friendsRef(id);
+  final friendDocumentRef =
+  friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+  final friendDocument = await friendDocumentRef.get();
+  List<FriendData> friends = [];
+  for (var doc in friendDocument.docs) {
+    var friend = doc.data();
+    String txt = standard(friend.name.toLowerCase());
+    if (txt.contains(standard(key.toLowerCase()))) {
+      friends.add(friend);
+    }
+  }
+
+  for (var friend in friends) {
+    yield friend;
+  }
+}
+
+Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
+  if (filter.search_type! == "friend_invitations") {
+    final invitationDocumentRef = friendCollectionRef
+        .where("type", isEqualTo: "invitations")
+        .orderBy("time");
+    final invitationDocument = await invitationDocumentRef.get();
+    for (var doc in invitationDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_list") {
+    final friendCollectionRef = friendsRef(profileId);
+    final friendDocumentRef =
+    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+    final friendDocument = await friendDocumentRef.get();
+    for (var doc in friendDocument.docs) {
+      yield doc.data();
+    }
+  } else if (filter.search_type! == "friend_suggestions") {
+    yield FriendData(
+        id: '1',
+        time: DateTime.now(),
+        name: "Luong Dat",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '2',
+        time: DateTime.now(),
+        name: "Minh Quang",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 8);
+    yield FriendData(
+        id: '3',
+        time: DateTime.now(),
+        name: "Dao Tuan",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '4',
+        time: DateTime.now(),
+        name: "Pham Trong",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '5',
+        time: DateTime.now(),
+        name: "Luong Dat",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '6',
+        time: DateTime.now(),
+        name: "Minh Quang",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '7',
+        time: DateTime.now(),
+        name: "Dao Tuan",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+    yield FriendData(
+        id: '8',
+        time: DateTime.now(),
+        name: "Pham Trong",
+        type: "friends",
+        userAsset: "assets/friend/tarek.jpg",
+        mutualism: 10);
+  }
+}
+
+Stream<SearchData> getSearchData(Filter filter) async* {
+  if (filter.search_type == "recentUser") {
+    yield SearchData(
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+      id: "2",
+      name: "Minh Quang",
+      //asset: "assets/friend/tarek.jpg"
+    );
+    yield SearchData(
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+  }
+  if (filter.search_type == "user" && filter.keyword == "a") {
+    yield SearchData(
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+  }
+}
+
 
 Stream<QuerySnapshot> getMessages(String id) {
   /// lấy danh sách message với 1 user sắp xếp theo createdAt
@@ -368,12 +637,12 @@ Stream<QuerySnapshot> getRecentChat() {
 
 Future editRecentChat(String profileId, String userId, Message message) async {
   var refRecentChat1 =
-      db.collection("recent-users").doc(profileId).collection("recent-chats");
+  db.collection("recent-users").doc(profileId).collection("recent-chats");
   var refRecentChat2 =
-      db.collection("recent-users").doc(userId).collection("recent-chats");
+  db.collection("recent-users").doc(userId).collection("recent-chats");
 
   String newMessage =
-      message.message.length < 10 ? message.message : message.message;
+  message.message.length < 10 ? message.message : message.message;
 
   try {
     await refRecentChat1.doc(userId).set({
@@ -399,7 +668,7 @@ Future editRecentChat(String profileId, String userId, Message message) async {
 
 Future seenChat(String profileId, String userId) async {
   var refRecentChat =
-      db.collection("recent-users").doc(profileId).collection("recent-chats");
+  db.collection("recent-users").doc(profileId).collection("recent-chats");
 
   try {
     await refRecentChat.doc(userId).update({"unread": false});

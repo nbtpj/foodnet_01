@@ -9,14 +9,23 @@ import '../search/search.dart';
 import 'components/friend_list_item.dart';
 
 class FriendList extends StatefulWidget {
-  const FriendList({Key? key}) : super(key: key);
+  final String id;
+  final String? name;
+  const FriendList({
+    Key? key,
+    required this.id,
+    this.name,
+  }) : super(key: key);
 
   @override
   _FriendListState createState() => _FriendListState();
 }
 
 class _FriendListState extends State<FriendList> {
-  Widget buildfriendlist(AsyncSnapshot<List<FriendData>> snapshot) {
+  bool isEmpty = true;
+  String keyword = "";
+
+  Widget buildFriendList(AsyncSnapshot<List<FriendData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
       return ListView.builder(
@@ -26,6 +35,7 @@ class _FriendListState extends State<FriendList> {
           itemBuilder: (BuildContext context, int index) {
             var friendItem = friendList[index];
             return FriendListItem(
+              id: friendItem.id,
               userAsset: friendItem.userAsset,
               name: friendItem.name,
               mutualFriends: friendItem.mutualism,
@@ -42,7 +52,13 @@ class _FriendListState extends State<FriendList> {
     double height = SizeConfig.screenHeight;
     Future<List<FriendData>> fetchRootFriend() async {
       //todo: implement get root post (categorical post)
-      return getFriends(Filter(search_type: "friend_list"), getMyProfileId())
+      return getFriends(Filter(search_type: "friend_list"), widget.id)
+          .toList();
+    }
+
+    Future<List<FriendData>> fetchRootFriendByKey(String key) async {
+      //todo: implement get root post (categorical post)
+      return pseudoSearchFriend(widget.id, key)
           .toList();
     }
 
@@ -72,7 +88,8 @@ class _FriendListState extends State<FriendList> {
                   ///30
                 ),
                 Text(
-                  "Bạn bè ",
+                  friendString + " " + (widget.name != null ? "của " +
+                      widget.name!.split(' ')[widget.name!.split(' ').length - 1] : ""),
                   style: TextStyle(
                       fontSize: height / 28.43, fontWeight: FontWeight.bold),
 
@@ -112,7 +129,7 @@ class _FriendListState extends State<FriendList> {
                 filled: true,
 
                 fillColor: Colors.grey[300],
-                hintText: 'Tìm kiếm bạn bè',
+                hintText: searchFriendString,
                 contentPadding: EdgeInsets.only(top: height / 60.93),
 
                 ///14
@@ -130,6 +147,18 @@ class _FriendListState extends State<FriendList> {
                 ),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
               ),
+              onChanged: (text) {
+                keyword = text;
+                if (text == "") {
+                  setState(() {
+                    isEmpty = true;
+                  });
+                } else {
+                  setState(() {
+                    isEmpty = false;
+                  });
+                }
+              },
             ),
           ),
           SizedBox(
@@ -137,7 +166,7 @@ class _FriendListState extends State<FriendList> {
           ),
           Expanded(
               child: FutureBuilder<List<FriendData>>(
-            future: fetchRootFriend(),
+            future: isEmpty == true ? fetchRootFriend() : fetchRootFriendByKey(keyword),
             builder: (context, snapshot) {
               return SingleChildScrollView(
                 child: Column(
@@ -163,7 +192,7 @@ class _FriendListState extends State<FriendList> {
                         ],
                       ),
                     ),
-                    buildfriendlist(snapshot)
+                    buildFriendList(snapshot)
                   ],
                 ),
               );

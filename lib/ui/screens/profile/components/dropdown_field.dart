@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../util/constants/colors.dart';
+import '../../../../util/constants/strings.dart';
 import '../../../../util/global.dart';
 
 class DropDownField extends StatefulWidget {
@@ -28,7 +29,7 @@ class DropDownField extends StatefulWidget {
 }
 
 class _DropDownFieldState extends State<DropDownField> {
-  String selectedItem = "Giới tính";
+  String selectedItem = defaultGender;
   @override
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
@@ -55,8 +56,8 @@ class _DropDownFieldState extends State<DropDownField> {
               padding: EdgeInsets.fromLTRB(0, height / 170.6, 0, height / 170.6), ///(5, 5)
               color: buttonColor,
               child: Text(
-                widget.setonEdit != null ? "Lưu" :
-                "Thêm",
+                widget.setonEdit != null ? saveString :
+                addString,
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -79,7 +80,7 @@ class _DropDownFieldState extends State<DropDownField> {
             selectedItem = value!;
           });
         },
-        items: ["Giới tính", "Nam", "Nữ", "Khác"].map((value) {
+        items: [defaultGender, maleString, femaleString, differentString].map((value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(

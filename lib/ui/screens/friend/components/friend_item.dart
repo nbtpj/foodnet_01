@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 
+import '../../../../util/constants/strings.dart';
+import '../../../../util/data.dart';
 import '../../../../util/global.dart';
+import '../../../../util/navigate.dart';
+import '../../profile/profile.dart';
 
 class FriendItem extends StatefulWidget {
+  final String id;
   final String userAsset;
   final String name;
   final String time;
@@ -12,6 +17,7 @@ class FriendItem extends StatefulWidget {
   final String type;
   const FriendItem({
     Key? key,
+    required this.id,
     required this.userAsset,
     required this.name,
     required this.time,
@@ -96,27 +102,27 @@ class _FriendItemState extends State<FriendItem> with TickerProviderStateMixin {
                   trailing: Text(widget.time),
                   leading: CircleAvatar(
                     radius: height / 28.43, ///30
-                    backgroundImage: AssetImage(widget.userAsset),
+                    backgroundImage: NetworkImage(widget.userAsset),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          widget.mutualism.toString() + " bạn chung",
+                          widget.mutualism.toString() + ' ' + mutualismFriendString,
                           style: TextStyle(fontSize: height / 56.867) ///15,
                       ),
                       FittedBox(
                         fit: BoxFit.contain,
                         child: (_confirm
                             ? Confirmed(type: widget.type,)
-                            : UnConfirm(updateConfirm: _updateConfirm, updateDelete: _updateDelete,
+                            : UnConfirm(id: widget.id, updateConfirm: _updateConfirm, updateDelete: _updateDelete,
                           index: widget.index, type: widget.type,)),
                       ),
                     ],
                   ),
                 ),
                 onTap: () {
-                  // todo Navigate.pushPage(context, ProfilePage(id: "2"));
+                  Navigate.pushPage(context, ProfilePage(id: widget.id));
                 },
               ),
               SizedBox(height: height / 85.3,) ///10
@@ -127,12 +133,14 @@ class _FriendItemState extends State<FriendItem> with TickerProviderStateMixin {
 }
 
 class UnConfirm extends StatelessWidget {
+  final String id;
   final void Function() updateConfirm;
   final void Function() updateDelete;
   final int index;
   final String type;
   const UnConfirm ({
     Key? key,
+    required this.id,
     required this.updateConfirm,
     required this.updateDelete,
     required this.index,
@@ -145,9 +153,12 @@ class UnConfirm extends StatelessWidget {
     double height = SizeConfig.screenHeight;
     return Row(
       children: [
-        GestureDetector(
-          onTap: () {
-            updateConfirm();
+        InkWell(
+          onTap: () async{
+            bool success = await acceptFriendRequest(id);
+            if (success) {
+              updateConfirm();
+            }
           },
           child: Container(
               decoration: BoxDecoration(
@@ -158,7 +169,7 @@ class UnConfirm extends StatelessWidget {
               height: height / 28.43, ///30
               alignment: Alignment.center,
               child: Text(
-                type == "invitation" ? "Xác nhận" : "Thêm bạn bè",
+                type == "invitation" ? confirmString : addFriendString,
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -166,11 +177,12 @@ class UnConfirm extends StatelessWidget {
               ),
             ),
         ),
-        GestureDetector(
-          onTap: () {
-            //eraseFriendsList(index);
-            updateDelete();
-
+        InkWell(
+          onTap: () async {
+            bool success = await cancelFriend(id);
+            if (success) {
+              updateDelete();
+            }
           },
           child: Container(
             decoration: BoxDecoration(
@@ -181,7 +193,7 @@ class UnConfirm extends StatelessWidget {
             height: height / 28.43, ///30
             alignment: Alignment.center,
             child: const Text(
-                "Xoá",
+                deleteString,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -227,12 +239,12 @@ class Confirmed extends StatelessWidget {
                         color: Colors.yellow,
                       ),
                       const Text(
-                        "  Gửi lời chào",
+                        sayHiString,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ) : const Text(
-                        "Đã gửi yêu cầu",
+                        requestSentString,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
 

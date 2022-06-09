@@ -4,6 +4,7 @@ import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import '../../../../util/global.dart';
 import '../../../../util/navigate.dart';
 
+//ignore:must_be_immutable
 class Friend extends StatelessWidget {
   final String userAsset;
   final String? firstName;
@@ -49,6 +50,18 @@ class Friend extends StatelessWidget {
                       width: width / 4.567, ///90
                       height: height / 8.36, ///102
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
                     ),
                   )),
               Positioned(
@@ -60,12 +73,6 @@ class Friend extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          /*Text(
-                      firstName!,
-                      style: const TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    Text(lastName!,
-                        style: const TextStyle(fontSize: 12, color: Colors.black)),*/
                           Text(
                             name!,
                             textAlign: TextAlign.center,

@@ -4,6 +4,7 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 
+import '../../../util/constants/strings.dart';
 import '../../../util/navigate.dart';
 import 'components/friend_item.dart';
 
@@ -46,7 +47,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                   iconSize: height / 28.43, ///30
                 ),
                 Text(
-                  "Gợi ý",
+                  suggestionString,
                   style: TextStyle(
                       fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
                 ),
@@ -79,7 +80,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                       child: Row(
                         children: [
                           Text(
-                            "Những người bạn có thể biết",
+                            friendMayKnowString,
                             style: TextStyle(
                               fontSize: height / 34.12, ///25
                               fontWeight: FontWeight.w500,
@@ -101,6 +102,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                                 itemBuilder: (BuildContext context, int index) {
                                   var friendItem = friendSuggestions[index];
                                   return FriendItem(
+                                    id: friendItem.id,
                                     userAsset: friendItem.userAsset,
                                     name: friendItem.name,
                                     time: friendItem.time_string,
