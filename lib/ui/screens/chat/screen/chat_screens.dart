@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/chat/utils.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
@@ -315,7 +316,7 @@ class _ChatScreensState extends State<ChatScreens> {
               ),
             );
           } else {
-            return const Center();
+            return loading;
           }
         });
   }
