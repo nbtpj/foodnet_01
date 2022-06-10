@@ -33,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     Stream<ProfileData> fetchData(String type, String keyword) {
-        return pseudoSearchUser(keyword);
+        return pseudoSearchUser(keyword, null);
     }
 
     return Scaffold(

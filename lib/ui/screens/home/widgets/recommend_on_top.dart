@@ -14,14 +14,9 @@ class DiscountCard extends StatefulWidget {
 }
 
 class _DiscountCardState extends State<DiscountCard> {
-  final List<String> imageList = [
-    "assets/discount/discount1.png",
-    "assets/discount/discount2.png",
-    "assets/discount/discount3.png",
-  ];
 
   Future<List<PostData>> fetchDiscountGood() async {
-    return getPosts(Filter(search_type: 'food')).toList();
+    return getPosts(Filter(search_type: 'recommend')).toList();
   }
 
   @override
@@ -53,7 +48,7 @@ class _DiscountCardState extends State<DiscountCard> {
                     .map((e) => ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Stack(
-                            fit: StackFit.loose,
+                            fit: StackFit.expand,
                             children: [
                               GestureDetector(
                                   onTap: () {
@@ -63,11 +58,17 @@ class _DiscountCardState extends State<DiscountCard> {
                                             builder: (context) =>
                                                 PostDetailView(food: e)));
                                   },
-                                  child: MediaWidget(
-                                    url:e.outstandingIMGURL,
-                                    isNet: null,
-                                    fit: BoxFit.cover,
-                                  ))
+                                  child:
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(e.outstandingIMGURL),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                              )
                             ],
                           ),
                         ))

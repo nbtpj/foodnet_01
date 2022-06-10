@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_geohash/dart_geohash.dart';
@@ -12,13 +11,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-final randomNumberGenerator = Random();
 
-/// định nghĩa các đối tượng dữ liệu
+/// define data entity (persistent mechanism)
 
 class LazyLoadData {
   /// interface lazy load cho các đối tượng có quá nhiều dữ liệu
-  /// ví dụ như: nếu đối tượng PostData chỉ cần hiển thị brief view thì không cần phải load toàn bộ các media.
   void loadMore() async {}
 }
 
@@ -385,14 +382,13 @@ class PostData implements LazyLoadData {
     }
   }
 
-  /// todo: Khởi tạo thêm đặc tính features
-
   PostData clone() {
     return PostData(
       id: id,
       title: title,
       description: description,
       mediaUrls: mediaUrls,
+      features: features,
       outstandingIMGURL: outstandingIMGURL,
       price: price,
       isGood: isGood,

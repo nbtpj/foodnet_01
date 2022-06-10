@@ -8,12 +8,13 @@ import 'package:tuple/tuple.dart';
 
 import 'entities.dart';
 
-/// định nghĩa các API sử dụng
+/// define data-related API used in UI code
 
-FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+/// define static FireStore Collection references
+final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+final db = FirebaseFirestore.instance;
 
-/// các hàm này nên hỗ trợ cache dữ liệu
-CollectionReference<PostData> postsRef =
+final CollectionReference<PostData> postsRef =
 FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
     fromFirestore: (snapshot, _) {
       var data = snapshot.data()!;
@@ -22,7 +23,7 @@ FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
     },
     toFirestore: (postData, _) => postData.toJson());
 
-CollectionReference<PostData> categoriesRef =
+final CollectionReference<PostData> categoriesRef =
 FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
     fromFirestore: (snapshot, _) {
       var data = snapshot.data()!;
@@ -31,7 +32,7 @@ FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
     },
     toFirestore: (postData, _) => postData.categoryToJson());
 
-CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
+final CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
     .collection('comments')
     .withConverter<CommentData>(
     fromFirestore: (snapshot, _) {
@@ -43,6 +44,32 @@ CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
     },
     toFirestore: (commentData, _) => commentData.toJson());
 
+final CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
+    .collection('profiles')
+    .withConverter<ProfileData>(
+  fromFirestore: (snapshot, _) {
+    var data = snapshot.data()!;
+    data["id"] = snapshot.id;
+    return ProfileData.fromJson(data);
+  },
+  toFirestore: (profileData, _) => profileData.toJson(),
+);
+
+final CollectionReference<ReactionData> flattenReactionRef =
+FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
+    fromFirestore: ReactionData.fromJson,
+    toFirestore: (reactionData, _) => reactionData.toJson());
+
+final CollectionReference<RecentUserSearchData> recentUserRef =
+FirebaseFirestore.instance.collection('reccentUserSearch').withConverter<RecentUserSearchData>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return RecentUserSearchData.fromJson(data);
+    },
+    toFirestore: (recentUser, _) => recentUser.toJson());
+
+/// define dynamic FireStore Collection references
 CollectionReference<FriendData> friendsRef(String profileId) {
   return FirebaseFirestore.instance
       .collection('friends')
@@ -56,17 +83,6 @@ CollectionReference<FriendData> friendsRef(String profileId) {
       },
       toFirestore: (friendData, _) => friendData.toJson());
 }
-
-CollectionReference<ProfileData> profilesRef = FirebaseFirestore.instance
-    .collection('profiles')
-    .withConverter<ProfileData>(
-  fromFirestore: (snapshot, _) {
-    var data = snapshot.data()!;
-    data["id"] = snapshot.id;
-    return ProfileData.fromJson(data);
-  },
-  toFirestore: (profileData, _) => profileData.toJson(),
-);
 
 CollectionReference<RecentUserSearchData> recentUsersRef(String profileId) {
   return FirebaseFirestore.instance
@@ -82,232 +98,24 @@ CollectionReference<RecentUserSearchData> recentUsersRef(String profileId) {
       toFirestore: (recentUserData, _) => recentUserData.toJson());
 }
 
-
-CollectionReference<ReactionData> flattenReactionRef =
-FirebaseFirestore.instance.collection("flatten-reactions").withConverter(
-    fromFirestore: ReactionData.fromJson,
-    toFirestore: (reactionData, _) => reactionData.toJson());
-
-CollectionReference<RecentUserSearchData> recentUserRef =
-FirebaseFirestore.instance.collection('reccentUserSearch').withConverter<RecentUserSearchData>(
-    fromFirestore: (snapshot, _) {
-      var data = snapshot.data()!;
-      data["id"] = snapshot.id;
-      return RecentUserSearchData.fromJson(data);
-    },
-    toFirestore: (recentUser, _) => recentUser.toJson());
-
-
-Future<PostData?> getPost(String id) async {
-  /// hàm lấy một đối tượng PostData dựa trên id
-  return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
-}
-
-Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
-  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
-  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
-  var foodSnapshot = await postsRef.limit(limit??100).get();
-  key = normalize(key.toLowerCase());
-  List<Tuple2> scores = [];
-  for (var doc in foodSnapshot.docs) {
-    var post = doc.data();
-    String txt = post.title + post.description;
-    txt = normalize(txt);
-    var similarity = key.similarityTo(txt.toLowerCase());
-    scores.add(Tuple2(similarity, post));
-  }
-  scores.sort((Tuple2 a, Tuple2 b) {
-    return a.item1.compareTo(b.item1) * -1;
-  });
-  for (var tuple in scores) {
-    yield tuple.item2 as PostData;
-  }
-}
-
-Stream<PostData> getPosts(Filter filter) async* {
-  /// lấy 1 danh sách post theo điều kiệu lọc
-  /// trả về dạng stream
-  Query<PostData> querySnap;
-  switch (filter.search_type) {
-    case null:
-    case "category":
-      querySnap = categoriesRef.orderBy("title");
-      break;
-
-    case "my_food":
-      querySnap = postsRef.where('author_uid', isEqualTo: getMyProfileId());
-      break;
-    case "base_on_locations":
-      var begin = GeoHash.fromDecimalDegrees(
-          filter.visibleRegion![2], filter.visibleRegion![0]),
-          end = GeoHash.fromDecimalDegrees(
-              filter.visibleRegion![3], filter.visibleRegion![1]);
-      querySnap = postsRef
-          .orderBy("position_hash")
-          .startAt([begin.geohash]).endAt([end.geohash]);
-      break;
-    case 'popular_food':
-      querySnap = postsRef.orderBy('react', descending: true);
-      break;
-    default:
-      querySnap = postsRef;
-      if (filter.author_id!=null){
-        querySnap = postsRef.where('author_uid', isEqualTo: filter.author_id!);
-      }
-  }
-  if (filter.search_type == 'favorite'){
-    var reactionSnap = await flattenReactionRef
-        .where('userId', isEqualTo: getMyProfileId())
-        .where('type', isEqualTo: 1)
-        .get();
-    for (var react in reactionSnap.docs) {
-      var post = await getPost(react.data().postId);
-      if (post != null) {
-        yield post;
-      }
-    }
-  } else {
-    for (var doc in (await querySnap.limit(filter.limit ?? 100).get()).docs) {
-      if (filter.search_type != 'recommend'||(filter.search_type == 'recommend'&& await doc.data().getReact() == 0)) {
-        yield doc.data();
-      }
-    }
-  }
-
-}
-
-Stream<CommentData> fetch_comments(String foodID) async* {
-  var commentSnap = await commentsRef.where('postID', isEqualTo: foodID).get();
-  List<CommentData> ls = commentSnap.docs.map((e) => e.data()).toList();
-  ls.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-  for (var doc in ls) {
-    yield doc;
-  }
-}
-
+/// get current user ID
 String getMyProfileId() {
   return FirebaseAuth.instance.currentUser!.uid;
 }
-
-Future<ProfileData?> getProfile(String id) async {
-  /// hàm lấy một đối tượng UserData dựa trên id
-  var a = (await profilesRef.doc(id).get()).data();
-  return a;
-}
-
-Stream<ProfileData> getProfiles(Filter filter) async* {
-  /// lấy 1 danh sách user theo điều kiệu lọc
-  /// trả về dạng stream
-  var profileSnapshot = await profilesRef.get();
-  for (var doc in profileSnapshot.docs) {
-    yield doc.data();
-  }
-}
-
-Future<void> createNewProfile(ProfileData profile) {
-  return profilesRef.doc(profile.id).set(profile);
-}
-
-Stream<FriendData> getFriend(String? profileId) async* {
-  if (profileId == null) throw Exception("Require login");
-  final friendCollectionRef = friendsRef(profileId);
-  final friendDocumentRef =
-  friendCollectionRef.where("type", isEqualTo: "friends");
-  final firstPage = friendDocumentRef.orderBy("time").limit(4);
-  final friendDocument = await firstPage.get();
-  for (var doc in friendDocument.docs) {
-    yield doc.data();
-  }
-}
-
-
-Stream<SearchData> getSearchData(Filter filter) async* {
-  if (filter.search_type == "recentUser") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-      id: "2",
-      name: "Minh Quang",
-    );
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-  }
-  if (filter.search_type == "user" && filter.keyword == "a") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-  }
-}
-
-Stream<QuerySnapshot<ReactionData>> get_my_reaction_list() {
-  return flattenReactionRef
-      .where('userId', isEqualTo: getMyProfileId())
-      .where('type', isEqualTo: 1)
-      .snapshots();
-}
-
-Stream<PostData> detail_list_fetcher(String name) async* {
-  switch (name) {
-    case my_post_string:
-      var foodSnapshot =
-      await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
-      break;
-    case my_favorite_string:
-      var reactionSnap = await flattenReactionRef
-          .where('userId', isEqualTo: getMyProfileId())
-          .where('type', isEqualTo: 1)
-          .get();
-      for (var react in reactionSnap.docs) {
-        var post = await getPost(react.data().postId);
-        if (post != null) {
-          yield post;
-        }
-      }
-      break;
-
-    case popular_string:
-      var foodSnapshot =
-      await postsRef.orderBy('react', descending: true).limit(10).get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
-      break;
-    default:
-      var foodSnapshot = await postsRef.get();
-      for (var doc in foodSnapshot.docs) {
-        yield doc.data();
-      }
-  }
-}
-
-
+/// get file extension's type
 String file_type(String url) {
   var fileName = (url.split('/').last);
   return fileName.split('.').last.toLowerCase();
 }
 
-final db = FirebaseFirestore.instance;
-
+///_______________________searching_______________________
+/// define searching functions. Note: current FireStore DO NOT support fulltext search, but via a third party with payment!
+/// to deal with this problem, we define a "pseudo text search" strategy, which first fetch a limited possible
+/// result the sort them by weighted query-matching score (with post searching), and substring matching (with user searching).
 
 String normalize(String s) {
+  /// normalize a string for text-matching
+  s = s.toLowerCase();
   for (int i = 0; i < s.length; i++) {
     if (s[i] == 'á' || s[i] == 'à' || s[i] == 'ả' || s[i] == 'ạ') {
       s = s.replaceRange(i, i+1, 'a');
@@ -346,23 +154,61 @@ String normalize(String s) {
   return s;
 }
 
-Stream<ProfileData> pseudoSearchUser(String key) async* {
-  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
-  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
-  var profileSnapshot = await profilesRef.get();
-  List<ProfileData> profiles = [];
-  for (var doc in profileSnapshot.docs) {
-    var profile = doc.data();
-    String txt = normalize(profile.name.toLowerCase());
-    if (txt.contains(normalize(key.toLowerCase()))) {
-      profiles.add(profile);
-    }
+Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
+  var foodSnapshot = await postsRef.limit(limit??100).get();
+  key = normalize(key);
+  List<Tuple2> scores = [];
+  for (var doc in foodSnapshot.docs) {
+    var post = doc.data();
+    var similarity = key.similarityTo(normalize(post.title))*8+
+        key.similarityTo(normalize(post.description))*4;
+    scores.add(Tuple2(similarity, post));
   }
-
-  for (var profile in profiles) {
-    yield profile;
+  scores.sort((Tuple2 a, Tuple2 b) {
+    return a.item1.compareTo(b.item1) * -1;
+  });
+  for (var tuple in scores) {
+    yield tuple.item2 as PostData;
   }
 }
+
+Stream<ProfileData> pseudoSearchUser(String key, int? limit) async* {
+  var profileSnapshot = await profilesRef.limit(limit??100).get();
+  key = normalize(key);
+  List<Tuple2> scores = [];
+  for (var doc in profileSnapshot.docs) {
+    var profile = doc.data();
+    var similarity = key.similarityTo(normalize(profile.name))*8+
+        key.similarityTo(normalize((profile.works??[]).join(', ')))*4+
+        key.similarityTo(normalize((profile.schools??[]).join(', ')))*4+
+        key.similarityTo(normalize((profile.favorites??[]).join(', ')))*2;
+    scores.add(Tuple2(similarity, profile));
+  }
+  scores.sort((Tuple2 a, Tuple2 b) {
+    return a.item1.compareTo(b.item1) * -1;
+  });
+  for (var tuple in scores) {
+    yield tuple.item2 as ProfileData;
+  }
+}
+
+Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
+  final friendCollectionRef = friendsRef(id);
+  final friendDocumentRef =
+  friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
+  final friendDocument = await friendDocumentRef.get();
+  for (var doc in friendDocument.docs) {
+    var friend = doc.data();
+    String txt = normalize(friend.name.toLowerCase());
+    if (txt.contains(normalize(key.toLowerCase()))) {
+      yield friend;
+    }
+  }
+}
+
+///_______________________data operation_______________________
+/// define data operation functions
+
 Future<String> checkFriend(String myId, String otherId) async {
   final friendCollectionRef = friendsRef(myId);
   final friendDocumentRef = await
@@ -414,28 +260,8 @@ Future<bool> cancelFriend(String profileId) async{
   }
 }
 
-Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
-  /// hàm này KHÔNG xử lý tối ưu bởi tìm kiếm được xử lý trên máy client, và hàm này phục vụ cho sử dụng tính năng.
-  /// các công cụ tìm kiếm fulltext bên thứ 3 là KHẢ DỤNG trên nền tảng firebase dưới dạng các extension, tuy nhiên đều yêu cầu trả phí
-  final friendCollectionRef = friendsRef(id);
-  final friendDocumentRef =
-  friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
-  final friendDocument = await friendDocumentRef.get();
-  List<FriendData> friends = [];
-  for (var doc in friendDocument.docs) {
-    var friend = doc.data();
-    String txt = normalize(friend.name.toLowerCase());
-    if (txt.contains(normalize(key.toLowerCase()))) {
-      friends.add(friend);
-    }
-  }
-
-  for (var friend in friends) {
-    yield friend;
-  }
-}
-
 Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
+  /// lấy các đối tượng FriendData
   if (profileId == null) throw Exception("Require login");
   final friendCollectionRef = friendsRef(profileId);
   if (filter.search_type! == "friend_invitations") {
@@ -454,84 +280,20 @@ Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
     for (var doc in friendDocument.docs) {
       yield doc.data();
     }
-  } else if (filter.search_type! == "friend_suggestions") {
-    yield FriendData(
-        id: '1',
-        time: DateTime.now(),
-        name: "Luong Dat",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 8);
-    yield FriendData(
-        id: '2',
-        time: DateTime.now(),
-        name: "Minh Quang",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 8);
-    yield FriendData(
-        id: '3',
-        time: DateTime.now(),
-        name: "Dao Tuan",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '4',
-        time: DateTime.now(),
-        name: "Pham Trong",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '5',
-        time: DateTime.now(),
-        name: "Luong Dat",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '6',
-        time: DateTime.now(),
-        name: "Minh Quang",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '7',
-        time: DateTime.now(),
-        name: "Dao Tuan",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
-    yield FriendData(
-        id: '8',
-        time: DateTime.now(),
-        name: "Pham Trong",
-        type: "friends",
-        userAsset: "assets/friend/tarek.jpg",
-        mutualism: 10);
   }
 }
 
 Stream<RecentUserSearchData> getRecentUsers(String id) async* {
   /// hàm lấy một đối tượng UserData dựa trên id
   var a = await recentUsersRef(id).orderBy("createAt", descending: true,).get();
-  print('get!' + id.toString());
-  print(a);
-  print('_______________');
   for (var doc in a.docs) {
     yield doc.data();
   }
 }
 
-
 Future<bool> checkEqualRecentUsers(String id, RecentUserSearchData temp) async {
   try {
     var a = await recentUsersRef(id).get();
-    print('get!' + id.toString());
-    print(a);
-    print('_______________');
     for (var doc in a.docs) {
       if (temp.profileId == doc.data().profileId) {
         bool success = await deleteRecentUsers(id, doc.data().id);
@@ -582,7 +344,6 @@ Future<bool> deleteAllRecentUsers(String id) async {
     return false;
   }
 }
-
 
 Stream<QuerySnapshot> getMessages(String id) {
   /// lấy danh sách message với 1 user sắp xếp theo createdAt
@@ -666,5 +427,179 @@ Future sendMessage(String senderId, String receiverId, String message) async {
     return {"status": true, "message": "success"};
   } on FirebaseAuthException catch (e) {
     return {"status": false, "message": e.message.toString()};
+  }
+}
+
+Future<PostData?> getPost(String id) async {
+  /// hàm lấy một đối tượng PostData dựa trên id
+  return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
+}
+
+Stream<PostData> getPosts(Filter filter) async* {
+  /// lấy 1 danh sách post theo điều kiệu lọc
+  /// trả về dạng stream
+  Query<PostData> querySnap;
+  switch (filter.search_type) {
+    case null:
+    case "category":
+      querySnap = categoriesRef.orderBy("title");
+      break;
+
+    case "my_food":
+      querySnap = postsRef.where('author_uid', isEqualTo: getMyProfileId());
+      break;
+    case "base_on_locations":
+      var begin = GeoHash.fromDecimalDegrees(
+          filter.visibleRegion![2], filter.visibleRegion![0]),
+          end = GeoHash.fromDecimalDegrees(
+              filter.visibleRegion![3], filter.visibleRegion![1]);
+      querySnap = postsRef
+          .orderBy("position_hash")
+          .startAt([begin.geohash]).endAt([end.geohash]);
+      break;
+    case 'popular_food':
+      querySnap = postsRef.orderBy('react', descending: true);
+      break;
+    default:
+      querySnap = postsRef;
+      if (filter.author_id!=null){
+        querySnap = postsRef.where('author_uid', isEqualTo: filter.author_id!);
+      }
+  }
+  if (filter.search_type == 'favorite'){
+    var reactionSnap = await flattenReactionRef
+        .where('userId', isEqualTo: getMyProfileId())
+        .where('type', isEqualTo: 1)
+        .get();
+    for (var react in reactionSnap.docs) {
+      var post = await getPost(react.data().postId);
+      if (post != null) {
+        yield post;
+      }
+    }
+  } else {
+    for (var doc in (await querySnap.limit(filter.limit ?? 100).get()).docs) {
+      if (filter.search_type != 'recommend'||(filter.search_type == 'recommend'&& await doc.data().getReact() == 0)) {
+        yield doc.data();
+      }
+    }
+  }
+
+}
+
+Stream<CommentData> fetch_comments(String foodID) async* {
+  var commentSnap = await commentsRef.where('postID', isEqualTo: foodID).get();
+  List<CommentData> ls = commentSnap.docs.map((e) => e.data()).toList();
+  ls.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+  for (var doc in ls) {
+    yield doc;
+  }
+}
+
+Future<ProfileData?> getProfile(String id) async {
+  /// hàm lấy một đối tượng UserData dựa trên id
+  var a = (await profilesRef.doc(id).get()).data();
+  return a;
+}
+
+Stream<ProfileData> getProfiles(Filter filter) async* {
+  /// lấy 1 danh sách user theo điều kiệu lọc
+  /// trả về dạng stream
+  var profileSnapshot = await profilesRef.get();
+  for (var doc in profileSnapshot.docs) {
+    yield doc.data();
+  }
+}
+
+Future<void> createNewProfile(ProfileData profile) {
+  return profilesRef.doc(profile.id).set(profile);
+}
+
+Stream<FriendData> getFriend(String? profileId) async* {
+  if (profileId == null) throw Exception("Require login");
+  final friendCollectionRef = friendsRef(profileId);
+  final friendDocumentRef =
+  friendCollectionRef.where("type", isEqualTo: "friends");
+  final firstPage = friendDocumentRef.orderBy("time").limit(4);
+  final friendDocument = await firstPage.get();
+  for (var doc in friendDocument.docs) {
+    yield doc.data();
+  }
+}
+
+Stream<SearchData> getSearchData(Filter filter) async* {
+  if (filter.search_type == "recentUser") {
+    yield SearchData(
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+      id: "2",
+      name: "Minh Quang",
+    );
+    yield SearchData(
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+  }
+  if (filter.search_type == "user" && filter.keyword == "a") {
+    yield SearchData(
+        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
+    yield SearchData(
+        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
+  }
+}
+
+Stream<QuerySnapshot<ReactionData>> get_my_reaction_list() {
+  return flattenReactionRef
+      .where('userId', isEqualTo: getMyProfileId())
+      .where('type', isEqualTo: 1)
+      .snapshots();
+}
+
+Stream<PostData> detail_list_fetcher(String name) async* {
+  switch (name) {
+    case my_post_string:
+      var foodSnapshot =
+      await postsRef.where('author_uid', isEqualTo: getMyProfileId()).get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+      break;
+    case my_favorite_string:
+      var reactionSnap = await flattenReactionRef
+          .where('userId', isEqualTo: getMyProfileId())
+          .where('type', isEqualTo: 1)
+          .get();
+      for (var react in reactionSnap.docs) {
+        var post = await getPost(react.data().postId);
+        if (post != null) {
+          yield post;
+        }
+      }
+      break;
+
+    case popular_string:
+      var foodSnapshot =
+      await postsRef.orderBy('react', descending: true).limit(10).get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
+      break;
+    default:
+      var foodSnapshot = await postsRef.get();
+      for (var doc in foodSnapshot.docs) {
+        yield doc.data();
+      }
   }
 }

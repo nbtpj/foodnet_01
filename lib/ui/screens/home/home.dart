@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/screens/chat/chat.dart';
 import 'package:foodnet_01/ui/screens/detailed_list/full_list.dart';
 import 'package:foodnet_01/ui/screens/home/components/food_part.dart';
-import 'package:foodnet_01/ui/screens/home/widgets/discount_cart.dart';
+import 'package:foodnet_01/ui/screens/home/widgets/recommend_on_top.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/favorite_posts.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/popular.dart';
