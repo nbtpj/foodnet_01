@@ -347,7 +347,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         InkWell(
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: widget.type == "friends"
+                                              color: widget.type == "friend"
                                                   ? buttonColor
                                                   : Colors.grey.shade300,
                                               borderRadius:
