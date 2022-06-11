@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_suggestions.dart';
 import 'package:foodnet_01/util/navigate.dart';
@@ -20,11 +21,8 @@ class Friends extends StatefulWidget {
 class _FriendsState extends State<Friends> {
   dynamic friendList;
 
-  Future<List<FriendData>> fetchRootFriend() async {
-    //todo: implement get root post (categorical post)
-    return getFriends(
-              Filter(search_type: "friend_invitations"), getMyProfileId()
-          ).toList();
+  Future<List<Relationship>> fetchRootFriend() async {
+    return Relationship.invitationRel(getMyProfileId()).toList();
   }
 
   @override
@@ -130,7 +128,7 @@ class _FriendsState extends State<Friends> {
                         ],
                       ),
                     ),
-                    FutureBuilder<List<FriendData>>(
+                    FutureBuilder<List<Relationship>>(
                     future: fetchRootFriend(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -141,15 +139,26 @@ class _FriendsState extends State<Friends> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: friendList.length,
                               itemBuilder: (BuildContext context, int index) {
-                                FriendData friendItem = friendList[index];
-                                return FriendItem(
-                                  id: friendItem.id,
-                                  userAsset: friendItem.userAsset,
-                                  name: friendItem.name,
-                                  time: friendItem.time_string,
-                                  mutualism: friendItem.mutualism,
-                                  index: index,
-                                  type: "invitation",
+                                Relationship friendItem = friendList[index];
+                                return FutureBuilder<ProfileData?>(
+                                  future: getProfile(friendItem.get_other_id_but_me),
+                                  builder: (context, snap){
+                                    if(snap.connectionState == ConnectionState.waiting){
+                                      return loading;
+                                    }
+                                    if (snap.hasData && snap.data!=null){
+                                      return FriendItem(
+                                        id: snap.data!.id,
+                                        userAsset: snap.data!.userAsset,
+                                        name: snap.data!.name,
+                                        time: friendItem.time_string,
+                                        mutualism: snap.data!.mutualism,
+                                        index: index,
+                                        type: "invitation",
+                                      );
+                                    }
+                                    return const Center();
+                                  },
                                 );
                               }),
                         );

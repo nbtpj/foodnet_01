@@ -16,19 +16,13 @@ class FriendSuggestion extends StatefulWidget {
 }
 
 class _FriendSuggestionState extends State<FriendSuggestion> {
-  /*void _eraseFriendsList(int index) {
-    setState(() {
-      friend1s.removeAt(index);
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
-    Future<List<FriendData>> fetchRootFriend() async {
-      //todo: implement get root post (categorical post)
-      return getFriends(Filter(search_type: "friend_suggestions"), getMyProfileId()).toList();
+    Future<List<ProfileData>> fetchRootFriend() async {
+      return Relationship.friendRecommend(getMyProfileId(), null).toList();
     }
     return Scaffold(
       body: Column(
@@ -90,7 +84,7 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                       ),
                     ),
 
-                    FutureBuilder<List<FriendData>>(
+                    FutureBuilder<List<ProfileData>>(
                         future: fetchRootFriend(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {

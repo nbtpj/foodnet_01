@@ -11,7 +11,7 @@ class FriendListItem extends StatefulWidget {
   final String id;
   final String userAsset;
   final String name;
-  final int mutualFriends;
+  final Future<int> mutualFriends;
 
   const FriendListItem({
     Key? key,
@@ -177,7 +177,17 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                     backgroundImage: NetworkImage(widget.userAsset),
                   ),
                 ),
-                subtitle: Text(widget.mutualFriends.toString() + " " + mutualismFriendString),
+                subtitle:
+                FutureBuilder<int>(
+                    future: widget.mutualFriends,
+                    builder: (context, snap){
+                      if(snap.hasData){
+                        return Text(
+                            snap.data.toString() + ' ' + mutualismFriendString,
+                        );
+                      }
+                      return const Center();
+                    }),
               ),
               onTap: () {
                 Navigate.pushPage(context, ProfilePage(id: widget.id));

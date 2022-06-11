@@ -81,7 +81,7 @@ class _SearchListState extends State<SearchList> {
       ),
       onTap: () {
         edit(data, "add", null, null);
-        Navigate.pushPage(context, ProfilePage(id: data != null ? data.id! : rdata!.profileId!,));
+        Navigate.pushPage(context, ProfilePage(id: data != null ? data.id : rdata!.profileId!,));
       },
     );
   }

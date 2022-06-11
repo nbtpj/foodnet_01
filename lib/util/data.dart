@@ -32,6 +32,15 @@ FirebaseFirestore.instance.collection('categories').withConverter<PostData>(
     },
     toFirestore: (postData, _) => postData.categoryToJson());
 
+final CollectionReference<Relationship> relationshipsRef =
+FirebaseFirestore.instance.collection('relationships').withConverter<Relationship>(
+    fromFirestore: (snapshot, _) {
+      var data = snapshot.data()!;
+      data["id"] = snapshot.id;
+      return Relationship.fromJson(data);
+    },
+    toFirestore: (relationData, _) => relationData.toJson());
+
 final CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
     .collection('comments')
     .withConverter<CommentData>(
@@ -70,20 +79,6 @@ FirebaseFirestore.instance.collection('reccentUserSearch').withConverter<RecentU
     toFirestore: (recentUser, _) => recentUser.toJson());
 
 /// define dynamic FireStore Collection references
-CollectionReference<FriendData> friendsRef(String profileId) {
-  return FirebaseFirestore.instance
-      .collection('friends')
-      .doc(profileId)
-      .collection("profiles")
-      .withConverter(
-      fromFirestore: (snapshot, _) {
-        var data = snapshot.data()!;
-        data["id"] = snapshot.id;
-        return FriendData.fromJson(data);
-      },
-      toFirestore: (friendData, _) => friendData.toJson());
-}
-
 CollectionReference<RecentUserSearchData> recentUsersRef(String profileId) {
   return FirebaseFirestore.instance
       .collection('reccentUserSearch')
@@ -192,16 +187,12 @@ Stream<ProfileData> pseudoSearchUser(String key, int? limit) async* {
   }
 }
 
-Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
-  final friendCollectionRef = friendsRef(id);
-  final friendDocumentRef =
-  friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
-  final friendDocument = await friendDocumentRef.get();
-  for (var doc in friendDocument.docs) {
-    var friend = doc.data();
-    String txt = normalize(friend.name.toLowerCase());
+Stream<ProfileData> pseudoSearchFriend(String id, String key) async* {
+  final friendDocument = await (Relationship.friendProfile(getMyProfileId()).toList());
+  for (var doc in friendDocument) {
+    String txt = normalize(doc.name.toLowerCase());
     if (txt.contains(normalize(key.toLowerCase()))) {
-      yield friend;
+      yield doc;
     }
   }
 }
@@ -210,78 +201,43 @@ Stream<FriendData> pseudoSearchFriend(String id, String key) async* {
 /// define data operation functions
 
 Future<String> checkFriend(String myId, String otherId) async {
-  final friendCollectionRef = friendsRef(myId);
-  final friendDocumentRef = await
-  friendCollectionRef.where("id", isEqualTo: otherId).get();
-  for (var doc in friendDocumentRef.docs) {
-    return doc.data().type;
+  var id = Relationship.createId([myId, otherId]);
+  var doc = await relationshipsRef.doc(id).get();
+  if (doc.exists){
+    var rel = doc.data()!;
+    if (rel.type =='invitation'){
+      if (rel.sender_id == getMyProfileId()){
+        return 'request';
+      } else {
+        return 'invitation';
+      }
+    }
+    return doc.data()!.type;
   }
   return "none";
 }
 
-Future<bool> addFriendRequest(ProfileData profile) async{
-  try {
-    final friendCollectionRef = friendsRef(getMyProfileId());
-    FriendData friendData = FriendData(id: profile.id!, name: profile.name, time: DateTime.now(),
-        userAsset: profile.userAsset, type: "requests", mutualism: 0);
-    ProfileData? myProfile = await getProfile(getMyProfileId());
-    FriendData friendData1 = FriendData(id: myProfile!.id!, name: myProfile.name, time: DateTime.now(),
-        userAsset: myProfile.userAsset, type: "invitations", mutualism: 0);
-    await friendCollectionRef.doc(profile.id!).set(friendData);
-    await friendsRef(profile.id!).doc(getMyProfileId()).set(friendData1);
-    return true;
-  } catch (e) {
-    print(e);
-    return false;
-  }
+Future<bool> addFriendRequest(String profileId) async{
+  return await Relationship.sendInvitation(profileId);
 }
 
 Future<bool> acceptFriendRequest(String profileId) async{
-  try {
-    final friendCollectionRef1 = friendsRef(profileId);
-    final friendCollectionRef2 = friendsRef(getMyProfileId());
-    await friendCollectionRef1.doc(getMyProfileId()).update({"type": "friends"});
-    await friendCollectionRef2.doc(profileId).update({"type": "friends"});
-    return true;
-  } catch (e) {
-    return false;
-  }
+  return await Relationship.acceptInvitation(profileId);
 }
 
 Future<bool> cancelFriend(String profileId) async{
   try {
-    final friendCollectionRef1 = friendsRef(profileId);
-    final friendCollectionRef2 = friendsRef(getMyProfileId());
-    await friendCollectionRef1.doc(getMyProfileId()).delete();
-    await friendCollectionRef2.doc(profileId).delete();
-    return true;
+    var ids = [getMyProfileId(), profileId];
+    ids.sort((a,b)=>a.compareTo(b));
+    var id = ids.join('_');
+    await relationshipsRef.doc(id).delete();
   } catch (e) {
     return false;
   }
+
+  return true;
 }
 
-Stream<FriendData> getFriends(Filter filter, String? profileId) async* {
-  /// lấy các đối tượng FriendData
-  if (profileId == null) throw Exception("Require login");
-  final friendCollectionRef = friendsRef(profileId);
-  if (filter.search_type! == "friend_invitations") {
-    final invitationDocumentRef = friendCollectionRef
-        .where("type", isEqualTo: "invitations")
-        .orderBy("time");
-    final invitationDocument = await invitationDocumentRef.get();
-    for (var doc in invitationDocument.docs) {
-      yield doc.data();
-    }
-  } else if (filter.search_type! == "friend_list") {
-    final friendCollectionRef = friendsRef(profileId);
-    final friendDocumentRef =
-    friendCollectionRef.where("type", isEqualTo: "friends").orderBy("time");
-    final friendDocument = await friendDocumentRef.get();
-    for (var doc in friendDocument.docs) {
-      yield doc.data();
-    }
-  }
-}
 
 Stream<RecentUserSearchData> getRecentUsers(String id) async* {
   /// hàm lấy một đối tượng UserData dựa trên id
@@ -515,17 +471,17 @@ Future<void> createNewProfile(ProfileData profile) {
   return profilesRef.doc(profile.id).set(profile);
 }
 
-Stream<FriendData> getFriend(String? profileId) async* {
-  if (profileId == null) throw Exception("Require login");
-  final friendCollectionRef = friendsRef(profileId);
-  final friendDocumentRef =
-  friendCollectionRef.where("type", isEqualTo: "friends");
-  final firstPage = friendDocumentRef.orderBy("time").limit(4);
-  final friendDocument = await firstPage.get();
-  for (var doc in friendDocument.docs) {
-    yield doc.data();
-  }
-}
+// Stream<FriendData> getFriend(String? profileId) async* {
+//   if (profileId == null) throw Exception("Require login");
+//   final friendCollectionRef = friendsRef(profileId);
+//   final friendDocumentRef =
+//   friendCollectionRef.where("type", isEqualTo: "friends");
+//   final firstPage = friendDocumentRef.orderBy("time").limit(4);
+//   final friendDocument = await firstPage.get();
+//   for (var doc in friendDocument.docs) {
+//     yield doc.data();
+//   }
+// }
 
 Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {

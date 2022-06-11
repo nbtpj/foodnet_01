@@ -13,8 +13,9 @@ class FriendItem extends StatefulWidget {
   final String name;
   final String time;
   final int index;
-  final int mutualism;
+  final Future<int> mutualism;
   final String type;
+
   const FriendItem({
     Key? key,
     required this.id,
@@ -45,12 +46,14 @@ class _FriendItemState extends State<FriendItem> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     lucencyController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 150));
+        AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 150));
     lucencyAnimation = Tween(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(parent: lucencyController, curve: Curves.easeOut));
 
     sizeController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+        AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 300));
     sizeAnimation = Tween(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(parent: sizeController, curve: Curves.easeOut));
   }
@@ -74,60 +77,79 @@ class _FriendItemState extends State<FriendItem> with TickerProviderStateMixin {
       sizeController.forward();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
     return _delete
         ? SizeTransition(
-          axis: Axis.vertical,
-          sizeFactor: sizeAnimation,
-          child: SizedBox(
-            height: 82.2,
-            width: width,
-          ),
-        ) : FadeTransition(
-          opacity: lucencyAnimation,
-          child: Column(
-            children: [
-              InkWell(
-                child: ListTile(
-                  title: Text(
-                    widget.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  isThreeLine: false,
-                  trailing: Text(widget.time),
-                  leading: CircleAvatar(
-                    radius: height / 28.43, ///30
-                    backgroundImage: NetworkImage(widget.userAsset),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          widget.mutualism.toString() + ' ' + mutualismFriendString,
-                          style: TextStyle(fontSize: height / 56.867) ///15,
-                      ),
-                      FittedBox(
-                        fit: BoxFit.contain,
-                        child: (_confirm
-                            ? Confirmed(type: widget.type,)
-                            : UnConfirm(id: widget.id, updateConfirm: _updateConfirm, updateDelete: _updateDelete,
-                          index: widget.index, type: widget.type,)),
-                      ),
-                    ],
+      axis: Axis.vertical,
+      sizeFactor: sizeAnimation,
+      child: SizedBox(
+        height: 82.2,
+        width: width,
+      ),
+    ) : FadeTransition(
+        opacity: lucencyAnimation,
+        child: Column(
+          children: [
+            InkWell(
+              child: ListTile(
+                title: Text(
+                  widget.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600
                   ),
                 ),
-                onTap: () {
-                  Navigate.pushPage(context, ProfilePage(id: widget.id));
-                },
+                isThreeLine: false,
+                trailing: Text(widget.time),
+                leading: CircleAvatar(
+                  radius: height / 28.43,
+
+                  ///30
+                  backgroundImage: NetworkImage(widget.userAsset),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FutureBuilder<int>(
+                      future: widget.mutualism,
+                      builder: (context, snap) {
+                      if (snap.hasData) {
+                        return Text
+                          (
+                            snap.data.toString() + ' ' +
+                                mutualismFriendString,
+                            style: TextStyle(fontSize: height / 56.867)
+                        );
+                      }
+                      return Center();
+                    },),
+
+                    FittedBox(
+                      fit: BoxFit.contain,
+                      child: (_confirm
+                          ? Confirmed(type: widget.type,)
+                          : UnConfirm(
+                        id: widget.id,
+                        updateConfirm: _updateConfirm,
+                        updateDelete: _updateDelete,
+                        index: widget.index,
+                        type: widget.type,)),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: height / 85.3,) ///10
-            ],
-          )
+              onTap: () {
+                Navigate.pushPage(context, ProfilePage(id: widget.id));
+              },
+            ),
+            SizedBox(height: height / 85.3,)
+
+            ///10
+          ],
+        )
     );
   }
 }
@@ -138,7 +160,8 @@ class UnConfirm extends StatelessWidget {
   final void Function() updateDelete;
   final int index;
   final String type;
-  const UnConfirm ({
+
+  const UnConfirm({
     Key? key,
     required this.id,
     required this.updateConfirm,
@@ -154,28 +177,36 @@ class UnConfirm extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-          onTap: () async{
+          onTap: () async {
             bool success = await acceptFriendRequest(id);
             if (success) {
               updateConfirm();
             }
           },
           child: Container(
-              decoration: BoxDecoration(
-                  color: buttonColor,
-                  borderRadius: BorderRadius.circular(height / 85.3)), ///10
-              margin: EdgeInsets.all(height / 213.25), ///4
-              width: width / 4.11, ///100
-              height: height / 28.43, ///30
-              alignment: Alignment.center,
-              child: Text(
-                type == "invitation" ? confirmString : addFriendString,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                ),
+            decoration: BoxDecoration(
+                color: buttonColor,
+                borderRadius: BorderRadius.circular(height / 85.3)),
+
+            ///10
+            margin: EdgeInsets.all(height / 213.25),
+
+            ///4
+            width: width / 4.11,
+
+            ///100
+            height: height / 28.43,
+
+            ///30
+            alignment: Alignment.center,
+            child: Text(
+              type == "invitation" ? confirmString : addFriendString,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
               ),
             ),
+          ),
         ),
         InkWell(
           onTap: () async {
@@ -187,16 +218,24 @@ class UnConfirm extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.grey[350],
-                borderRadius: BorderRadius.circular(height / 85.3)), ///10
-            margin: EdgeInsets.all(height / 213.25), ///4
-            width: width / 4.11, ///100
-            height: height / 28.43, ///30
+                borderRadius: BorderRadius.circular(height / 85.3)),
+
+            ///10
+            margin: EdgeInsets.all(height / 213.25),
+
+            ///4
+            width: width / 4.11,
+
+            ///100
+            height: height / 28.43,
+
+            ///30
             alignment: Alignment.center,
             child: const Text(
-                deleteString,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+              deleteString,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         )
@@ -207,7 +246,8 @@ class UnConfirm extends StatelessWidget {
 
 class Confirmed extends StatelessWidget {
   final String type;
-  const Confirmed ({
+
+  const Confirmed({
     Key? key,
     required this.type,
   }) : super(key: key);
@@ -220,33 +260,41 @@ class Confirmed extends StatelessWidget {
       child: Row(
         children: [
           Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[350],
-                  borderRadius: BorderRadius.circular(height / 85.3)), ///10
-              margin: EdgeInsets.all(height / 213.25), ///4
-              width: width / 2.74, ///150
-              height: height / 28.43, ///30
-              alignment: Alignment.center,
-              child: type == "invitation" ?
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 0,
-                        width: width / 25.6875,
-                      ),
-                      const Icon(
-                        IconData(0xf05a3, fontFamily: 'MaterialIcons'),
-                        color: Colors.yellow,
-                      ),
-                      const Text(
-                        sayHiString,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ) : const Text(
-                        requestSentString,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+            decoration: BoxDecoration(
+                color: Colors.grey[350],
+                borderRadius: BorderRadius.circular(height / 85.3)),
+
+            ///10
+            margin: EdgeInsets.all(height / 213.25),
+
+            ///4
+            width: width / 2.74,
+
+            ///150
+            height: height / 28.43,
+
+            ///30
+            alignment: Alignment.center,
+            child: type == "invitation" ?
+            Row(
+              children: [
+                SizedBox(
+                  height: 0,
+                  width: width / 25.6875,
+                ),
+                const Icon(
+                  IconData(0xf05a3, fontFamily: 'MaterialIcons'),
+                  color: Colors.yellow,
+                ),
+                const Text(
+                  sayHiString,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ) : const Text(
+              requestSentString,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
 
           ),
         ],

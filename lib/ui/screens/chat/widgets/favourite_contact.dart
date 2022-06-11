@@ -14,9 +14,8 @@ class FavoriteContacts extends StatefulWidget {
 class _FavoriteContactsState extends State<FavoriteContacts> {
   @override
   Widget build(BuildContext context) {
-    Future<List<FriendData>> fetchRootFriend() async {
-      return getFriends(Filter(search_type: "friend_list"), getMyProfileId())
-          .toList();
+    Future<List<ProfileData>> fetchRootFriend() async {
+      return Relationship.friendProfile(getMyProfileId()).toList();
     }
 
     return Padding(
@@ -48,7 +47,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
           ),
           SizedBox(
               height: 120.0,
-              child: FutureBuilder<List<FriendData>>(
+              child: FutureBuilder<List<ProfileData>>(
                 future: fetchRootFriend(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData){

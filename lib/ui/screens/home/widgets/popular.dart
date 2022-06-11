@@ -26,7 +26,7 @@ class _PopularFoodsState extends State<PopularFoods> {
             height: SizeConfig.screenHeight/2.28,                 /// 300.0
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: foodList.length ,
+              itemCount: foodList.length,
               itemBuilder: (context, index){
                 var food = foodList[index];
                 return build_a_food_thumb(context, food);
@@ -35,7 +35,7 @@ class _PopularFoodsState extends State<PopularFoods> {
           );
         }
         else{
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
 
           // return const Center();
         }

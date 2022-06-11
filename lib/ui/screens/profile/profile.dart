@@ -51,8 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
               return FutureBuilder<ProfileData?>(
                 future: getProfile(widget.id),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    ProfileData? profile = snapshot.data;
+                  if (snapshot.hasData && snapshot.data!=null) {
+                    ProfileData profile = snapshot.data!;
 
                     return Column(
                       children: [
@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ///25
                               ),
                               Text(
-                                profile!.name,
+                                profile.name,
                                 style: TextStyle(
                                     fontSize: height / 34.12,
                                     fontWeight: FontWeight.bold),
@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         InkWell(
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: widget.type == "friends"
+                                              color: widget.type == "friend"
                                                   ? Colors.grey.shade300
                                                   : buttonColor,
                                               borderRadius:
@@ -237,12 +237,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 Icon(
                                                   widget.type == "none"
                                                       ? Icons.person_add_rounded :
-                                                  widget.type == "friends"
+                                                  widget.type == "friend"
                                                       ? Icons.person :
-                                                  widget.type == "invitations"
+                                                  widget.type == "invitation"
                                                       ? Icons.check
                                                       : Icons.person_add_disabled,
-                                                  color: widget.type == "friends"
+                                                  color: widget.type == "friend"
                                                       ? Colors.black
                                                       : Colors.white,
                                                 ),
@@ -254,13 +254,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 Text(
                                                   widget.type == "none"
                                                       ? addFriendString :
-                                                  widget.type == "friends"
+                                                  widget.type == "friend"
                                                       ? friendString :
-                                                  widget.type == "invitations"
+                                                  widget.type == "invitation"
                                                       ? acceptString
                                                       : cancelRequestString,
                                                   style: TextStyle(
-                                                      color: widget.type == "friends"
+                                                      color: widget.type == "friend"
                                                           ? Colors.black
                                                           : Colors.white),
                                                 ),
@@ -270,30 +270,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                           onTap: () async {
                                             switch (widget.type) {
                                               case "none":
-                                                bool success = await addFriendRequest(profile);
+                                                bool success = await addFriendRequest(profile.id);
                                                 if (success) {
                                                   setState(() {
-                                                    widget.type = "requests";
+                                                    widget.type = "request";
                                                   });
                                                 }
                                                 break;
-                                              case "invitations":
-                                                bool success = await acceptFriendRequest(profile.id!);
+                                              case "invitation":
+                                                bool success = await acceptFriendRequest(profile.id);
                                                 if (success) {
                                                   setState(() {
-                                                    widget.type = "friends";
+                                                    widget.type = "friend";
                                                   });
                                                 }
                                                 break;
-                                              case "requests":
-                                                bool success = await cancelFriend(profile.id!);
+                                              case "request":
+                                                bool success = await cancelFriend(profile.id);
                                                 if (success) {
                                                   setState(() {
                                                     widget.type = "none";
                                                   });
                                                 }
                                                 break;
-                                              case "friends":
+                                              case "friend":
                                                 showModalBottomSheet(
                                                     context: context,
                                                     builder: (builder) {
@@ -343,8 +343,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         SizedBox(
                                           width: width / 51.375,
-
-                                          ///8
                                         ),
                                         InkWell(
                                           child: Container(
@@ -354,15 +352,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   : Colors.grey.shade300,
                                               borderRadius:
                                               BorderRadius.circular(height / 47.39),
-
-                                              ///18
                                             ),
                                             width: width / 2.834,
-
-                                            ///145
                                             height: height / 22.45,
-
-                                            ///38
                                             child: Row(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -370,19 +362,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                               children: [
                                                 Icon(
                                                   Icons.message,
-                                                  color: widget.type == "friends"
+                                                  color: widget.type == "friend"
                                                       ? Colors.white
                                                       : Colors.black,
                                                 ),
                                                 SizedBox(
                                                   width: width / 137,
-
-                                                  ///3
                                                 ),
                                                 Text(
                                                   messageString,
                                                   style: TextStyle(
-                                                      color: widget.type == "friends"
+                                                      color: widget.type == "friend"
                                                           ? Colors.white
                                                           : Colors.black),
                                                 ),
@@ -390,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             ),
                                           ),
                                           onTap: () {
-                                            Navigate.pushPage(context, ChatScreens(userId: profile.id!));
+                                            Navigate.pushPage(context, ChatScreens(userId: profile.id));
                                           },
                                         ),
                                         SizedBox(
@@ -730,8 +720,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Container(
                                       padding: EdgeInsets.fromLTRB(
                                           width / 27.4, height / 85.3, width / 27.4, 0),
-
-                                      ///(15, 10, 15, 0)
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -742,20 +730,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 friendString,
                                                 style: TextStyle(
                                                     fontSize: height / 32.81,
-
-                                                    ///26
                                                     fontWeight: FontWeight.w600),
                                               ),
-                                              Text(
-                                                ///todo: So ban va so ban chung
-                                                profile.friendsNumber.toString() +  " " + friend_string,
-                                                style: TextStyle(
-                                                  color: const Color(0xffacacae),
-                                                  fontSize: height / 53.3125,
-
-                                                  ///16
-                                                ),
-                                              ),
+                                              FutureBuilder<int>(builder: (context, snap){
+                                                if(snap.hasData){
+                                                  return
+                                                    Text(
+                                                      snap.data.toString() +  " " + friend_string,
+                                                      style: TextStyle(
+                                                        color: const Color(0xffacacae),
+                                                        fontSize: height / 53.3125,
+                                                      ),
+                                                    );
+                                                } else{
+                                                  return const Center();
+                                                }
+                                              }),
                                             ],
                                           ),
                                           InkWell(
@@ -771,12 +761,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       color: const Color(0xffeff0f1)
                                                           .withOpacity(.4),
                                                       blurRadius: height / 170.6,
-
-                                                      ///5.0
                                                       offset: Offset(0, height / 85.3),
-
-                                                      ///10
-                                                      // shadow direction: bottom right
                                                     )
                                                   ]),
                                               width: (MediaQuery.of(context).size.width / 2) -
@@ -794,16 +779,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                             ),
                                             onTap: () {
-                                              Navigate.pushPage(context, FriendList(id: profile.id!, name: profile.name));
+                                              Navigate.pushPage(context, FriendList(id: profile.id, name: profile.name));
                                             },
                                           ),
                                         ],
                                       )),
-                                  FutureBuilder<List<FriendData>>(
-                                      future: getFriend(profile.id!).toList(),
+                                  FutureBuilder<List<ProfileData>>(
+                                      future: Relationship.friendProfile(widget.id).toList(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          List<FriendData> friendShortList = snapshot.data!;
+                                          List<ProfileData> friendShortList = snapshot.data!;
                                           return Container(
                                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                               width: MediaQuery.of(context).size.width,

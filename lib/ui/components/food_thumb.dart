@@ -47,69 +47,78 @@ Widget build_a_food_thumb(BuildContext context, PostData food) {
                         fit: BoxFit.cover,
                       ),
                       borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(30.0),
-                          topRight: const Radius.circular(30.0)),
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0)),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              food.title,
-                              softWrap: true,
-                              style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: SizeConfig.screenHeight / 34.15,
-
-                                  /// 20
-                                  fontWeight: FontWeight.w700),
-                            )),
-                        FutureBuilder<ProfileData?>(
-                            future: food.getOwner(),
-                            builder: (context, snap) => snap.hasData
-                                ? FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: Text(snap.data?.name ?? None,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            color: Colors.green,
-                                            fontSize:
-                                                SizeConfig.screenHeight / 40,
-                                            fontFamily: "Roboto")))
-                                : const SizedBox.shrink()),
-                        food.cateList.isNotEmpty
-                            ? FittedBox(
+                   Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: SizeConfig.screenHeight / 35,
+                            child: FittedBox(
                                 fit: BoxFit.fitWidth,
                                 child: Text(
-                                  food.cateList.join(','),
-                                  softWrap: true,
+                                  food.title,
+                                  // softWrap: true,
                                   style: TextStyle(
-                                      color: Colors.black38,
-                                      fontSize: SizeConfig.screenHeight / 42.69,
+                                      color: Colors.black54,
+                                      fontSize: SizeConfig.screenHeight / 36.15,
+                                      fontWeight: FontWeight.w700),
+                                )),
+                          )
+                          ,
+                          FutureBuilder<ProfileData?>(
+                              future: food.getOwner(),
+                              builder: (context, snap) => snap.hasData
+                                  ? SizedBox(
+                                  height: SizeConfig.screenHeight / 40,
+                                  child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Text(snap.data?.name ?? None,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize:
+                                                  SizeConfig.screenHeight / 40,
+                                              fontFamily: "Roboto"))))
+                                  : const SizedBox.shrink()),
+                          food.cateList.isNotEmpty
+                              ? SizedBox(
+                              height: SizeConfig.screenHeight / 40,
+                              child:FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    food.cateList.join(','),
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.black38,
+                                        fontSize:
+                                            SizeConfig.screenHeight / 42.69,
 
-                                      /// 16
-                                      fontWeight: FontWeight.w400),
-                                ))
-                            : SizedBox.shrink(),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.screenHeight / 136.6),
-                          child: Text(
-                            "${food.price}$current_string",
-                            softWrap: true,
-                            style: TextStyle(
-                                color: buttonColor,
-                                fontSize: SizeConfig.screenHeight / 37.95,
-                                fontWeight: FontWeight.bold),
+                                        /// 16
+                                        fontWeight: FontWeight.w400),
+                                  )))
+                              : SizedBox.shrink(),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: SizeConfig.screenHeight / 136.6),
+                            child: SizedBox(
+                              height: SizeConfig.screenHeight / 30,
+                              child:Text(
+                              "${food.price}$current_string",
+                              softWrap: true,
+                              style: TextStyle(
+                                  color: buttonColor,
+                                  fontSize: SizeConfig.screenHeight / 37.95,
+                                  fontWeight: FontWeight.bold),
+                            )),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
               food.isGood
@@ -151,7 +160,7 @@ Widget build_a_food_thumb_by_id(BuildContext context, String postId) {
       if (snapshot.hasData && snapshot.data != null) {
         return build_a_food_thumb(context, snapshot.data!);
       } else {
-        if (snapshot.data==null){
+        if (snapshot.data == null) {
           return const SizedBox.shrink();
         }
         return loading;

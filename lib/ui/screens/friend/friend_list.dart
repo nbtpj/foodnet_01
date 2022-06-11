@@ -25,7 +25,7 @@ class _FriendListState extends State<FriendList> {
   bool isEmpty = true;
   String keyword = "";
 
-  Widget buildFriendList(AsyncSnapshot<List<FriendData>> snapshot) {
+  Widget buildFriendList(AsyncSnapshot<List<ProfileData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
       return ListView.builder(
@@ -50,14 +50,11 @@ class _FriendListState extends State<FriendList> {
   Widget build(BuildContext context) {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
-    Future<List<FriendData>> fetchRootFriend() async {
-      //todo: implement get root post (categorical post)
-      return getFriends(Filter(search_type: "friend_list"), widget.id)
-          .toList();
+    Future<List<ProfileData>> fetchRootFriend() async {
+      return Relationship.friendProfile(getMyProfileId()).toList();
     }
 
-    Future<List<FriendData>> fetchRootFriendByKey(String key) async {
-      //todo: implement get root post (categorical post)
+    Future<List<ProfileData>> fetchRootFriendByKey(String key) async {
       return pseudoSearchFriend(widget.id, key)
           .toList();
     }
@@ -72,7 +69,6 @@ class _FriendListState extends State<FriendList> {
                 top: height / 21.325,
                 bottom: height / 85.3),
 
-            ///(10, 10, 40, 10)
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -165,7 +161,7 @@ class _FriendListState extends State<FriendList> {
             height: height / 170.6,
           ),
           Expanded(
-              child: FutureBuilder<List<FriendData>>(
+              child: FutureBuilder<List<ProfileData>>(
             future: isEmpty == true ? fetchRootFriend() : fetchRootFriendByKey(keyword),
             builder: (context, snapshot) {
               return SingleChildScrollView(

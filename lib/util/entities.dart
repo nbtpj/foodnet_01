@@ -10,7 +10,7 @@ import 'package:foodnet_01/util/global.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
+import 'package:tuple/tuple.dart';
 
 /// define data entity (persistent mechanism)
 
@@ -43,20 +43,20 @@ class CommentData {
       : commentID = json['commentID'] as String,
         comment = json['comment'] as String,
         mediaUrls =
-        (json['mediaUrls'] as List).map((e) => e as String).toList(),
+            (json['mediaUrls'] as List).map((e) => e as String).toList(),
         timestamp = (json['timestamp'] as Timestamp).toDate(),
         react = json['react'] as int,
         postID = json['postID'] as String,
         userID = json['userID'] as String;
 
   Map<String, dynamic> toJson() => {
-    'comment': comment,
-    'mediaUrls': mediaUrls,
-    'timestamp': Timestamp.fromDate(timestamp),
-    'react': react,
-    'userID': userID,
-    'postID': postID,
-  };
+        'comment': comment,
+        'mediaUrls': mediaUrls,
+        'timestamp': Timestamp.fromDate(timestamp),
+        'react': react,
+        'userID': userID,
+        'postID': postID,
+      };
 
   Future<ProfileData?> load_profile() async {
     profile = await getProfile(userID);
@@ -134,34 +134,34 @@ class PostData implements LazyLoadData {
 
   PostData(
       {this.author_id,
-        this.id = "new",
-        this.title = "",
-        this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing"
-            "Lorem ipsum dolor sit amet, consectetur adipiscing",
-        this.mediaUrls = const [
-          "assets/food/HeavenlyPizza.jpg",
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-        ],
-        this.outstandingIMGURL = '',
-        this.price,
-        this.isGood = true,
-        this.react = 0,
-        this.cateList = const [],
-        this.features = const [
-          ["200+", "Calories"],
-          ["%10", "Fat"],
-          ["%40", "Proteins"],
-          ["200+", "Calories"]
-        ],
-        this.position,
-        this.numUpvote = 0,
-        this.numDownvote = 0});
+      this.id = "new",
+      this.title = "",
+      this.description = "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing"
+          "Lorem ipsum dolor sit amet, consectetur adipiscing",
+      this.mediaUrls = const [
+        "assets/food/HeavenlyPizza.jpg",
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+      ],
+      this.outstandingIMGURL = '',
+      this.price,
+      this.isGood = true,
+      this.react = 0,
+      this.cateList = const [],
+      this.features = const [
+        ["200+", "Calories"],
+        ["%10", "Fat"],
+        ["%40", "Proteins"],
+        ["200+", "Calories"]
+      ],
+      this.position,
+      this.numUpvote = 0,
+      this.numDownvote = 0});
 
   int i = 0;
 
@@ -190,7 +190,7 @@ class PostData implements LazyLoadData {
       return None;
     }
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(position!.latitude, position!.longitude);
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
     Placemark place = placemarks[0];
     List<String?> add_names = [
       place.name,
@@ -256,14 +256,14 @@ class PostData implements LazyLoadData {
   Future<dynamic> getRate() async {
     // todo: Kì vọng đẩy lên cloud function
     numUpvote = (await flattenReactionRef
-        .where("postId", isEqualTo: id)
-        .where('type', isEqualTo: 1)
-        .get())
+            .where("postId", isEqualTo: id)
+            .where('type', isEqualTo: 1)
+            .get())
         .size;
     numDownvote = (await flattenReactionRef
-        .where("postId", isEqualTo: id)
-        .where('type', isEqualTo: -1)
-        .get())
+            .where("postId", isEqualTo: id)
+            .where('type', isEqualTo: -1)
+            .get())
         .size;
     return {
       "numUpvote": numUpvote,
@@ -273,28 +273,28 @@ class PostData implements LazyLoadData {
 
   PostData.fromJson(Map<String, Object?> json)
       : this(
-      author_id: json['author_uid']! as String,
-      id: json['id']! as String,
-      description: json['description']! as String,
-      mediaUrls:
-      (json['mediaUrls'] as List).map((e) => e as String).toList(),
-      cateList:
-      (json['cateList'] as List).map((e) => e as String).toList(),
-      price: json['price']! as int,
-      isGood: json['isGood']! as bool,
-      react: json['react']! as int,
-      outstandingIMGURL: json['outstandingIMGURL']! as String,
-      title: json['title']! as String,
-      position: json['position'] != null
-          ? LatLng((json['position']! as GeoPoint).latitude,
-          (json['position']! as GeoPoint).longitude)
-          : null);
+            author_id: json['author_uid']! as String,
+            id: json['id']! as String,
+            description: json['description']! as String,
+            mediaUrls:
+                (json['mediaUrls'] as List).map((e) => e as String).toList(),
+            cateList:
+                (json['cateList'] as List).map((e) => e as String).toList(),
+            price: json['price']! as int,
+            isGood: json['isGood']! as bool,
+            react: json['react']! as int,
+            outstandingIMGURL: json['outstandingIMGURL']! as String,
+            title: json['title']! as String,
+            position: json['position'] != null
+                ? LatLng((json['position']! as GeoPoint).latitude,
+                    (json['position']! as GeoPoint).longitude)
+                : null);
 
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
-      id: json['id']! as String,
-      title: json['title']! as String,
-      outstandingIMGURL: json['outstandingIMGURL']! as String);
+            id: json['id']! as String,
+            title: json['title']! as String,
+            outstandingIMGURL: json['outstandingIMGURL']! as String);
 
   Map<String, Object?> toJson() {
     return {
@@ -312,7 +312,7 @@ class PostData implements LazyLoadData {
       "outstandingIMGURL": outstandingIMGURL,
       "position_hash": position != null
           ? GeoHash.fromDecimalDegrees(position!.longitude, position!.latitude)
-          .geohash
+              .geohash
           : null,
     };
   }
@@ -341,7 +341,7 @@ class PostData implements LazyLoadData {
         outstandingIMGURL = "$author_id-${DateTime.now().toUtc()}";
         await storage.ref('food').child(outstandingIMGURL).putFile(f);
         outstandingIMGURL =
-        await storage.ref('food').child(outstandingIMGURL).getDownloadURL();
+            await storage.ref('food').child(outstandingIMGURL).getDownloadURL();
       } catch (e) {
         debugPrint(
             "error: can not upload: " + outstandingIMGURL + e.toString());
@@ -355,7 +355,7 @@ class PostData implements LazyLoadData {
           mediaUrls[i] = "$author_id-${DateTime.now().toUtc()}";
           await storage.ref('food').child(mediaUrls[i]).putFile(f);
           mediaUrls[i] =
-          await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
+              await storage.ref('food').child(mediaUrls[i]).getDownloadURL();
         } catch (e) {
           debugPrint("error: can not upload: " + mediaUrls[i] + e.toString());
           return false;
@@ -423,112 +423,304 @@ class UserData implements LazyLoadData {
   }
 }
 
-class FriendData implements LazyLoadData {
-  String id;
-  String name;
-  DateTime time;
-  String userAsset;
-  String type;
-  int mutualism;
+class Relationship {
+  late String id, type, sender_id;
 
-  FriendData({
-    required this.id,
-    required this.name,
-    required this.time,
-    required this.userAsset,
-    required this.type,
-    required this.mutualism,
-  });
+  /// type: friend, invitation, suggestion
+  late DateTime time;
+  late List<String> member_ids;
 
-  @override
-  void loadMore() {
-    // TODO: implement loadMore
-  }
-
-  FriendData.fromJson(Map<String, Object?> json)
-      : this(
-      id: json["id"]! as String,
-      name: json["name"]! as String,
-      userAsset: json["userAsset"] as String,
-      time: (json['time'] as Timestamp).toDate(),
-      type: json['type'] as String,
-      mutualism: 0);
+  Relationship(
+      {this.id = "new",
+      required this.sender_id,
+      required this.type,
+      required this.time,
+      required this.member_ids});
 
   String get time_string {
     return timeago.format(time);
   }
+  String get get_other_id_but_me {
+    for (var a in member_ids){
+      if (a!=getMyProfileId()){
+        return a;
+      }
+    }
+    return "none";
+  }
 
-  Map<String, Object?> toJson() {
-    return {"id": id, "name": name, "time": time, "userAsset": userAsset, "type": type};
+  static Stream<ProfileData> friendRecommend(String of_id, int?limit) async*{
+    var profiles = await profilesRef.limit(limit??100).get();
+    List<Tuple2<int, ProfileData>> scores = [];
+    for (var doc in profiles.docs) {
+      var profile = doc.data();
+      var mul = await profile.mutualism;
+      scores.add(Tuple2(mul, profile));
+    }
+    scores.sort((Tuple2 a, Tuple2 b) {
+      return a.item1.compareTo(b.item1) * -1;
+    });
+    for (var tuple in scores) {
+      if (tuple.item2.id != getMyProfileId()) {
+        yield tuple.item2;
+      }
+    }
+  }
+
+  // Stream<ProfileData> get members async* {
+  //   for (var mid in member_ids) {
+  //     var snap = await profilesRef.doc(mid).get();
+  //     if (snap.data() != null) {
+  //       yield snap.data()!;
+  //     }
+  //   }
+  // }
+  static Future<List<String>> mutualismIds(String id_a, String id_b) async {
+    List<String> list_rel = (await relationshipsRef
+            .where('member_ids', arrayContains: id_a)
+            .where('type', isEqualTo: 'friend')
+            .get())
+        .docs
+        .map((e) {
+      var x = e.data().member_ids;
+      x.remove(id_a);
+      return x[0];
+    }).toList();
+    List<String> list_rel_ = (await relationshipsRef
+            .where('member_ids', arrayContains: id_b)
+            .where('type', isEqualTo: 'friend')
+            .get())
+        .docs
+        .map((e) {
+      var x = e.data().member_ids;
+      x.remove(id_b);
+      return x[0];
+    }).toList();
+    Set<String> ids = {};
+    for (var i in list_rel) {
+      if (list_rel_.contains(i)) {
+        ids.add(i);
+      }
+    }
+    return ids.toList();
+  }
+
+  static Future<List<String>> invitationIds(String of_id) async {
+    var list_rel = await relationshipsRef
+        .where('member_ids', arrayContains: of_id)
+        .where('sender_id', isNotEqualTo: of_id)
+        .where('type', isEqualTo: 'invitation')
+        .get();
+    Set<String> ids = {};
+    for (var doc in list_rel.docs) {
+      ids.addAll(doc.data().member_ids);
+    }
+    return ids.toList();
+  }
+  static Stream<Relationship>invitationRel(String of_id) async* {
+    var list_rel = await relationshipsRef
+        .where('member_ids', arrayContains: of_id)
+        .where('type', isEqualTo: 'invitation')
+        .get();
+    for (var doc in list_rel.docs) {
+      if (doc.data().sender_id!=of_id) {
+        yield doc.data();
+      }
+    }
+  }
+
+  static Stream<ProfileData> invitationProfile(String of_id) async* {
+    var ids = await invitationIds(of_id);
+    for (var id in ids) {
+      var profile = await profilesRef.doc(id).get();
+      if (profile.data() != null) {
+        yield profile.data()!;
+      }
+    }
+  }
+
+  static Stream<Relationship> friendRelationship(String of_id) async* {
+    var list_rel = await relationshipsRef
+        .where('member_ids', arrayContains: of_id)
+        .where('type', isEqualTo: 'friend')
+        .get();
+    for (var doc in list_rel.docs) {
+      yield doc.data();
+    }
+  }
+
+  static Future<List<String>> friendIds(String of_id) async {
+    var list_rel = await relationshipsRef
+        .where('member_ids', arrayContains: of_id)
+        .where('type', isEqualTo: 'friend')
+        .get();
+    Set<String> ids = {};
+    for (var doc in list_rel.docs) {
+      ids.addAll(doc.data().member_ids);
+    }
+    ids.remove(of_id);
+    return ids.toList();
+  }
+
+  static Stream<ProfileData> friendProfile(String of_id) async* {
+    var ids = await friendIds(of_id);
+    for (var id in ids) {
+      var profile = await profilesRef.doc(id).get();
+      if (profile.data() != null) {
+        yield profile.data()!;
+      }
+    }
+  }
+
+  static createId(List<String> ids) {
+    ids.sort((a, b) => a.compareTo(b));
+    String relation_id = ids.join('_');
+    return relation_id;
+  }
+
+  static Future<bool> sendInvitation(String other_id) async {
+    String relation_id = createId([getMyProfileId(), other_id]);
+    var doc = await relationshipsRef.doc(relation_id).get();
+    if (doc.exists && doc.data()!.type == "friend") {
+      return false;
+    }
+    try {
+      await relationshipsRef.doc(relation_id).set(Relationship(
+          sender_id: getMyProfileId(),
+          type: "invitation",
+          time: DateTime.now(),
+          member_ids: [getMyProfileId(), other_id]));
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  static Future<bool> acceptInvitation(String other_id) async {
+    String relation_id = createId([getMyProfileId(), other_id]);
+    var doc = await relationshipsRef.doc(relation_id).get();
+
+    if (!doc.exists || doc.exists && doc.data()!.type != "invitation") {
+      return false;
+    }
+    var invitation = doc.data()!;
+    invitation.type = "friend";
+    try {
+      await relationshipsRef.doc(relation_id).set(invitation);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  static Future<bool> rejectInvitation(String other_id) async {
+    String relation_id = createId([getMyProfileId(), other_id]);
+    var doc = await relationshipsRef.doc(relation_id).get();
+
+    if (!doc.exists || doc.exists && doc.data()!.type != "invitation") {
+      return false;
+    }
+    var invitation = doc.data()!;
+
+    try {
+      await relationshipsRef.doc(invitation.id).delete();
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  static Future<bool> removeFriend(String other_id) async {
+    String relation_id = createId([getMyProfileId(), other_id]);
+    var doc = await relationshipsRef.doc(relation_id).get();
+
+    if (!doc.exists || doc.exists && doc.data()!.type != "friend") {
+      return false;
+    }
+    var friend = doc.data()!;
+    try {
+      await relationshipsRef.doc(friend.id).delete();
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  static Relationship fromJson(Map<String, dynamic> data) {
+    return Relationship(
+        sender_id: data['sender_id'],
+        type: data['type'],
+        time: (data['time'] as Timestamp).toDate(),
+        member_ids:
+            (data['member_ids'] as List).map((e) => e as String).toList());
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'time': time,
+      'type': type,
+      'member_ids': member_ids,
+      'sender_id': sender_id
+    };
   }
 }
 
 class ProfileData extends Equatable {
-  String? id;
+  String id;
   String name;
   late String userAsset;
   late String wallAsset;
-  int? mutualism;
-  int friendsNumber = 0;
   String? dayOfBirth;
   String? gender;
   String? location;
   List<String>? works;
   List<String>? schools;
   List<String>? favorites;
-  List<String>? friendReferences;
 
   ProfileData({
-    this.id,
+    this.id = "new",
     required this.name,
     this.userAsset =
-    "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
+        "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
     this.wallAsset = "gs://mobile-foodnet.appspot.com/profile/wall_default.png",
-    this.mutualism,
-    this.friendsNumber = 0,
     this.dayOfBirth,
     this.gender,
     this.location,
     List<String>? works,
     List<String>? schools,
     List<String>? favorites,
-    List<String>? friendReferences,
   }) {
     this.schools = schools ?? [];
     this.works = works ?? [];
     this.favorites = favorites ?? [];
-    this.friendReferences = friendReferences ?? [];
+  }
+  Future<int> get mutualism async{
+    return (await Relationship.mutualismIds(getMyProfileId(), id)).length;
   }
 
   ProfileData.fromJson(Map<String, Object?> json)
       : this(
-      id: json["id"]! as String,
-      name: json["name"]! as String,
-      userAsset: json["userAsset"]! as String,
-      wallAsset: json["wallAsset"]! as String,
-      dayOfBirth: json["dob"] != null
-          ? (json["dob"]! as Timestamp).toDate().toString()
-          : null,
-      gender: json["gender"] != null ? json["gender"]! as String : null,
-      location:
-      json["location"] != null ? json["location"] as String : null,
-      works: (json["works"] as List).map((e) => e as String).toList(),
-      schools: (json["schools"] as List).map((e) => e as String).toList(),
-      favorites:
-      (json["favorites"] as List).map((e) => e as String).toList(),
-      friendReferences: json.containsKey("friends") &&
-          json["friends"] != null
-          ? (json["friends"]! as List)
-          .map((e) => e.path as String)
-          .toList()
-          : [],
-      friendsNumber:
-      (json.containsKey("friends") && json["friends"] != null
-          ? (json["friends"]! as List)
-          : [])
-          .length
-    // friends: (json["friends"] as List).map((e) => e as FriendData).toList(),
-  );
+          id: json["id"]! as String,
+          name: json["name"]! as String,
+          userAsset: json["userAsset"]! as String,
+          wallAsset: json["wallAsset"]! as String,
+          dayOfBirth: json["dob"] != null
+              ? (json["dob"]! as Timestamp).toDate().toString()
+              : null,
+          gender: json["gender"] != null ? json["gender"]! as String : null,
+          location:
+              json["location"] != null ? json["location"] as String : null,
+          works: (json["works"] as List).map((e) => e as String).toList(),
+          schools: (json["schools"] as List).map((e) => e as String).toList(),
+          favorites:
+              (json["favorites"] as List).map((e) => e as String).toList(),
+        );
+
+  Future<int> get friendsNumber async {
+    return (await Relationship.friendIds(id)).length;
+  }
+
+  get time_string => "";
 
   Map<String, Object?> toJson() {
     return {
@@ -543,8 +735,6 @@ class ProfileData extends Equatable {
       "works": works,
       "schools": schools,
       "favorites": favorites,
-      "friends": friendReferences,
-      "friendsNumber": friendsNumber
     };
   }
 
@@ -659,10 +849,11 @@ class Filter {
 
   Filter(
       {this.search_type,
-        this.keyword,
-        this.scoreThreshold,
-        this.visibleRegion,
-        this.limit, this.author_id});
+      this.keyword,
+      this.scoreThreshold,
+      this.visibleRegion,
+      this.limit,
+      this.author_id});
 }
 
 class ReactionData implements LazyLoadData {
@@ -674,9 +865,9 @@ class ReactionData implements LazyLoadData {
 
   ReactionData(
       {required this.userId,
-        required this.postId,
-        required this.type,
-        required this.time});
+      required this.postId,
+      required this.type,
+      required this.time});
 
   factory ReactionData.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options) {
@@ -712,26 +903,26 @@ class Message {
 
   Message(
       {required this.senderId,
-        required this.receiverId,
-        required this.message,
-        required this.unread,
-        required this.createdAt});
+      required this.receiverId,
+      required this.message,
+      required this.unread,
+      required this.createdAt});
 
   static Message fromJson(Map<String, dynamic> json) => Message(
-    senderId: json["senderId"],
-    receiverId: json["receiverId"],
-    message: json["message"],
-    unread: json["unread"],
-    createdAt: json["createdAt"]?.toDate(),
-  );
+        senderId: json["senderId"],
+        receiverId: json["receiverId"],
+        message: json["message"],
+        unread: json["unread"],
+        createdAt: json["createdAt"]?.toDate(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "senderId": senderId,
-    "receiverId": receiverId,
-    "message": message,
-    "unread": unread,
-    "createdAt": createdAt.toUtc(),
-  };
+        "senderId": senderId,
+        "receiverId": receiverId,
+        "message": message,
+        "unread": unread,
+        "createdAt": createdAt.toUtc(),
+      };
 }
 
 class RecentUserSearchData implements LazyLoadData {
@@ -758,8 +949,7 @@ class RecentUserSearchData implements LazyLoadData {
         createAt: json["createAt"].toDate(),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "userAsset": userAsset,
         "id": id,
         "name": name,
@@ -771,5 +961,4 @@ class RecentUserSearchData implements LazyLoadData {
   void loadMore() {
     // TODO: implement loadMore
   }
-
 }
