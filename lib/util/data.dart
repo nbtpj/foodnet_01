@@ -47,8 +47,6 @@ final CollectionReference<CommentData> commentsRef = FirebaseFirestore.instance
     fromFirestore: (snapshot, _) {
       var data = snapshot.data()!;
       data["commentID"] = snapshot.id;
-      print("data is");
-      print(data);
       return CommentData.fromJson(data);
     },
     toFirestore: (commentData, _) => commentData.toJson());
@@ -150,6 +148,7 @@ String normalize(String s) {
 }
 
 Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
+  /// todo: đẩy lên cloud
   var foodSnapshot = await postsRef.limit(limit??100).get();
   key = normalize(key);
   List<Tuple2> scores = [];
@@ -168,6 +167,7 @@ Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
 }
 
 Stream<ProfileData> pseudoSearchUser(String key, int? limit) async* {
+  /// todo: đấy lên cloud
   var profileSnapshot = await profilesRef.limit(limit??100).get();
   key = normalize(key);
   List<Tuple2> scores = [];
@@ -188,6 +188,7 @@ Stream<ProfileData> pseudoSearchUser(String key, int? limit) async* {
 }
 
 Stream<ProfileData> pseudoSearchFriend(String id, String key) async* {
+  /// todo: đấy lên cloud
   final friendDocument = await (Relationship.friendProfile(getMyProfileId()).toList());
   for (var doc in friendDocument) {
     String txt = normalize(doc.name.toLowerCase());
