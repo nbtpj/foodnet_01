@@ -452,19 +452,14 @@ class Relationship {
     });
     for (var tuple in scores) {
       if (tuple.item2.id != getMyProfileId()) {
-        yield tuple.item2;
+        var rel = await relationshipsRef.doc(createId([getMyProfileId(), tuple.item2.id])).get();
+        if (!rel.exists || rel.data()!.type=='invitation') {
+          yield tuple.item2;
+        }
       }
     }
   }
 
-  // Stream<ProfileData> get members async* {
-  //   for (var mid in member_ids) {
-  //     var snap = await profilesRef.doc(mid).get();
-  //     if (snap.data() != null) {
-  //       yield snap.data()!;
-  //     }
-  //   }
-  // }
   static Future<List<String>> mutualismIds(String id_a, String id_b) async {
     List<String> list_rel = (await relationshipsRef
             .where('member_ids', arrayContains: id_a)
