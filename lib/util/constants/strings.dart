@@ -87,4 +87,4 @@ const String unFriendString = lang=='en'?'Unfriend ':"Huỷ kết bạn với ";
 const String postString = lang=='en'? "Post":"Bài đăng";
 const String cancelRequestString = lang=='en' ? "Cancel Request":"Huỷ yêu cầu";
 const String acceptString = lang=='en'?"Accept":"Chấp nhận";
-
+const String notValidString = lang=='en'?"Not valid!":"Không hợp lệ!";

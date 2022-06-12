@@ -69,7 +69,8 @@ class _PostEditForm extends State<PostEditForm> {
             List<DropdownMenuItem<String>> builds = [
               DropdownMenuItem<String>(
                 child: SizedBox(
-                  height: SizeConfig.screenHeight / 20,
+                  height: SizeConfig.screenHeight / 16,
+                  width: SizeConfig.screenWidth / 1.5,
                   child: Row(
                     children: [
                       SizedBox(
@@ -91,12 +92,14 @@ class _PostEditForm extends State<PostEditForm> {
                 DropdownMenuItem<String>(
                   child: SizedBox(
                     height: SizeConfig.screenHeight / 16,
+                    width: SizeConfig.screenWidth / 1.5,
                     child: Row(
                       children: [
                         SizedBox(
                           height: SizeConfig.screenHeight / 16,
+                          width: SizeConfig.screenWidth / 12,
                           child: FittedBox(
-                              fit: BoxFit.fitHeight,
+                              fit: BoxFit.contain,
                               child: MediaWidget(url: tag.outstandingIMGURL)),
                         ),
                         SizedBox(
@@ -104,35 +107,33 @@ class _PostEditForm extends State<PostEditForm> {
                           width: SizeConfig.screenWidth / 10,
                         ),
                         SizedBox(
-                          // width: SizeConfig.screenWidth / 5,
-                          // height: SizeConfig.screenHeight / 16,
-                          child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text(tag.title,
-                                  style: const TextStyle(
-                                      color: Colors.orange, fontSize: 18))),
-                        ),
+                            width: SizeConfig.screenWidth / 4,
+                            height: SizeConfig.screenHeight / 16,
+                            child: Align(
+                                alignment: FractionalOffset.center,
+                                child: Text(tag.title,
+                                    style: const TextStyle(
+                                        color: Colors.orange, fontSize: 18)))
+                            ),
                         SizedBox(
                           height: SizeConfig.screenHeight / 16,
                           width: SizeConfig.screenWidth / 10,
                         ),
                         SizedBox(
                             child: FutureBuilder<int>(
-                              future: tag.numcite,
-                              builder: (context, snap){
-                                if (snap.hasData){
-                                  return FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text("${snap.data!}",
-                                          softWrap: true,
-                                          style: const TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 18)));
-                                } else {
-                                  return loading;
-                                }
-                              },
-                            )),
+                          future: tag.numcite,
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              return FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text("${snap.data!}",
+                                      style: const TextStyle(
+                                          color: Colors.green, fontSize: 18)));
+                            } else {
+                              return loading;
+                            }
+                          },
+                        )),
                       ],
                     ),
                   ),
@@ -140,15 +141,13 @@ class _PostEditForm extends State<PostEditForm> {
                 )
             ]);
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(3.0),
               child: DropdownButton<String>(
                 items: builds,
                 value: food.cateList.length > i ? food.cateList[i] : None,
                 icon: const Icon(Icons.arrow_downward),
                 elevation: 16,
-                style: const TextStyle(
-                  color: Colors.deepPurple
-                ),
+                style: const TextStyle(color: Colors.deepPurple),
                 underline: const SizedBox(),
                 onChanged: (newValue) {
                   setState(() {
@@ -176,7 +175,13 @@ class _PostEditForm extends State<PostEditForm> {
               ),
             );
           } else {
-            return const SizedBox.shrink();
+            return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: SizeConfig.screenHeight / 16,
+                  width: SizeConfig.screenWidth / 1.2,
+                  child: loading,
+                ));
           }
         });
   }
@@ -193,10 +198,10 @@ class _PostEditForm extends State<PostEditForm> {
           ),
           onTap: () async {
             final XFile? image =
-            await widget._picker.pickImage(source: ImageSource.gallery);
+                await widget._picker.pickImage(source: ImageSource.gallery);
             setState(() {
               widget.food.outstandingIMGURL =
-              image == null ? widget.food.outstandingIMGURL : image.path;
+                  image == null ? widget.food.outstandingIMGURL : image.path;
             });
           },
         ),
@@ -270,127 +275,121 @@ class _PostEditForm extends State<PostEditForm> {
       key: _formKey,
       child: Expanded(
           child: Container(
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: ListView(children: [
-              _select_cover_post(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FormBuilderTextField(
-                  textAlign: TextAlign.center,
-                  name: "title",
-                  decoration: const InputDecoration(
-                      labelText: name_string,
-                      border: OutlineInputBorder()
-                  ),
-                  initialValue: widget.food.title,
-                  onChanged: (value) {
-                    widget.food.title = value ?? widget.food.title;
-                  },
-                ),
-              ),
-              // _build_feat_selector(context),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FormBuilderTextField(
-                    name: "features",
-                    decoration: const InputDecoration(
-                      labelText: features_string,
-                      border: OutlineInputBorder()
-                    ),
-                    initialValue: [
-                      for (var i_feat in widget.food.getFeatures())
-                        "${i_feat[1]}: ${i_feat[0]}"
-                    ].join("; "),
-                    onChanged: (value) {
-                      List<String> feats =
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        child: ListView(children: [
+          _select_cover_post(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FormBuilderTextField(
+              textAlign: TextAlign.center,
+              name: "title",
+              decoration: const InputDecoration(
+                  labelText: name_string, border: OutlineInputBorder()),
+              initialValue: widget.food.title,
+              onChanged: (value) {
+                widget.food.title = value ?? widget.food.title;
+              },
+            ),
+          ),
+          // _build_feat_selector(context),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FormBuilderTextField(
+                name: "features",
+                decoration: const InputDecoration(
+                    labelText: features_string, border: OutlineInputBorder()),
+                initialValue: [
+                  for (var i_feat in widget.food.getFeatures())
+                    "${i_feat[1]}: ${i_feat[0]}"
+                ].join("; "),
+                onChanged: (value) {
+                  List<String> feats =
                       value != null ? value.replaceAll(" ", '').split(";") : [];
-                      widget.food.features = [];
-                      for (var feat in feats) {
-                        try {
-                          String a = feat.split(":")[0], b = feat.split(":")[1];
+                  widget.food.features = [];
+                  for (var feat in feats) {
+                    try {
+                      String a = feat.split(":")[0], b = feat.split(":")[1];
 
-                          widget.food.features.add([b, a]);
-                        } catch (e) {}
-                        ;
-                      }
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FormBuilderTextField(
-                    name: "description",
-                    initialValue: widget.food.description,
-                    decoration: const InputDecoration(
-                      labelText: description_string,
-                      border: OutlineInputBorder()
-                    ),
-                    onChanged: (value) {
-                      widget.food.description = value ?? widget.food.description;
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FormBuilderTextField(
-                    name: "price",
-                    decoration: const InputDecoration(
-                      hintText: price_string,
-                      labelText: lang=="en" ? "Price" : "Giá",
-                      border: OutlineInputBorder()
-                    ),
-                    autofillHints: const ["000 vnd", "500 vnd", ".99 \$"],
-                    validator: (value) {
-                      if (value == null) return null;
-                      value = value.replaceAll("[^\\d.]", "");
-                      return value;
-                    },
-                    initialValue: widget.food.price?.toString() ?? None,
-                    onChanged: (value) {
-                      try {
-                        if (value != None) {
-                          widget.food.price = int.parse(value ?? "0");
-                        }
-                      } catch (e) {}
-                    }),
-              ),
-              FormBuilderSwitch(
-                  name: "isGood",
-                  decoration: const InputDecoration(
-                    border: InputBorder.none
-                  ),
-                  initialValue: widget.food.isGood,
-                  title: const Text(sale_this_thing),
-                  onChanged: (value) {
-                    widget.food.isGood = value!;
-                  }),
-              for (int i = 0; i < 3; i++) _select_tags(widget.food, i),
-              _select_medias(),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: GestureDetector(
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LocationPicker(
+                      widget.food.features.add([b, a]);
+                    } catch (e) {}
+                    ;
+                  }
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FormBuilderTextField(
+                name: "description",
+                initialValue: widget.food.description,
+                decoration: const InputDecoration(
+                    labelText: description_string,
+                    border: OutlineInputBorder()),
+                onChanged: (value) {
+                  widget.food.description = value ?? widget.food.description;
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FormBuilderTextField(
+                name: "price",
+                decoration: const InputDecoration(
+                    hintText: price_string,
+                    labelText: lang == "en" ? "Price" : "Giá",
+                    border: OutlineInputBorder()),
+                autofillHints: const ["000 vnd", "500 vnd", ".99 \$"],
+                validator: (value) {
+                  if (value == null) return null;
+                  value = value.replaceAll("[^\\d.]", "");
+                  return value;
+                },
+                initialValue: widget.food.price?.toString() ?? None,
+                onChanged: (value) {
+                  try {
+                    if (value != None) {
+                      widget.food.price = int.parse(value!);
+                    } else {
+                      widget.food.price = null;
+                    }
+                  } catch (e) {
+                    notify(notValidString);
+                  }
+                }),
+          ),
+          FormBuilderSwitch(
+              name: "isGood",
+              decoration: const InputDecoration(border: InputBorder.none),
+              initialValue: widget.food.isGood,
+              title: const Text(sale_this_thing),
+              onChanged: (value) {
+                widget.food.isGood = value!;
+              }),
+          for (int i = 0; i < 3; i++) _select_tags(widget.food, i),
+          _select_medias(),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: GestureDetector(
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LocationPicker(
                                 food: widget.food,
                               )));
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding:
+                },
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding:
                           EdgeInsets.only(left: SizeConfig.screenWidth / 51.38),
-
-                          /// 8.0
-                          child: Icon(
-                            Icons.location_pin,
-                            color: freeDelivery,
-                            size: SizeConfig.screenHeight / 22.77,
-                          ),
-                        ),
-                        FutureBuilder<String?>(
-                            future: widget.food.getLocationName(),
-                            builder: (context, snapshot) => Text(
+                      child: Icon(
+                        Icons.location_pin,
+                        color: freeDelivery,
+                        size: SizeConfig.screenHeight / 22.77,
+                      ),
+                    ),
+                    FutureBuilder<String?>(
+                        future: widget.food.getLocationName(),
+                        builder: (context, snapshot) => Text(
                               snapshot.hasData ? snapshot.data ?? None : None,
                               style: TextStyle(
                                   color: freeDelivery,
@@ -398,13 +397,11 @@ class _PostEditForm extends State<PostEditForm> {
                                   // overflow: TextOverflow.fade,
                                   fontSize: SizeConfig.screenHeight / 44.69),
                             ))
-
-                        /// 16
-                      ],
-                    )),
-              )
-            ]),
-          )),
+                  ],
+                )),
+          )
+        ]),
+      )),
     );
   }
 
@@ -488,11 +485,9 @@ class _PostEditForm extends State<PostEditForm> {
                         Icons.delete,
                         color: Colors.red,
                       ))),
-
             ],
           ),
           _build_form(),
         ]));
-
   }
 }
