@@ -847,7 +847,6 @@ class Filter {
 }
 
 class ReactionData implements LazyLoadData {
-  // todo: thêm trigger để mỗi lần cập nhật sẽ update biến react trong post tương ứng
   String userId;
   String postId;
   int type;

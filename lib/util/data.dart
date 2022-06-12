@@ -473,18 +473,6 @@ Future<void> createNewProfile(ProfileData profile) {
   return profilesRef.doc(profile.id).set(profile);
 }
 
-// Stream<FriendData> getFriend(String? profileId) async* {
-//   if (profileId == null) throw Exception("Require login");
-//   final friendCollectionRef = friendsRef(profileId);
-//   final friendDocumentRef =
-//   friendCollectionRef.where("type", isEqualTo: "friends");
-//   final firstPage = friendDocumentRef.orderBy("time").limit(4);
-//   final friendDocument = await firstPage.get();
-//   for (var doc in friendDocument.docs) {
-//     yield doc.data();
-//   }
-// }
-
 Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {
     yield SearchData(
