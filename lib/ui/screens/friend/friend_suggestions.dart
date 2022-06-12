@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/search/search.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -87,6 +89,9 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                     FutureBuilder<List<ProfileData>>(
                         future: fetchRootFriend(),
                         builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting){
+                            return loading;
+                          }
                           if (snapshot.hasData) {
                             var friendSuggestions = snapshot.data ?? [];
                             return ListView.builder(

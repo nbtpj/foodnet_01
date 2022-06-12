@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -164,6 +165,9 @@ class _FriendListState extends State<FriendList> {
               child: FutureBuilder<List<ProfileData>>(
             future: isEmpty == true ? fetchRootFriend() : fetchRootFriendByKey(keyword),
             builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting){
+                return loading;
+              }
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -177,7 +181,7 @@ class _FriendListState extends State<FriendList> {
                       child: Row(
                         children: [
                           Text(
-                            "${snapshot.data?.length} $friend_string",
+                            snapshot.data==null?loading_string:"${snapshot.data?.length} $friend_string",
                             style: TextStyle(
                               fontSize: height / 34.12,
 

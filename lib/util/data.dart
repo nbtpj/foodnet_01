@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:tuple/tuple.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 import 'entities.dart';
 
@@ -472,18 +473,6 @@ Future<void> createNewProfile(ProfileData profile) {
   return profilesRef.doc(profile.id).set(profile);
 }
 
-// Stream<FriendData> getFriend(String? profileId) async* {
-//   if (profileId == null) throw Exception("Require login");
-//   final friendCollectionRef = friendsRef(profileId);
-//   final friendDocumentRef =
-//   friendCollectionRef.where("type", isEqualTo: "friends");
-//   final firstPage = friendDocumentRef.orderBy("time").limit(4);
-//   final friendDocument = await firstPage.get();
-//   for (var doc in friendDocument.docs) {
-//     yield doc.data();
-//   }
-// }
-
 Stream<SearchData> getSearchData(Filter filter) async* {
   if (filter.search_type == "recentUser") {
     yield SearchData(
@@ -559,4 +548,39 @@ Stream<PostData> detail_list_fetcher(String name) async* {
         yield doc.data();
       }
   }
+}
+
+Future<int> getNumCite(String title) {
+  return FirebaseFunctions
+      .instanceFor(region: "asia-east1")
+      .httpsCallable("numCite")
+      .call({"title" : title})
+      .then((res) => res.data["total"] as int);
+}
+
+Future<int> getUpvote(String postId) {
+  return FirebaseFunctions
+      .instanceFor(region: "asia-east1")
+      .httpsCallable("getUpvote")
+      .call({"postId": postId})
+      .then((res) => res.data["total"] as int);
+}
+
+Future<int> getDownvote(String postId) {
+  return FirebaseFunctions
+      .instanceFor(region: "asia-east1")
+      .httpsCallable("getDownvote")
+      .call({"postId": postId})
+      .then((res) => res.data["total"] as int);
+}
+
+Future<Map<String, dynamic>> calculateMutualism(List<String> profileIdList) {
+  return FirebaseFunctions
+      .instanceFor(region: "asia-east1")
+      .httpsCallable("calcMutualism")
+      .call({"idList": profileIdList})
+      .then((res) {
+        print(res.data.toString());
+        return res.data as Map<String, dynamic>;
+      });
 }

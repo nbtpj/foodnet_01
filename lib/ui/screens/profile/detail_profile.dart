@@ -127,15 +127,6 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-            color: Colors.black,
-            iconSize: height / 28.43, ///30
-            padding: const EdgeInsets.only(right: 0),
-          ),
-        ],
       ),
 
       body: SingleChildScrollView(

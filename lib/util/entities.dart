@@ -165,13 +165,12 @@ class PostData implements LazyLoadData {
 
   int i = 0;
 
-  Future<int> get numcite async {
-    // todo: Kì vọng đẩy lên cloud function
-    return (await postsRef.where('cateList', arrayContains: title).get()).size;
+  Future<int> get numcite {
+    return getNumCite(title);
   }
 
   LatLng positions() {
-    return position ?? LatLng(0, 0);
+    return position ?? const LatLng(0, 0);
   }
 
   bool isEditable() {
@@ -254,17 +253,8 @@ class PostData implements LazyLoadData {
   }
 
   Future<dynamic> getRate() async {
-    // todo: Kì vọng đẩy lên cloud function
-    numUpvote = (await flattenReactionRef
-            .where("postId", isEqualTo: id)
-            .where('type', isEqualTo: 1)
-            .get())
-        .size;
-    numDownvote = (await flattenReactionRef
-            .where("postId", isEqualTo: id)
-            .where('type', isEqualTo: -1)
-            .get())
-        .size;
+    numUpvote = await getUpvote(id);
+    numDownvote = await getDownvote(id);
     return {
       "numUpvote": numUpvote,
       "numDownvote": numDownvote,
@@ -462,19 +452,14 @@ class Relationship {
     });
     for (var tuple in scores) {
       if (tuple.item2.id != getMyProfileId()) {
-        yield tuple.item2;
+        var rel = await relationshipsRef.doc(createId([getMyProfileId(), tuple.item2.id])).get();
+        if (!rel.exists || rel.data()!.type=='invitation') {
+          yield tuple.item2;
+        }
       }
     }
   }
 
-  // Stream<ProfileData> get members async* {
-  //   for (var mid in member_ids) {
-  //     var snap = await profilesRef.doc(mid).get();
-  //     if (snap.data() != null) {
-  //       yield snap.data()!;
-  //     }
-  //   }
-  // }
   static Future<List<String>> mutualismIds(String id_a, String id_b) async {
     List<String> list_rel = (await relationshipsRef
             .where('member_ids', arrayContains: id_a)
@@ -857,7 +842,6 @@ class Filter {
 }
 
 class ReactionData implements LazyLoadData {
-  // todo: thêm trigger để mỗi lần cập nhật sẽ update biến react trong post tương ứng
   String userId;
   String postId;
   int type;
