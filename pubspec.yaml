@@ -62,6 +62,7 @@ dependencies:
   string_similarity: ^2.0.0
   firebase_analytics: ^9.1.9
   equatable: ^2.0.0
+  cloud_functions: ^3.2.16
 dev_dependencies:
   flutter_test:
     sdk: flutter

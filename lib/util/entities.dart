@@ -165,13 +165,12 @@ class PostData implements LazyLoadData {
 
   int i = 0;
 
-  Future<int> get numcite async {
-    // todo: Kì vọng đẩy lên cloud function
-    return (await postsRef.where('cateList', arrayContains: title).get()).size;
+  Future<int> get numcite {
+    return getNumCite(title);
   }
 
   LatLng positions() {
-    return position ?? LatLng(0, 0);
+    return position ?? const LatLng(0, 0);
   }
 
   bool isEditable() {
@@ -254,17 +253,8 @@ class PostData implements LazyLoadData {
   }
 
   Future<dynamic> getRate() async {
-    // todo: Kì vọng đẩy lên cloud function
-    numUpvote = (await flattenReactionRef
-            .where("postId", isEqualTo: id)
-            .where('type', isEqualTo: 1)
-            .get())
-        .size;
-    numDownvote = (await flattenReactionRef
-            .where("postId", isEqualTo: id)
-            .where('type', isEqualTo: -1)
-            .get())
-        .size;
+    numUpvote = await getUpvote(id);
+    numDownvote = await getDownvote(id);
     return {
       "numUpvote": numUpvote,
       "numDownvote": numDownvote,
