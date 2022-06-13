@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -29,6 +30,21 @@ class _FriendListState extends State<FriendList> {
   Widget buildFriendList(AsyncSnapshot<List<ProfileData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
+      if (friendList.isEmpty) {
+        return Container(
+          height: SizeConfig.screenHeight/3,
+          width: SizeConfig.screenWidth,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(nothingAsset),
+              fit: BoxFit.contain,
+            ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0)),
+          ),
+        );
+      }
       return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
