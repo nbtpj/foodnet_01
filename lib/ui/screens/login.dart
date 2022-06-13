@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/custom_button.dart';
 import 'package:foodnet_01/ui/components/custom_text_field.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -158,7 +159,12 @@ class _LoginState extends State<Login> {
                     formMode = FormMode.FORGOT_PASSWORD;
                     setState(() {});
                   },
-                  child: const Text('Forgot Password?'),
+                  child: Text(
+                      forgotPassword,
+                      style: TextStyle(
+                        color: buttonColor,
+                      ),
+                  ),
                 ),
               ),
             ],
@@ -172,18 +178,15 @@ class _LoginState extends State<Login> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Don\'t have an account? '),
+              const Text(account),
               InkWell(
                 onTap: () {
                   formMode = FormMode.REGISTER;
                   setState(() {});
                 },
                 child: Text(
-                  'Register',
-                  style: TextStyle(color: Theme
-                      .of(context)
-                      .colorScheme
-                      .secondary),
+                  registerString,
+                  style: TextStyle(color: buttonColor),
                 ),
               ),
             ],
@@ -194,14 +197,14 @@ class _LoginState extends State<Login> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Already have an account? '),
+              const Text(haveAccount),
               InkWell(
                 onTap: () {
                   formMode = FormMode.LOGIN;
                   setState(() {});
                 },
                 child: Text(
-                  'Login',
+                  loginString,
                   style: TextStyle(color: Theme
                       .of(context)
                       .colorScheme
@@ -280,6 +283,7 @@ class _LoginState extends State<Login> {
       child: CustomButton(
         label: "Submit",
         onPressed: () => login(),
+        color: buttonColor,
       ).fadeInList(4, false),
     );
   }

@@ -5,9 +5,12 @@ import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
+import 'package:foodnet_01/util/global.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../util/constants/colors.dart';
 import '../../../util/constants/strings.dart';
+import '../../../util/navigate.dart';
 
 class CommentFood extends StatefulWidget {
   PostData food;
@@ -113,13 +116,23 @@ class CommentFoodState extends State<CommentFood> {
 
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
     return Scaffold(
-        body: Column(children: <Widget>[
-      Row(
-        children: const [
-          Positioned(left: 0, top: 20, child: ArrowBack()),
-        ],
+      appBar: AppBar(
+        backgroundColor: buttonColor,
+        toolbarHeight: height / 12.186, ///70
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+          color: Colors.white,
+          iconSize: height / 28.43, ///30
+          onPressed: () {
+            Navigate.popPage(context);
+          },
+        ),
       ),
+        body: Column(children: <Widget>[
       Expanded(
         child: FutureBuilder<List<CommentData>>(
           future: fetch_comments(widget.food.id).toList(),

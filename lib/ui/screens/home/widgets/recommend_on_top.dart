@@ -33,11 +33,7 @@ class _DiscountCardState extends State<DiscountCard> {
           if (snapshot.hasData) {
             return SizedBox(
               height: SizeConfig.screenHeight / 3.415,
-
-              /// 200.0
               width: SizeConfig.screenWidth,
-
-              /// 411.0
               child: CarouselSlider(
                 options: CarouselOptions(
                   enableInfiniteScroll: true,

@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final screen = [
     Home(),
-    Discovery(),
+    Discovery(arriveType: "nav",),
 
     // SearchPageView(),
     // CartView(),

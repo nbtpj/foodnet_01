@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -29,6 +30,21 @@ class _FriendListState extends State<FriendList> {
   Widget buildFriendList(AsyncSnapshot<List<ProfileData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
+      if (friendList.isEmpty) {
+        return Container(
+          height: SizeConfig.screenHeight/3,
+          width: SizeConfig.screenWidth,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(nothingAsset),
+              fit: BoxFit.contain,
+            ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0)),
+          ),
+        );
+      }
       return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -61,62 +77,49 @@ class _FriendListState extends State<FriendList> {
     }
 
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(
-                left: width / 41.1,
-                right: width / 41.1,
-                top: height / 21.325,
-                bottom: height / 85.3),
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigate.popPage(context);
-                  },
-                  icon:
-                      const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
-                  color: Colors.black,
-                  iconSize: height / 28.43,
-
-                  ///30
-                ),
-                Text(
-                  friendString + " " + (widget.name != null ? "của " +
-                      widget.name!.split(' ')[widget.name!.split(' ').length - 1] : ""),
-                  style: TextStyle(
-                      fontSize: height / 28.43, fontWeight: FontWeight.bold),
-
-                  ///30
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigate.pushPage(
-                        context,
-                        const SearchPage(
-                          type: "user",
-                        ));
-                  },
-                  icon: const Icon(Icons.search),
-                  color: Colors.black,
-                  iconSize: height / 28.43,
-
-                  ///30
-                  padding: const EdgeInsets.only(right: 0),
-                ),
-              ],
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigate.popPage(context);
+          },
+          color: Colors.black,
+          icon: const Icon(Icons.arrow_back),
+          iconSize: height / 28.43,
+          padding: const EdgeInsets.only(right: 10),
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        toolbarHeight: height / 12.186, ///70
+        title: Center(
+          child: Text(
+            friendString + " " + (widget.name != null ? "của " +
+                widget.name!.split(' ')[widget.name!.split(' ').length - 1] : ""),
+            style: TextStyle(
+              fontSize: height / 30.464, ///28
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-          const Divider(
-            color: Colors.black54,
-          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigate.pushPage(
+                  context,
+                  const SearchPage(
+                    type: "user",
+                  ));
+            },
+            color: Colors.black,
+            icon: const Icon(Icons.search),
+            iconSize: height / 28.43,
+          )
+        ],
+      ),
+      body: Column(
+        children: [
           SizedBox(
-            height: height / 170.6,
-
-            ///5
+            height: height / 50,
           ),
           Container(
             margin: EdgeInsets.only(left: width / 27.4, right: width / 27.4),

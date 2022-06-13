@@ -16,6 +16,8 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../util/navigate.dart';
+
 class PostEditPreView extends StatefulWidget {
   PostData food;
 
@@ -406,12 +408,40 @@ class _PostEditForm extends State<PostEditForm> {
 
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
+    double width = SizeConfig.screenWidth;
     return Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigate.popPage(context);
+            },
+            color: Colors.white,
+            icon: const Icon(Icons.arrow_back),
+            iconSize: height / 28.43,
+            padding: const EdgeInsets.only(right: 10),
+          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: buttonColor,
+          toolbarHeight: height / 12.186, ///70
+          title: Padding(
+            padding: EdgeInsets.only(left: width / 23),
+            child: Text(
+              editPostString,
+              style: TextStyle(
+                fontSize: height / 30.464, ///28
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
         body: Column(children: [
+          SizedBox(height: height / 85.3,),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const ArrowBack(),
               Container(
                   height: SizeConfig.screenHeight / 19.51,
                   width: SizeConfig.screenWidth / 10.28,

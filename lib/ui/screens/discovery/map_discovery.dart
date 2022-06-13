@@ -19,15 +19,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../util/navigate.dart';
+
 class Discovery extends StatefulWidget {
   late CameraPosition init_state;
+  final String? arriveType;
 
   Discovery(
       {Key? key,
       this.init_state = const CameraPosition(
         target: LatLng(20.8861024, 106.4049451),
         zoom: 14.4746,
-      )})
+      ), this.arriveType,})
       : super(key: key);
 
   @override
@@ -264,6 +267,8 @@ class _DiscoveryState extends State<Discovery> {
 
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
+    double width = SizeConfig.screenWidth;
     // createMarkers(context);
 
     location.onLocationChanged.listen((LocationData loc) {
@@ -275,6 +280,31 @@ class _DiscoveryState extends State<Discovery> {
     });
 
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: buttonColor,
+          toolbarHeight: height / 12.186, ///70
+          leading: widget.arriveType == null ? IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
+            color: Colors.white,
+            iconSize: height / 28.43, ///30
+            onPressed: () {
+              Navigate.popPage(context);
+            },
+          ) : SizedBox(height: height / 28.3, width: height / 28.3,),
+          title: Padding(
+            padding: EdgeInsets.only(left: width / 7.4),
+            child: Text(
+              "Map discovery",
+              style: TextStyle(
+                fontSize: height / 30.464, ///28
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
         body: Stack(children: [
       GoogleMap(
         // polygons: myPolygon(),
@@ -297,10 +327,9 @@ class _DiscoveryState extends State<Discovery> {
           });
         },
       ),
-      Row(
-        children: [
-          const ArrowBack(),
-          FloatingActionButton(
+      Padding(
+          padding: EdgeInsets.only(left: width / 41.1, top: height / 85.3),
+          child: FloatingActionButton(
             child: Icon(
               following ? Icons.share_location : Icons.not_listed_location,
               color: Colors.white,
@@ -310,8 +339,7 @@ class _DiscoveryState extends State<Discovery> {
                 following ? following = false : following = true;
               });
             },
-          )
-        ],
+          ),
       ),
       Positioned(
         bottom: 20,

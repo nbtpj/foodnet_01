@@ -6,6 +6,7 @@ import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 
+import '../../../util/constants/colors.dart';
 import '../../../util/global.dart';
 import '../../../util/navigate.dart';
 
@@ -105,25 +106,26 @@ class _DetailProfileState extends State<DetailProfile> {
     double height = SizeConfig.screenHeight;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: buttonColor,
         toolbarHeight: height / 12.186, ///70
         leading: IconButton(
           icon: const Icon(
-              IconData(0xe094, fontFamily: 'MaterialIcons'),
+              Icons.arrow_back,
           ),
-          color: Colors.black,
+          color: Colors.white,
           iconSize: height / 28.43, ///30
           onPressed: () {
             Navigate.popPage(context);
           },
         ),
-        title: Center(
+        title: Padding(
+          padding: EdgeInsets.only(left: width / 5.4),
           child: Text(
             introductionString,
             style: TextStyle(
               fontSize: height / 30.464, ///28
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),

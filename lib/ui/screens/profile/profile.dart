@@ -73,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                                 icon: widget.arriveType == null
                                     ? const Icon(
-                                    IconData(0xe094, fontFamily: 'MaterialIcons'))
+                                    Icons.arrow_back)
                                     : const SizedBox(
                                   width: 10,
                                 ),

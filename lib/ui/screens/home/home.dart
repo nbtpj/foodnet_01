@@ -8,10 +8,13 @@ import 'package:foodnet_01/ui/screens/home/widgets/my_posts.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/popular.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/recommend.dart';
 import 'package:foodnet_01/ui/screens/home/widgets/search_food.dart';
+import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
 
+import '../../../util/navigate.dart';
+import '../search_food/search.dart';
 import 'widgets/categories.dart';
 
 class Home extends StatefulWidget {
@@ -26,29 +29,49 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double height = SizeConfig.screenHeight;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigate.pushPage(context, const SearchFoodPage());
+          },
+          color: Colors.white,
+          icon: const Icon(Icons.search),
+          iconSize: height / 28.43,
+          padding: const EdgeInsets.only(right: 10),
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: buttonColor,
+        toolbarHeight: height / 12.186, ///70
+        title: Center(
+          child: Text(
+            homePageString,
+            style: TextStyle(
+              fontSize: height / 30.464, ///28
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigate.pushPage(context, Chat());
+              },
+              color: Colors.white,
+              icon: const Icon(Icons.message),
+              iconSize: height / 28.43,
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: height / 85.3,),
             // UserNameText(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Expanded(flex: 7, child: SearchFood()),
-                Expanded(
-                    child: IconButton(
-                  onPressed: () async {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return Chat();
-                    }));
-                  },
-                  icon: const Icon(Icons.message),
-                  iconSize: 40,
-                ))
-              ],
-            ),
+
             const DiscountCard(),
             FoodPart(partName: tag_string),
             const CategoriesFood(),

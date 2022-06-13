@@ -46,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
                 onPressed: () {
                   Navigate.popPage(context);
                 },
-                icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
+                icon: const Icon(Icons.arrow_back),
                 color: Colors.black,
               ),
               Container(

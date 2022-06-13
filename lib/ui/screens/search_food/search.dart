@@ -21,16 +21,19 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
   String keyword = "";
 
   Widget _build_result_list(BuildContext context) {
-    // Stream<PostData> snap = pseudoFullTextSearchPost(keyword, null);
+    double height = SizeConfig.screenHeight;
     return FutureBuilder<List<PostData>>(
         future: fullTextSearchPost(keyword, null),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostData> data = snapshot.data!;
-            return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, idx) =>
-                    buildSearchItem(context, data[idx]));
+            return Padding(
+                padding: EdgeInsets.only(left: height / 85.3),
+                child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, idx) =>
+                        buildSearchItem(context, data[idx])),
+            );
           } else {
             return loading;
           }
@@ -56,7 +59,7 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
                 onPressed: () {
                   Navigate.popPage(context);
                 },
-                icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
+                icon: const Icon(Icons.arrow_back),
                 color: Colors.black,
               ),
               Container(
