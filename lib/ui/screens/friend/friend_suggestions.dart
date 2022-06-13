@@ -27,44 +27,48 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
       return Relationship.friendRecommend(getMyProfileId(), null).toList();
     }
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: width / 41.1 , right: width / 41.1, top: height / 21.325, bottom: height / 85.3), ///(10 ,10, 40, 10)
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigate.popPage(context);
-                  },
-                  icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
-                  color: Colors.black,
-                  iconSize: height / 28.43, ///30
-                ),
-                Text(
-                  suggestionString,
-                  style: TextStyle(
-                      fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigate.pushPage(context, const SearchPage(type: "user",));
-                  },
-                  icon: const Icon(Icons.search),
-                  color: Colors.black,
-                  iconSize: height / 28.43, ///30
-                  padding: const EdgeInsets.only(right: 0),
-                ),
-              ],
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigate.popPage(context);
+          },
+          color: Colors.black,
+          icon: const Icon(Icons.arrow_back),
+          iconSize: height / 28.43,
+          padding: const EdgeInsets.only(right: 10),
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        toolbarHeight: height / 12.186, ///70
+        title: Center(
+          child: Text(
+            suggestionString,
+            style: TextStyle(
+              fontSize: height / 30.464, ///28
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-
-          const Divider(
-            color: Colors.black54,
-          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigate.pushPage(
+                  context,
+                  const SearchPage(
+                    type: "user",
+                  ));
+            },
+            color: Colors.black,
+            icon: const Icon(Icons.search),
+            iconSize: height / 28.43,
+          )
+        ],
+      ),
+      body: Column(
+        children: [
           SizedBox(
-            height: height / 170.6, ///5
+            height: height / 50,
           ),
 
           Expanded(
@@ -85,6 +89,8 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                         ],
                       ),
                     ),
+
+                    SizedBox(height: height / 50,),
 
                     FutureBuilder<List<ProfileData>>(
                         future: fetchRootFriend(),
