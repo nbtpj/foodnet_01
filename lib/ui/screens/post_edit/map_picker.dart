@@ -54,29 +54,34 @@ class _LocationPickerState extends State<LocationPicker> {
               setState(() {});
             },
           ),
-          Row(
-            children:  [const ArrowBack(),
-              Container(
-                  height: SizeConfig.screenHeight / 19.51,
-                  width: SizeConfig.screenWidth / 10.28,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.25),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                      onPressed: () async {
-                        widget.food.position = widget._location;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PostEditForm(food: widget.food,)));
-                      },
-                      icon: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ))),
-            ],
+          Positioned(
+              left: SizeConfig.screenWidth / 41.1,
+              top: SizeConfig.screenHeight / 20,
+              child: Row(
+                children:  [const ArrowBack(),
+                  SizedBox(width: SizeConfig.screenWidth / 41.1,),
+                  Container(
+                      height: SizeConfig.screenHeight / 19.51,
+                      width: SizeConfig.screenWidth / 10.28,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                          onPressed: () async {
+                            widget.food.position = widget._location;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PostEditForm(food: widget.food,)));
+                          },
+                          icon: const Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          ))),
+                ],
+              ),
           ),
           Positioned(
             left: SizeConfig.screenWidth / 2-50,

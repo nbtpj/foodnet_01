@@ -29,7 +29,7 @@ class PhotoPage extends StatelessWidget {
                 height: height / 42.65, ///20
               ),
               IconButton(
-                icon: const Icon(IconData(0xe094, fontFamily: 'MaterialIcons')),
+                icon: const Icon(Icons.arrow_back),
                 color: Colors.white,
                 iconSize: height / 42.65, ///20
                 padding: const EdgeInsets.all(1),
