@@ -87,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var searchList = snapshot.data ?? [];
-                  return SearchList(recentData: searchList);
+                  return SearchList(recentData: searchList, type: widget.type);
                 } else {
                   return const SizedBox(width: 0, height: 0,);
                 }
@@ -97,7 +97,7 @@ class _SearchPageState extends State<SearchPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var searchList = snapshot.data ?? [];
-                  return SearchList(searchList: searchList, keyword: keyword);
+                  return SearchList(searchList: searchList, keyword: keyword, type: widget.type);
                 } else {
                   return const SizedBox(width: 0, height: 0,);
                 }

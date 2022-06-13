@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/chat/screen/chat_screens.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
@@ -14,12 +15,14 @@ import '../../profile/profile.dart';
 class SearchList extends StatefulWidget {
   late List<ProfileData>? searchList;
   final String? keyword;
+  final String type;
   late List<RecentUserSearchData>? recentData;
 
   SearchList({
     Key? key,
     this.searchList,
     this.keyword,
+    required this.type,
     this.recentData,
   }) : super(key: key);
 
@@ -80,8 +83,12 @@ class _SearchListState extends State<SearchList> {
         ),
       ),
       onTap: () {
-        edit(data, "add", null, null);
-        Navigate.pushPage(context, ProfilePage(id: data != null ? data.id : rdata!.profileId!,));
+        if (widget.type == "user") {
+          edit(data, "add", null, null);
+          Navigate.pushPage(context, ProfilePage(id: data != null ? data.id : rdata!.profileId!,));
+        } else {
+          Navigate.pushPage(context, ChatScreens(userId: data!.id,));
+        }
       },
     );
   }
