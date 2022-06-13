@@ -21,9 +21,9 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
   String keyword = "";
 
   Widget _build_result_list(BuildContext context) {
-    Stream<PostData> snap = pseudoFullTextSearchPost(keyword, null);
+    // Stream<PostData> snap = pseudoFullTextSearchPost(keyword, null);
     return FutureBuilder<List<PostData>>(
-        future: snap.toList(),
+        future: fullTextSearchPost(keyword, null),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostData> data = snapshot.data!;

@@ -18,8 +18,7 @@ Widget buildSearchItem(BuildContext context, PostData post) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  PostDetailView(food: post)));
+              builder: (context) => PostDetailView(food: post)));
     },
   );
 }

@@ -15,6 +15,7 @@ class PostDetailView extends StatefulWidget {
 }
 
 class _PostDetailView extends State<PostDetailView> {
+
   refresh() {
     setState(() {
       widget.isChange = true;

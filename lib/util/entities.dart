@@ -280,6 +280,25 @@ class PostData implements LazyLoadData {
                     (json['position']! as GeoPoint).longitude)
                 : null);
 
+  PostData.fromSearchHit(Map<String, Object?> json)
+      : this(
+            author_id: json['author_uid']! as String,
+            id: json['objectID']! as String,
+            description: json['description']! as String,
+            mediaUrls:
+                (json['mediaUrls'] as List).map((e) => e as String).toList(),
+            cateList:
+                (json['cateList'] as List).map((e) => e as String).toList(),
+            price: json['price']! as int,
+            isGood: json['isGood']! as bool,
+            react: json['react']! as int,
+            outstandingIMGURL: json['outstandingIMGURL']! as String,
+            title: json['title']! as String,
+            position: json['position'] != null
+                ? LatLng((json['position']! as GeoPoint).latitude,
+                    (json['position']! as GeoPoint).longitude)
+                : null);
+
   PostData.categoryFromJson(Map<String, Object?> json)
       : this(
             id: json['id']! as String,
@@ -701,6 +720,22 @@ class ProfileData extends Equatable {
               (json["favorites"] as List).map((e) => e as String).toList(),
         );
 
+  ProfileData.fromSearchHit(Map<String, Object?> json)
+      : this(
+          id: json["objectID"]! as String,
+          name: json["name"]! as String,
+          userAsset: json["userAsset"]! as String,
+          wallAsset: json["wallAsset"]! as String,
+          dayOfBirth: json["dob"] != null
+              ? (json["dob"]! as Timestamp).toDate().toString()
+              : null,
+          gender: json["gender"] != null ? json["gender"]! as String : null,
+          location: json["location"] != null ? json["location"] as String : null,
+          works: (json["works"] as List).map((e) => e as String).toList(),
+          schools: (json["schools"] as List).map((e) => e as String).toList(),
+          favorites: (json["favorites"] as List).map((e) => e as String).toList(),
+  );
+
   Future<int> get friendsNumber async {
     return (await Relationship.friendIds(id)).length;
   }
@@ -804,23 +839,6 @@ class ProfileData extends Equatable {
   @override
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
-}
-
-class SearchData implements LazyLoadData {
-  String? id;
-  String? asset;
-  String name;
-
-  SearchData({
-    this.id,
-    this.asset,
-    required this.name,
-  });
-
-  @override
-  void loadMore() {
-    // TODO: implement loadMore
-  }
 }
 
 class Filter {
