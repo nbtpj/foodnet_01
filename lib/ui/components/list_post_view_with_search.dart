@@ -6,6 +6,7 @@ import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
+import 'package:foodnet_01/util/navigate.dart';
 
 Widget _build_food(BuildContext context, PostData food) {
   return GestureDetector(
@@ -157,7 +158,16 @@ abstract class ListViewWithTextSearch<T extends StatefulWidget>
 
   Widget _build_header(BuildContext context) {
     return Row(
-      children: [const ArrowBack(), _build_search(context)],
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigate.popPage(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.black,
+        ),
+        _build_search(context),
+      ],
     );
   }
 
