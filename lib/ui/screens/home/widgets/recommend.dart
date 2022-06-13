@@ -28,6 +28,11 @@ class _RecommendFoodsState extends State<RecommendFoods> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var foodList = snapshot.data ?? [];
+          if (foodList.isEmpty) {
+            return SizedBox(
+              height: SizeConfig.screenHeight / 7,
+            );
+          }
           return SizedBox(
             height: SizeConfig.screenHeight / 2.58,
 

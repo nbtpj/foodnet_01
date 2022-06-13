@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -179,6 +180,21 @@ abstract class ListViewWithTextSearch<T extends StatefulWidget>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<PostData> ls = snapshot.data ?? [];
+            if (ls.isEmpty) {
+              return Container(
+                height: SizeConfig.screenHeight,
+                width: SizeConfig.screenWidth,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(nothingAsset),
+                    fit: BoxFit.contain,
+                  ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0)),
+                ),
+              );
+            }
             var rows = [];
             int chunkSize = 2;
             for (var i = 0; i < ls.length; i += chunkSize) {
