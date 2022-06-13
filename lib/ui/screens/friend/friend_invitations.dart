@@ -38,7 +38,7 @@ class _FriendsState extends State<Friends> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Bạn bè ",
+                  friendString,
                   style: TextStyle(
                       fontSize: height / 28.43, fontWeight: FontWeight.bold), ///30
                 ),
