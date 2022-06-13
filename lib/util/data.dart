@@ -1,10 +1,10 @@
+import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:algolia/algolia.dart';
 
 import 'entities.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/strings.dart';

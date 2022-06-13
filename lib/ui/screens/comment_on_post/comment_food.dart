@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/comment_on_post/comment.dart';
 import 'package:foodnet_01/util/constants/animations.dart';
 import 'package:foodnet_01/util/data.dart';

@@ -6,11 +6,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:foodnet_01/ui/components/arrow_back.dart';
 import 'package:foodnet_01/ui/screens/discovery/map_style.dart';
 import 'package:foodnet_01/ui/screens/post_detail/post_detail.dart';
 import 'package:foodnet_01/util/constants/colors.dart';
 import 'package:foodnet_01/util/constants/images.dart';
+import 'package:foodnet_01/util/constants/position.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -28,7 +28,7 @@ class Discovery extends StatefulWidget {
   Discovery(
       {Key? key,
       this.init_state = const CameraPosition(
-        target: LatLng(20.8861024, 106.4049451),
+        target: initPosition,
         zoom: 14.4746,
       ), this.arriveType,})
       : super(key: key);
