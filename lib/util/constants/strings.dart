@@ -89,3 +89,10 @@ const String cancelRequestString = lang=='en' ? "Cancel Request":"Huỷ yêu c�
 const String acceptString = lang=='en'?"Accept":"Chấp nhận";
 const String notValidString = lang=='en'?"Not valid!":"Không hợp lệ!";
 const String loading_string = lang=='en'?"Loading...":"Đang tải...";
+const String homePageString = lang=='en'?"Homepage":"Trang chủ";
+const String editPostString = lang=='en'?"Edit Post":"Chỉnh sửa bài đăng";
+const String forgotPassword = lang=='en'?"Forgot Password?":"Quên mật khẩu?";
+const String registerString = lang=='en'?"Register":"Đăng ký";
+const String account = lang=='en'?"Don't have account? ":"Chưa có tài khoản? ";
+const String haveAccount = lang=='en'?'Already have an account? ':"Đã có tài khoản? ";
+const String loginString = lang=='en'?'Login':"Đăng nhập";
