@@ -348,7 +348,7 @@ Future editRecentChat(String profileId, String userId, Message message) async {
       "unread": true,
       "createdAt": message.createdAt
     });
-    print("edited recent chat");
+    // print("edited recent chat");
   } on FirebaseAuthException catch (e) {
     print(e.message.toString());
     return;
@@ -361,7 +361,7 @@ Future seenChat(String profileId, String userId) async {
 
   try {
     await refRecentChat.doc(userId).update({"unread": false});
-    print("Seen chat");
+    // print("Seen chat");
   } on FirebaseAuthException catch (e) {
     print(e.message.toString());
     return;
@@ -381,7 +381,7 @@ Future sendMessage(String senderId, String receiverId, String message) async {
     var res = await refMessage.add(newMessage.toJson());
 
     await editRecentChat(senderId, receiverId, newMessage);
-    print(res);
+    // print(res);
     return {"status": true, "message": "success"};
   } on FirebaseAuthException catch (e) {
     return {"status": false, "message": e.message.toString()};
