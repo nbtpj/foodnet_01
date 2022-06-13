@@ -3,9 +3,8 @@ import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
-import 'package:string_similarity/string_similarity.dart';
-import 'package:tuple/tuple.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:algolia/algolia.dart';
 
 import 'entities.dart';
 
@@ -14,6 +13,10 @@ import 'entities.dart';
 /// define static FireStore Collection references
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 final db = FirebaseFirestore.instance;
+const Algolia _algoliaClient = Algolia.init(
+    applicationId: "X7OU6XRVSQ",
+    apiKey: "230ea22847e93701afa369d6a721fcc1"
+);
 
 final CollectionReference<PostData> postsRef =
 FirebaseFirestore.instance.collection('posts').withConverter<PostData>(
@@ -148,44 +151,32 @@ String normalize(String s) {
   return s;
 }
 
-Stream<PostData> pseudoFullTextSearchPost(String key, int? limit) async* {
-  /// todo: đẩy lên cloud
-  var foodSnapshot = await postsRef.limit(limit??100).get();
-  key = normalize(key);
-  List<Tuple2> scores = [];
-  for (var doc in foodSnapshot.docs) {
-    var post = doc.data();
-    var similarity = key.similarityTo(normalize(post.title))*8+
-        key.similarityTo(normalize(post.description))*4;
-    scores.add(Tuple2(similarity, post));
-  }
-  scores.sort((Tuple2 a, Tuple2 b) {
-    return a.item1.compareTo(b.item1) * -1;
+Future<List<PostData>> fullTextSearchPost(String key, int? limit) {
+  AlgoliaQuery algoliaQuery = _algoliaClient.instance
+      .index("post_fts")
+      .query(normalize(key));
+  return algoliaQuery.getObjects()
+    .then((snapshot) {
+      final rawHits = snapshot.toMap()['hits'] as List;
+      final searchPostResults = List<PostData>.from(
+          rawHits.map((hit) => PostData.fromSearchHit(hit))
+      );
+      return searchPostResults;
   });
-  for (var tuple in scores) {
-    yield tuple.item2 as PostData;
-  }
 }
 
-Stream<ProfileData> pseudoSearchUser(String key, int? limit) async* {
-  /// todo: đấy lên cloud
-  var profileSnapshot = await profilesRef.limit(limit??100).get();
-  key = normalize(key);
-  List<Tuple2> scores = [];
-  for (var doc in profileSnapshot.docs) {
-    var profile = doc.data();
-    var similarity = key.similarityTo(normalize(profile.name))*8+
-        key.similarityTo(normalize((profile.works??[]).join(', ')))*4+
-        key.similarityTo(normalize((profile.schools??[]).join(', ')))*4+
-        key.similarityTo(normalize((profile.favorites??[]).join(', ')))*2;
-    scores.add(Tuple2(similarity, profile));
-  }
-  scores.sort((Tuple2 a, Tuple2 b) {
-    return a.item1.compareTo(b.item1) * -1;
+Future<List<ProfileData>> searchUser(String key, int? limit) {
+  AlgoliaQuery algoliaQuery = _algoliaClient.instance
+      .index("profile_fts")
+      .query(normalize(key));
+  return algoliaQuery.getObjects()
+      .then((snapshot) {
+        final rawHits = snapshot.toMap()['hits'] as List;
+        final searchUserResults = List<ProfileData>.from(
+          rawHits.map((hit) => ProfileData.fromSearchHit(hit))
+        );
+        return searchUserResults;
   });
-  for (var tuple in scores) {
-    yield tuple.item2 as ProfileData;
-  }
 }
 
 Stream<ProfileData> pseudoSearchFriend(String id, String key) async* {
@@ -471,39 +462,6 @@ Stream<ProfileData> getProfiles(Filter filter) async* {
 
 Future<void> createNewProfile(ProfileData profile) {
   return profilesRef.doc(profile.id).set(profile);
-}
-
-Stream<SearchData> getSearchData(Filter filter) async* {
-  if (filter.search_type == "recentUser") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-      id: "2",
-      name: "Minh Quang",
-    );
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "5", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "6", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "7", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "8", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-  }
-  if (filter.search_type == "user" && filter.keyword == "a") {
-    yield SearchData(
-        id: "1", name: "Luong Dat", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "2", name: "Minh Quang", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "3", name: "Pham Trong", asset: "assets/friend/tarek.jpg");
-    yield SearchData(
-        id: "4", name: "Dao Tuan", asset: "assets/friend/tarek.jpg");
-  }
 }
 
 Stream<QuerySnapshot<ReactionData>> get_my_reaction_list() {

@@ -22,6 +22,11 @@ class _PopularFoodsState extends State<PopularFoods> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           var foodList = snapshot.data ?? [];
+          if (foodList.isEmpty) {
+            return SizedBox(
+              height: SizeConfig.screenHeight / 7,
+            );
+          }
           return SizedBox(
             height: SizeConfig.screenHeight/2.28,                 /// 300.0
             child: ListView.builder(

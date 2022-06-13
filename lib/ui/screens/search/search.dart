@@ -32,8 +32,8 @@ class _SearchPageState extends State<SearchPage> {
         return getRecentUsers(getMyProfileId());
     }
 
-    Stream<ProfileData> fetchData(String type, String keyword) {
-        return pseudoSearchUser(keyword, null);
+    Future<List<ProfileData>> fetchData(String type, String keyword) {
+        return searchUser(keyword, null);
     }
 
     return Scaffold(
@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
                       contentPadding: EdgeInsets.only(left: width / 27.4 ,top: height / 85.3, bottom: height / 85.3), ///(15, 10, 10)
                       border: InputBorder.none,
                       isDense: true,
-                      hintText: widget.type == "user" ? searchUser
+                      hintText: widget.type == "user" ? searchUserString
                           : searchConversation,
                   ),
                   onChanged: (text) {
@@ -93,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                 }
               }
           ) : FutureBuilder <List<ProfileData>?>(
-              future: fetchData(widget.type, keyword).toList(),
+              future: fetchData(widget.type, keyword),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var searchList = snapshot.data ?? [];

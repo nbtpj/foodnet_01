@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_list.dart';
 import 'package:foodnet_01/ui/screens/friend/friend_suggestions.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/navigate.dart';
 
 import '../../../util/constants/strings.dart';
@@ -133,6 +134,21 @@ class _FriendsState extends State<Friends> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         friendList = snapshot.data ?? [];
+                        if (friendList.isEmpty) {
+                          return Container(
+                            height: SizeConfig.screenHeight/3,
+                            width: SizeConfig.screenWidth,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(nothingAsset),
+                                fit: BoxFit.contain,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0)),
+                            ),
+                          );
+                        }
                         return SizedBox(
                           child: ListView.builder(
                               shrinkWrap: true,

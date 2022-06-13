@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/search/search.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -100,6 +101,21 @@ class _FriendSuggestionState extends State<FriendSuggestion> {
                           }
                           if (snapshot.hasData) {
                             var friendSuggestions = snapshot.data ?? [];
+                            if (friendSuggestions.isEmpty) {
+                              return Container(
+                                height: SizeConfig.screenHeight/3,
+                                width: SizeConfig.screenWidth,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(nothingAsset),
+                                    fit: BoxFit.contain,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.0),
+                                      topRight: Radius.circular(30.0)),
+                                ),
+                              );
+                            }
                             return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),

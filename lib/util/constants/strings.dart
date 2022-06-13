@@ -71,7 +71,7 @@ const String viewProfilePictureString = lang=='en'?'View Profile Picture':"Xem �
 const String selectProfilePictureString = lang=='en'?'Select profile picture':"Chọn ảnh đại diện";
 const String seeCoverPhotoString = lang=='en'?'See cover photo':"Xem ảnh bìa";
 const String uploadCoverPhotoString = lang=='en'?'Upload cover photo':"Chọn ảnh bìa";
-const String searchUser = lang=='en'?'Search User':"Tìm kiếm người dùng";
+const String searchUserString = lang=='en'?'Search User':"Tìm kiếm người dùng";
 const String searchConversation = lang=='en'?'Search Conversation':"Tìm kiếm cuộc trò chuyện";
 const String searchFriendString = lang=='en'?'Search Friend':'Tìm kiếm bạn bè';
 const String friendInvitation = lang=='en'?'Friend Requests':"Lời mời kết bạn";
