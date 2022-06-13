@@ -68,7 +68,7 @@ class _FriendListState extends State<FriendList> {
     double width = SizeConfig.screenWidth;
     double height = SizeConfig.screenHeight;
     Future<List<ProfileData>> fetchRootFriend() async {
-      return Relationship.friendProfile(getMyProfileId()).toList();
+      return Relationship.friendProfile(widget.id).toList();
     }
 
     Future<List<ProfileData>> fetchRootFriendByKey(String key) async {

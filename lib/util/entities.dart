@@ -459,10 +459,29 @@ class Relationship {
   }
 
   static Stream<ProfileData> friendRecommend(String of_id, int?limit) async*{
-    var profiles = await profilesRef.limit(limit??100).get();
+    var pf = await friendIds(of_id);
+    var possibleRel = await relationshipsRef.where('member_ids', arrayContainsAny: pf).limit(limit??100).get();
+    Set<String> possibleids = {};
+    for(var d in possibleRel.docs){
+      for (var id in d.data().member_ids){
+        if (!pf.contains(id) && id!=getMyProfileId()){
+          var relation_existed = await relationshipsRef.doc(createId([getMyProfileId(), id])).get();
+          if (!relation_existed.exists) {
+            possibleids.add(id);
+          }
+        }
+      }
+    }
+    List<ProfileData> profiles = [];
+    for (var rid in possibleids){
+      var doc = await profilesRef.doc(rid).get();
+      if (doc.data()!=null) {
+        profiles.add(doc.data()!);
+      }
+    }
     List<Tuple2<int, ProfileData>> scores = [];
-    for (var doc in profiles.docs) {
-      var profile = doc.data();
+    for (var doc in profiles) {
+      var profile = doc;
       var mul = await profile.mutualism;
       scores.add(Tuple2(mul, profile));
     }

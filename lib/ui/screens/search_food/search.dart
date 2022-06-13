@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/search_food/components/build_components.dart';
+import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
@@ -25,17 +26,35 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
     return FutureBuilder<List<PostData>>(
         future: fullTextSearchPost(keyword, null),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return loading;
+          }
           if (snapshot.hasData) {
             List<PostData> data = snapshot.data!;
+            if (data.isEmpty) {
+              return Container(
+                height: SizeConfig.screenHeight / 3,
+                width: SizeConfig.screenWidth,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(nothingAsset),
+                    fit: BoxFit.contain,
+                  ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0)),
+                ),
+              );
+            }
             return Padding(
-                padding: EdgeInsets.only(left: height / 85.3),
-                child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, idx) =>
-                        buildSearchItem(context, data[idx])),
+              padding: EdgeInsets.only(left: height / 85.3),
+              child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, idx) =>
+                      buildSearchItem(context, data[idx])),
             );
           } else {
-            return loading;
+            return const Center();
           }
         });
   }
