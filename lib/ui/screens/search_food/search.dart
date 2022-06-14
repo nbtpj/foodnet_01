@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
 import 'package:foodnet_01/ui/screens/search_food/components/build_components.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';
 import 'package:foodnet_01/util/navigate.dart';

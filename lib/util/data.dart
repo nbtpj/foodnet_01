@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:elastic_app_search/elastic_app_search.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:algolia/algolia.dart';
 
 
 import 'entities.dart';
