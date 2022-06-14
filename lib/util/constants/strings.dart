@@ -96,3 +96,4 @@ const String registerString = lang=='en'?"Register":"Đăng ký";
 const String account = lang=='en'?"Don't have account? ":"Chưa có tài khoản? ";
 const String haveAccount = lang=='en'?'Already have an account? ':"Đã có tài khoản? ";
 const String loginString = lang=='en'?'Login':"Đăng nhập";
+const String discoveryString = lang=='en'?'Discovery':"Khám phá";

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/food_thumb.dart';
 import 'package:foodnet_01/ui/components/loading_view.dart';
-import 'package:foodnet_01/util/constants/images.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/global.dart';

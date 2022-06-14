@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:foodnet_01/util/constants/position.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
@@ -170,7 +171,7 @@ class PostData implements LazyLoadData {
   }
 
   LatLng positions() {
-    return position ?? const LatLng(0, 0);
+    return position ?? initPosition;
   }
 
   bool isEditable() {
