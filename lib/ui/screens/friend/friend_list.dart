@@ -27,6 +27,10 @@ class _FriendListState extends State<FriendList> {
   bool isEmpty = true;
   String keyword = "";
 
+  void isDelete() {
+    setState(() {});
+  }
+
   Widget buildFriendList(AsyncSnapshot<List<ProfileData>> snapshot) {
     if (snapshot.hasData) {
       var friendList = snapshot.data ?? [];
@@ -56,6 +60,7 @@ class _FriendListState extends State<FriendList> {
               userAsset: friendItem.userAsset,
               name: friendItem.name,
               mutualFriends: friendItem.mutualism,
+              isDelete: isDelete,
             );
           });
     } else {

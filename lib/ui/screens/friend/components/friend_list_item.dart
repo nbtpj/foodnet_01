@@ -12,6 +12,7 @@ class FriendListItem extends StatefulWidget {
   final String userAsset;
   final String name;
   final Future<int> mutualFriends;
+  final Function isDelete;
 
   const FriendListItem({
     Key? key,
@@ -19,6 +20,7 @@ class FriendListItem extends StatefulWidget {
     required this.userAsset,
     required this.name,
     required this.mutualFriends,
+    required this.isDelete,
   }) : super(key: key);
 
   @override
@@ -158,6 +160,7 @@ class _FriendListItemState extends State<FriendListItem> with TickerProviderStat
                                       setState(() {
                                         _delete = true;
                                         sizeController.forward();
+                                        widget.isDelete();
                                         Navigate.popPage(context);
                                       });
                                     }
