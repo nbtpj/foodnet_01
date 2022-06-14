@@ -45,12 +45,12 @@ class _LoginState extends State<Login> {
           );
         } on FirebaseAuthException catch (e) {
           if (e.code == 'user-not-found') {
-            print('No user found for that email.');
+            showInSnackBar('No user found for that email.');
           } else if (e.code == 'wrong-password') {
-            print('Wrong password provided for that user.');
+            showInSnackBar('Wrong password provided for that user.');
           }
         }
-      } else {
+      } else if (formMode == FormMode.REGISTER) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email!,
             password: password!
@@ -64,11 +64,20 @@ class _LoginState extends State<Login> {
           createNewProfile(newProfile);
         }).catchError((e) {
           if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
+            showInSnackBar('The password provided is too weak.');
           } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
+            showInSnackBar('The account already exists for that email.');
           }
         });
+      } else {
+        print('reset password');
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email!).then((value) {
+          showInSnackBar('A Email has sent to your email');
+        }).catchError((e) {
+          if (e.code == 'user-not-found') {
+            showInSnackBar('The account haven\'t exists');
+          }
+        }) ;
       }
     }
   }
@@ -282,7 +291,7 @@ class _LoginState extends State<Login> {
       replacement: const Center(child: CircularProgressIndicator()),
       child: CustomButton(
         label: "Submit",
-        onPressed: () => login(),
+        onPressed: login,
         color: buttonColor,
       ).fadeInList(4, false),
     );

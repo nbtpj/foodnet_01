@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
-  final Function? onPressed;
+  final Function onPressed;
   final Color? color;
 
   const CustomButton({
     Key? key,
     this.label = 'Continue',
-    this.onPressed,
+    required this.onPressed,
     this.color,
   }) : super(key: key);
 
@@ -22,7 +22,9 @@ class CustomButton extends StatelessWidget {
       height: 50.0,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        onPressed: () => onPressed,
+        onPressed: () async {
+          await onPressed();
+        },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
                 color ?? Theme.of(context).colorScheme.secondary),
