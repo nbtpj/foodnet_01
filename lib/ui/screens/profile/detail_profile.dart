@@ -3,6 +3,7 @@ import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
 import 'package:foodnet_01/ui/screens/profile/components/date_picker.dart';
 import 'package:foodnet_01/ui/screens/profile/components/dropdown_field.dart';
 import 'package:foodnet_01/ui/screens/profile/components/input_field.dart';
+import 'package:foodnet_01/ui/screens/profile/profile.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
 import 'package:foodnet_01/util/entities.dart';
 
@@ -116,6 +117,7 @@ class _DetailProfileState extends State<DetailProfile> {
           iconSize: height / 28.43, ///30
           onPressed: () {
             Navigate.popPage(context);
+            Navigate.pushPageReplacement(context, ProfilePage(id: widget.profile.id));
           },
         ),
         title: Padding(
