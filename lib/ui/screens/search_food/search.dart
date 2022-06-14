@@ -22,11 +22,11 @@ class _SearchFoodPageState extends State<SearchFoodPage> {
 
   Widget _build_result_list(BuildContext context) {
     double height = SizeConfig.screenHeight;
-    return FutureBuilder<List<PostData>>(
-        future: fullTextSearchPost(keyword, null),
+    return FutureBuilder<List<SearchPostData>>(
+        future: searchPost(keyword),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<PostData> data = snapshot.data!;
+            List<SearchPostData> data = snapshot.data!;
             return Padding(
                 padding: EdgeInsets.only(left: height / 85.3),
                 child: ListView.builder(

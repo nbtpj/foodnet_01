@@ -63,7 +63,7 @@ dependencies:
   firebase_analytics: ^9.1.9
   equatable: ^2.0.0
   cloud_functions: ^3.2.16
-  algolia: ^1.1.1
+  elastic_app_search: ^0.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

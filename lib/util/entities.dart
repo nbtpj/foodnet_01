@@ -964,3 +964,42 @@ class RecentUserSearchData implements LazyLoadData {
     // TODO: implement loadMore
   }
 }
+
+class SearchProfileData {
+  String id;
+  String name;
+  String userAsset;
+
+  SearchProfileData({
+    required this.id,
+    required this.name,
+    required this.userAsset
+  });
+
+  SearchProfileData.fromData(Map<String, dynamic>? json) : this(
+    id: json!["id"] as String,
+    name: json["name"] as String,
+    userAsset: json["userasset"] as String
+  );
+}
+
+class SearchPostData {
+  String id;
+  String title;
+  String description;
+  String outstandingIMGURL;
+
+  SearchPostData({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.outstandingIMGURL
+  });
+
+  SearchPostData.fromData(Map<String, dynamic>? json) : this(
+    id: json!["id"] as String,
+    title: json["title"] as String,
+    description: json["description"] as String,
+    outstandingIMGURL: json["outstandingimgurl"] as String
+  );
+}
