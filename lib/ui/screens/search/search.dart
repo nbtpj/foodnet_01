@@ -32,8 +32,8 @@ class _SearchPageState extends State<SearchPage> {
         return getRecentUsers(getMyProfileId());
     }
 
-    Future<List<ProfileData>> fetchData(String type, String keyword) {
-        return searchUser(keyword, null);
+    Future<List<SearchProfileData>> fetchData(String type, String keyword) {
+        return searchUser(keyword);
     }
 
     return Scaffold(
@@ -92,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                   return const SizedBox(width: 0, height: 0,);
                 }
               }
-          ) : FutureBuilder <List<ProfileData>?>(
+          ) : FutureBuilder <List<SearchProfileData>?>(
               future: fetchData(widget.type, keyword),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

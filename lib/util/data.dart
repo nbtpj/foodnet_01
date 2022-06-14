@@ -1,10 +1,13 @@
-import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:elastic_app_search/elastic_app_search.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:algolia/algolia.dart';
+
 
 import 'entities.dart';
 
@@ -13,9 +16,9 @@ import 'entities.dart';
 /// define static FireStore Collection references
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 final db = FirebaseFirestore.instance;
-const Algolia _algoliaClient = Algolia.init(
-    applicationId: "X7OU6XRVSQ",
-    apiKey: "230ea22847e93701afa369d6a721fcc1"
+final service = ElasticAppSearch(
+  endPoint: "https://firestore-eas.ent.asia-east1.gcp.elastic-cloud.com",
+  searchKey: "private-e9smabtgeiynh3vuyhavy5f1",
 );
 
 final CollectionReference<PostData> postsRef =
@@ -151,32 +154,32 @@ String normalize(String s) {
   return s;
 }
 
-Future<List<PostData>> fullTextSearchPost(String key, int? limit) {
-  AlgoliaQuery algoliaQuery = _algoliaClient.instance
-      .index("post_fts")
-      .query(normalize(key));
-  return algoliaQuery.getObjects()
-    .then((snapshot) {
-      final rawHits = snapshot.toMap()['hits'] as List;
-      final searchPostResults = List<PostData>.from(
-          rawHits.map((hit) => PostData.fromSearchHit(hit))
-      );
-      return searchPostResults;
-  });
+Future<List<SearchPostData>> searchPost(String key) async{
+  ElasticResponse response = await service
+      .engine("firestore-post")
+      .query(key)
+      .get();
+  if (response.results.isNotEmpty) {
+    return List<SearchPostData>.from(
+        response.results.map((result) => SearchPostData.fromData(result.data))
+    );
+  } else {
+    return [];
+  }
 }
 
-Future<List<ProfileData>> searchUser(String key, int? limit) {
-  AlgoliaQuery algoliaQuery = _algoliaClient.instance
-      .index("profile_fts")
-      .query(normalize(key));
-  return algoliaQuery.getObjects()
-      .then((snapshot) {
-        final rawHits = snapshot.toMap()['hits'] as List;
-        final searchUserResults = List<ProfileData>.from(
-          rawHits.map((hit) => ProfileData.fromSearchHit(hit))
-        );
-        return searchUserResults;
-  });
+Future<List<SearchProfileData>> searchUser(String key) async{
+  ElasticResponse response = await service
+      .engine("firestore-profile")
+      .query(key)
+      .get();
+  if (response.results.isNotEmpty) {
+    return List<SearchProfileData>.from(
+        response.results.map((result) => SearchProfileData.fromData(result.data))
+    );
+  } else {
+    return [];
+  }
 }
 
 Stream<ProfileData> pseudoSearchFriend(String id, String key) async* {
@@ -339,7 +342,6 @@ Future editRecentChat(String profileId, String userId, Message message) async {
       "unread": true,
       "createdAt": message.createdAt
     });
-    // print("edited recent chat");
   } on FirebaseAuthException catch (e) {
     print(e.message.toString());
     return;
@@ -352,7 +354,6 @@ Future seenChat(String profileId, String userId) async {
 
   try {
     await refRecentChat.doc(userId).update({"unread": false});
-    // print("Seen chat");
   } on FirebaseAuthException catch (e) {
     print(e.message.toString());
     return;
@@ -372,14 +373,13 @@ Future sendMessage(String senderId, String receiverId, String message) async {
     var res = await refMessage.add(newMessage.toJson());
 
     await editRecentChat(senderId, receiverId, newMessage);
-    // print(res);
     return {"status": true, "message": "success"};
   } on FirebaseAuthException catch (e) {
     return {"status": false, "message": e.message.toString()};
   }
 }
 
-Future<PostData?> getPost(String id) async {
+Future<PostData> getPost(String id) async {
   /// hàm lấy một đối tượng PostData dựa trên id
   return postsRef.doc(id).get().then((snapshot) => snapshot.data()!);
 }

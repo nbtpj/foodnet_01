@@ -13,7 +13,7 @@ import '../../profile/profile.dart';
 
 //ignore: must_be_immutable
 class SearchList extends StatefulWidget {
-  late List<ProfileData>? searchList;
+  late List<SearchProfileData>? searchList;
   final String? keyword;
   final String type;
   late List<RecentUserSearchData>? recentData;
@@ -32,7 +32,7 @@ class SearchList extends StatefulWidget {
 
 class _SearchListState extends State<SearchList> {
 
-  Future<void> edit(ProfileData? editContent, String type, String? id, int? index) async {
+  Future<void> edit(SearchProfileData? editContent, String type, String? id, int? index) async {
     if (type == "erase") {
       bool success = await deleteRecentUsers(getMyProfileId(), id!);
       if (!success) {
@@ -63,7 +63,7 @@ class _SearchListState extends State<SearchList> {
     }
   }
 
-  buildListItem(ProfileData? data, int index, RecentUserSearchData? rdata) {
+  buildListItem(SearchProfileData? data, int index, RecentUserSearchData? rdata) {
     double height = SizeConfig.screenHeight;
     return InkWell(
       child: ListTile(
