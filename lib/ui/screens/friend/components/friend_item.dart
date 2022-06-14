@@ -178,9 +178,14 @@ class UnConfirm extends StatelessWidget {
       children: [
         InkWell(
           onTap: () async {
-            bool success = await acceptFriendRequest(id);
+            bool success = false;
+            if (type == "invitation") {
+              success = await acceptFriendRequest(id);
+            } else {
+              success = await addFriendRequest(id);
+            }
             if (success) {
-              updateConfirm();
+                updateConfirm();
             }
           },
           child: Container(
