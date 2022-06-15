@@ -12,12 +12,19 @@ import 'package:foodnet_01/util/data.dart';
 import 'package:foodnet_01/util/global.dart';
 
 class MyHomePage extends StatefulWidget {
+  late int? index;
+  MyHomePage({
+    Key? key,
+    this.index,
+  }) : super(key: key);
+
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   final navigationKey = GlobalKey<CurvedNavigationBarState>();
+
   int index = 0;
 
   final screen = [
@@ -34,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    index = widget.index != null ? widget.index! : index;
     SizeConfig().init(context);
     final items = [
       Icon(Icons.home, size: SizeConfig.screenHeight / 22.77),
@@ -70,7 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
               animationDuration: Duration(milliseconds: 100),
               index: index,
               items: items,
-              onTap: (index) => setState(() => this.index = index),
+              onTap: (index) => setState(() {
+                this.index = index;
+                widget.index = null;
+              }),
             ),
           ),
         ),

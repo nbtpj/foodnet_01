@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/ui/screens/nav_bar.dart';
 import 'package:foodnet_01/ui/screens/profile/components/ListTile.dart';
 import 'package:foodnet_01/ui/screens/profile/components/date_picker.dart';
 import 'package:foodnet_01/ui/screens/profile/components/dropdown_field.dart';
@@ -117,7 +118,7 @@ class _DetailProfileState extends State<DetailProfile> {
           iconSize: height / 28.43, ///30
           onPressed: () {
             Navigate.popPage(context);
-            Navigate.pushPageReplacement(context, ProfilePage(id: widget.profile.id));
+            Navigate.pushPageReplacement(context, MyHomePage(index: 3,));
           },
         ),
         title: Padding(
