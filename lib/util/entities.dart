@@ -147,7 +147,6 @@ class PostData implements LazyLoadData {
           "Lorem ipsum dolor sit amet, consectetur adipiscing",
       this.mediaUrls = const [
         "assets/food/HeavenlyPizza.jpg",
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
       ],
       this.outstandingIMGURL = '',
       this.price,
