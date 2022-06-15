@@ -45,9 +45,9 @@ class _LoginState extends State<Login> {
           );
         } on FirebaseAuthException catch (e) {
           if (e.code == 'user-not-found') {
-            showInSnackBar('No user found for that email.');
+            showInSnackBar(noUserFoundString);
           } else if (e.code == 'wrong-password') {
-            showInSnackBar('Wrong password provided for that user.');
+            showInSnackBar(wrongPassString);
           }
         }
       } else if (formMode == FormMode.REGISTER) {
@@ -64,18 +64,17 @@ class _LoginState extends State<Login> {
           createNewProfile(newProfile);
         }).catchError((e) {
           if (e.code == 'weak-password') {
-            showInSnackBar('The password provided is too weak.');
+            showInSnackBar(weakPassString);
           } else if (e.code == 'email-already-in-use') {
-            showInSnackBar('The account already exists for that email.');
+            showInSnackBar(emailExistString);
           }
         });
       } else {
-        print('reset password');
         await FirebaseAuth.instance.sendPasswordResetEmail(email: email!).then((value) {
-          showInSnackBar('A Email has sent to your email');
+          showInSnackBar(resetPassString);
         }).catchError((e) {
           if (e.code == 'user-not-found') {
-            showInSnackBar('The account haven\'t exists');
+            showInSnackBar(noUserFoundString);
           }
         }) ;
       }
@@ -237,7 +236,7 @@ class _LoginState extends State<Login> {
             children: [
               CustomTextField(
                 enabled: !loading,
-                hintText: "Name",
+                hintText: name_string,
                 textInputAction: TextInputAction.next,
                 validateFunction: Validations.validateName,
                 onSaved: (String? val) {
@@ -268,7 +267,7 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20.0),
               CustomTextField(
                 enabled: !loading,
-                hintText: "Password",
+                hintText: passwordString,
                 textInputAction: TextInputAction.done,
                 validateFunction: Validations.validatePassword,
                 submitAction: login,
@@ -290,7 +289,7 @@ class _LoginState extends State<Login> {
       visible: !loading,
       replacement: const Center(child: CircularProgressIndicator()),
       child: CustomButton(
-        label: "Submit",
+        label: formMode,
         onPressed: login,
         color: buttonColor,
       ).fadeInList(4, false),

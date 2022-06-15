@@ -97,3 +97,9 @@ const String account = lang=='en'?"Don't have account? ":"Chưa có tài khoản
 const String haveAccount = lang=='en'?'Already have an account? ':"Đã có tài khoản? ";
 const String loginString = lang=='en'?'Login':"Đăng nhập";
 const String discoveryString = lang=='en'?'Discovery':"Khám phá";
+const String noUserFoundString = lang=='en'?'No user found for that email.':'Email chưa được đăng ký.';
+const String wrongPassString = lang=='en'?'Wrong password provided for that user.':'Sai mật khẩu.';
+const String weakPassString = lang=='en'?'The password provided is too weak.':'Mật khẩu quá yếu.';
+const String emailExistString = lang=='en'?'The account already exists for that email.':'Email đã tồn tại.';
+const String resetPassString = lang=='en'?'Password reset email was sent':'Yêu cầu đặt lại mật khẩu đã được gửi.';
+const String passwordString = lang=='en'?'Password':"Mật khẩu";

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:foodnet_01/util/constants/strings.dart';
+import 'package:foodnet_01/util/enum.dart';
 
 class CustomButton extends StatelessWidget {
-  final String label;
+  final FormMode label;
   final Function onPressed;
   final Color? color;
 
   const CustomButton({
     Key? key,
-    this.label = 'Continue',
+    required this.label,
     required this.onPressed,
     this.color,
   }) : super(key: key);
@@ -36,7 +38,8 @@ class CustomButton extends StatelessWidget {
               ),
             )),
         child: Text(
-          label,
+          label == FormMode.LOGIN ? loginString
+              : label == FormMode.REGISTER ? registerString : confirmString,
           style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 18.0,
