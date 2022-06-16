@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dart_geohash/dart_geohash.dart';
+import 'package:elastic_app_search/elastic_app_search.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodnet_01/util/constants/strings.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:elastic_app_search/elastic_app_search.dart';
-
 
 import 'entities.dart';
 
