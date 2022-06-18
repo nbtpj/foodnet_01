@@ -29,3 +29,8 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các cloud function được cài đặt trên Firebase, KHÔNG thể triển khai trực tiếp từ project này. Trên thực tế, một project Firebase khác được tạo ra và triển khai, quản lý các chức năng này.
 
 Các API key được thể hiện trong mã nguồn với mục đích build thử nghiệm. Mọi hành vi lạm dụng các API này cho mục đích khác đều KHÔNG được phép.
+
+## Tài liệu tham khảo
+Dự án này tham khảo một số thiết kế từ :
+* [food_order_ui](https://github.com/iremaysel/food_order_ui)
+* [facebook_clone](https://github.com/youssefmarzouk621/facebook-clone)
