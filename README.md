@@ -1,16 +1,31 @@
 # foodnet_01
 
-A new Flutter project.
+Dự án FoodNet - Mạng xã hội review ẩm thực (cài đặt phía ứng dụng).
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Chạy lệnh sau để chạy ứng dụng trong các máy ảo:
 
-A few resources to get you started if this is your first Flutter project:
+```cmd
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Để ứng dụng hoạt động, máy cần phải có kết nối mạng.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Các tài liệu liên quan được cập nhật tại địa chỉ [Google Driver](https://drive.google.com/drive/folders/1GCwJzF32qca5T-HzU_95EOmZjZCo5D99?usp=sharing), bao gồm:
+* [Tài liệu hướng dẫn sử dụng](https://docs.google.com/document/d/1TiTDeaF_t5___Y3sHM969yky0OKN9ArO/edit?usp=sharing&ouid=101352446849824163988&rtpof=true&sd=true)
+* [Báo cáo](https://docs.google.com/document/d/1X1j7BIUgD4pPOVZDAcsCAc9WP_9fThTP/edit?usp=sharing&ouid=101352446849824163988&rtpof=true&sd=true)
+* [Phân công công việc](https://docs.google.com/spreadsheets/d/14ROmwByNcetT_ewgx4Gf5Eghc_ls20IkjzbFpV1v3tc/edit?usp=sharing)
+* [Video demo]()
+* [Hai phiên bản cài đặt](https://drive.google.com/drive/folders/12tNAMTDt_631zcC2YndRZKceum_tzP1n?usp=sharing)
+
+## Nhóm tác giả
+* Lương Duy Đạt
+* Nguyễn Minh Quang
+* Phạm Văn Trọng
+* Đào Trọng Tuấn
+
+## Lưu ý khi sử dụng mã nguồn
+File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các cloud function được cài đặt trên Firebase, KHÔNG thể triển khai trực tiếp từ project này. Trên thực tế, một project Firebase khác được tạo ra và triển khai, quản lý các chức năng này.
+
+Các API key được thể hiện trong mã nguồn với mục đích build thử nghiệm. Mọi hành vi lạm dụng các API này cho mục đích khác đều KHÔNG được phép.
