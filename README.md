@@ -10,7 +10,22 @@ Chạy lệnh sau để chạy ứng dụng trong các máy ảo:
 flutter run
 ```
 
-Để ứng dụng hoạt động, máy cần phải có kết nối mạng.
+Chạy lệnh sau để build mã nguồn sang file APK (lưu tại ```build\```)
+
+```cmd
+flutter build apk --no-tree-shake-icons
+```
+
+Với phiên bản IOS:
+
+```cmd
+flutter build ios --no-tree-shake-icons
+```
+
+Tuy nhiên, như sẽ nói ở phần Lưu ý, có một vài điều kiện mà bạn phái đáp ứng thì mới có thể build & deploy app. Trong trường hợp chỉ muốn test khả nằn hoạt động trên nền tảng IOS, lời khuyên là sử dụng lệnh chạy ứng dụng trên máy ảo đối IOS (sử dụng lệnh ```flutter run```)!
+
+
+Để ứng dụng hoạt động, máy cần phải có kết nối mạng và cho phép quyền truy cập vị trí.
 
 Các tài liệu liên quan được cập nhật tại địa chỉ [Google Driver](https://drive.google.com/drive/folders/1GCwJzF32qca5T-HzU_95EOmZjZCo5D99?usp=sharing), bao gồm:
 * [Tài liệu hướng dẫn sử dụng](https://docs.google.com/document/d/1TiTDeaF_t5___Y3sHM969yky0OKN9ArO/edit?usp=sharing&ouid=101352446849824163988&rtpof=true&sd=true)
@@ -26,11 +41,13 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 * Đào Trọng Tuấn
 
 ## Lưu ý khi sử dụng mã nguồn
-File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các cloud function được cài đặt trên Firebase, KHÔNG thể triển khai trực tiếp từ project này. Trên thực tế, một project Firebase khác được tạo ra và triển khai, quản lý các chức năng này.
+File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các cloud function được cài đặt trên Firebase, KHÔNG thể triển khai trực tiếp từ project này. Trên thực tế, một project Firebase khác được sử dụng để triển khai, quản lý các chức năng này.
 
 Các API key được thể hiện trong mã nguồn với mục đích build thử nghiệm. Mọi hành vi lạm dụng các API này cho mục đích khác đều KHÔNG được phép.
 
 Mã nguồn này đã build và chạy được trên máy ảo IOS, tuy nhiên do một số chính sách của Apple, sẽ không có file cài đặt cho IOS.
+Việc deploy có thể tham khảo [đường dẫn](https://docs.flutter.dev/deployment/ios).
+
 ## Tài liệu tham khảo
 Dự án này tham khảo một số thiết kế từ :
 * [food_order_ui](https://github.com/iremaysel/food_order_ui)
