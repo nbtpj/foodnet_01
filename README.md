@@ -16,7 +16,7 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 * [Tài liệu hướng dẫn sử dụng](https://docs.google.com/document/d/1TiTDeaF_t5___Y3sHM969yky0OKN9ArO/edit?usp=sharing&ouid=101352446849824163988&rtpof=true&sd=true)
 * [Báo cáo](https://docs.google.com/document/d/1X1j7BIUgD4pPOVZDAcsCAc9WP_9fThTP/edit?usp=sharing&ouid=101352446849824163988&rtpof=true&sd=true)
 * [Phân công công việc](https://docs.google.com/spreadsheets/d/14ROmwByNcetT_ewgx4Gf5Eghc_ls20IkjzbFpV1v3tc/edit?usp=sharing)
-* [Video demo](https://drive.google.com/file/d/1A4DFLKUgnB7cVwO3ZmenJt6WhYtWum0Y/view?usp=sharing)
+* [Video demo](https://youtu.be/Nk5OWpM3rFs)
 * [Phiên bản cài đặt (cho Android)](https://drive.google.com/drive/folders/12tNAMTDt_631zcC2YndRZKceum_tzP1n?usp=sharing)
 
 ## Nhóm tác giả
