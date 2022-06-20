@@ -22,7 +22,7 @@ Với phiên bản IOS:
 flutter build ios --no-tree-shake-icons
 ```
 
-Tuy nhiên, như sẽ nói ở phần Lưu ý, có một vài điều kiện mà bạn phái đáp ứng thì mới có thể build & deploy app. Trong trường hợp chỉ muốn test khả nằn hoạt động trên nền tảng IOS, lời khuyên là sử dụng lệnh chạy ứng dụng trên máy ảo đối IOS (sử dụng lệnh ```flutter run```)!
+Tuy nhiên, như sẽ nói ở phần Lưu ý, có một vài điều kiện mà bạn phái đáp ứng thì mới có thể build & deploy app. Trong trường hợp chỉ muốn test khả năng hoạt động trên nền tảng IOS, lời khuyên là sử dụng lệnh chạy ứng dụng trên máy ảo IOS (sử dụng lệnh ```flutter run```)!
 
 
 Để ứng dụng hoạt động, máy cần phải có kết nối mạng và cho phép quyền truy cập vị trí.
