@@ -1,12 +1,17 @@
-# foodnet_01
+# FoodNet
 
 Dự án FoodNet - Mạng xã hội review ẩm thực (cài đặt phía ứng dụng).
 
 ## Getting Started
 
+Cài đặt Flutter theo [hướng dẫn](https://docs.flutter.dev/get-started/install). 
+
+Tại giao diện dòng lệnh, mở đường dẫn của thư mục project và thực hiện các thao tác sau (khuyến khích sử dụng các IDE sẽ trực quan hơn để thao tác với các máy ảo)
+
 Chạy lệnh sau để chạy ứng dụng trong các máy ảo:
 
 ```cmd
+flutter pub get
 flutter run
 ```
 
@@ -39,6 +44,10 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 * Nguyễn Minh Quang
 * Phạm Văn Trọng
 * Đào Trọng Tuấn
+
+## Công nghệ sử dụng
+* [Flutter](https://flutter.dev/)
+* [Firebase](https://firebase.google.com/)
 
 ## Lưu ý khi sử dụng mã nguồn
 File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các cloud function được cài đặt trên Firebase, KHÔNG thể triển khai trực tiếp từ project này. Trên thực tế, một project Firebase khác được sử dụng để triển khai, quản lý các chức năng này.
