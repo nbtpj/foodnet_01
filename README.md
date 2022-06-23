@@ -55,7 +55,7 @@ File [cloud_function.js](cloud_function_define/cloud_function.js) mô tả các 
 Các API key được thể hiện trong mã nguồn với mục đích build thử nghiệm. Mọi hành vi lạm dụng các API này cho mục đích khác đều KHÔNG được phép.
 
 Mã nguồn này đã build và chạy được trên máy ảo IOS, tuy nhiên do một số chính sách của Apple, sẽ không có file cài đặt được cung cấp cho IOS.
-Trrong trường hợp bạn đã có Bundle ID và muốn thử nghiệm build và deploy, có thể tham khảo [hướng dẫn](https://docs.flutter.dev/deployment/ios).
+Trong trường hợp bạn đã có Bundle ID và muốn thử nghiệm build và deploy, có thể tham khảo [hướng dẫn](https://docs.flutter.dev/deployment/ios).
 
 ## Tài liệu tham khảo
 Dự án này tham khảo một số thiết kế từ :
