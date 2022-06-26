@@ -6,6 +6,8 @@ Dự án FoodNet - Mạng xã hội review ẩm thực (cài đặt phía ứng 
 
 Cài đặt Flutter theo [hướng dẫn](https://docs.flutter.dev/get-started/install). 
 
+Lưu ý phiên bản Android được khuyến khích sử dụng là Android 12.0, API 31.
+
 Tại giao diện dòng lệnh, mở đường dẫn của thư mục project và thực hiện các thao tác sau (khuyến khích sử dụng các IDE sẽ trực quan hơn để thao tác với các máy ảo)
 
 Chạy lệnh sau để tải các package cần thiết và tạo Icon app:
