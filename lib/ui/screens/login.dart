@@ -94,7 +94,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      body: Column(
+      body: Row(
         children: [
           Expanded(
             child: AnimatedContainer(
@@ -115,15 +115,15 @@ class _LoginState extends State<Login> {
   buildLottieContainer(BuildContext context) {
     final screenWidth = min(
         MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
-    return Center(
+    return Expanded(
       child: SizedBox(
           width: screenWidth * 0.5,
           height: screenWidth * 0.5,
-          child: Image.asset(
+          child: Center(
+              child: Image.asset(
             AppAnimations.appAnimation,
             fit: BoxFit.contain,
-          )
-      ),
+          ))),
     );
   }
 
@@ -133,6 +133,7 @@ class _LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        buildLottieContainer(context),
         const Text(
           appName,
           style: TextStyle(
@@ -140,8 +141,7 @@ class _LoginState extends State<Login> {
             fontWeight: FontWeight.bold,
           ),
         ).fadeInList(0, false),
-        buildLottieContainer(context),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: 60.0),
         Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: formKey,
