@@ -8,15 +8,21 @@ Cài đặt Flutter theo [hướng dẫn](https://docs.flutter.dev/get-started/i
 
 Tại giao diện dòng lệnh, mở đường dẫn của thư mục project và thực hiện các thao tác sau (khuyến khích sử dụng các IDE sẽ trực quan hơn để thao tác với các máy ảo)
 
-Chạy lệnh sau để chạy ứng dụng trong các máy ảo:
+Chạy lệnh sau để tải các package cần thiết và tạo Icon app:
+
 
 ```cmd
 flutter pub get
 flutter pub run flutter_launcher_icons:main
+```
+
+Chạy lệnh sau để chạy ứng dụng trong các máy ảo (lưu ý phải kết nối với AVD hoặc máy ảo IOS trước khi chạy):
+
+```cmd
 flutter run
 ```
 
-Chạy lệnh sau để build mã nguồn sang file APK (lưu tại ```build\```)
+Chạy lệnh sau để build mã nguồn sang file APK (lưu tại ```build\app\outputs\flutter-apk\app-release.apk```)
 
 ```cmd
 flutter build apk --no-tree-shake-icons

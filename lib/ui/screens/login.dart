@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodnet_01/ui/components/custom_button.dart';
@@ -39,10 +41,8 @@ class _LoginState extends State<Login> {
     } else {
       if (formMode == FormMode.LOGIN) {
         try {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: email!,
-              password: password!
-          );
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: email!, password: password!);
         } on FirebaseAuthException catch (e) {
           if (e.code == 'user-not-found') {
             showInSnackBar(noUserFoundString);
@@ -51,16 +51,17 @@ class _LoginState extends State<Login> {
           }
         }
       } else if (formMode == FormMode.REGISTER) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: email!,
-            password: password!
-        ).then((result) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email!, password: password!)
+            .then((result) {
           result.user!.updateDisplayName(name!);
           ProfileData newProfile = ProfileData(
               id: result.user!.uid,
               name: name!,
-              userAsset: "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
-              wallAsset: "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Fwall_default.png?alt=media&token=64c186ba-bf3a-44db-a501-ccfdcc80fa2f");
+              userAsset:
+                  "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Favatar_default.jpeg?alt=media&token=56e50943-98e5-44d8-9590-235569b96fe3",
+              wallAsset:
+                  "https://firebasestorage.googleapis.com/v0/b/mobile-foodnet.appspot.com/o/profile%2Fwall_default.png?alt=media&token=64c186ba-bf3a-44db-a501-ccfdcc80fa2f");
           createNewProfile(newProfile);
         }).catchError((e) {
           if (e.code == 'weak-password') {
@@ -70,13 +71,15 @@ class _LoginState extends State<Login> {
           }
         });
       } else {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: email!).then((value) {
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: email!)
+            .then((value) {
           showInSnackBar(resetPassString);
         }).catchError((e) {
           if (e.code == 'user-not-found') {
             showInSnackBar(noUserFoundString);
           }
-        }) ;
+        });
       }
     }
   }
@@ -88,22 +91,19 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Row(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: Column(
         children: [
-          buildLottieContainer(),
           Expanded(
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               child: Center(
                 child: Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                  child: buildFormContainer(),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                  child: buildFormContainer(context),
                 ),
               ),
             ),
@@ -113,30 +113,22 @@ class _LoginState extends State<Login> {
     );
   }
 
-  buildLottieContainer() {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    return AnimatedContainer(
-      width: screenWidth < 700 ? 0 : screenWidth * 0.5,
-      duration: const Duration(milliseconds: 500),
-      color: Theme
-          .of(context)
-          .colorScheme
-          .secondary
-          .withOpacity(0.3),
-      child: Center(
-        child: Lottie.asset(
-          AppAnimations.chatAnimation,
-          height: 400,
-          fit: BoxFit.cover,
-        ),
+  buildLottieContainer(BuildContext context) {
+    final screenWidth = min(
+        MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
+    return Center(
+      child: SizedBox(
+          width: screenWidth * 0.5,
+          height: screenWidth * 0.5,
+          child: Image.asset(
+            AppAnimations.appAnimation,
+            fit: BoxFit.contain,
+          )
       ),
     );
   }
 
-  buildFormContainer() {
+  buildFormContainer(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +141,8 @@ class _LoginState extends State<Login> {
             fontWeight: FontWeight.bold,
           ),
         ).fadeInList(0, false),
-        const SizedBox(height: 70.0),
+        buildLottieContainer(context),
+        const SizedBox(height: 10.0),
         Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           key: formKey,
@@ -168,10 +161,10 @@ class _LoginState extends State<Login> {
                     setState(() {});
                   },
                   child: Text(
-                      forgotPassword,
-                      style: TextStyle(
-                        color: buttonColor,
-                      ),
+                    forgotPassword,
+                    style: TextStyle(
+                      color: buttonColor,
+                    ),
                   ),
                 ),
               ),
@@ -213,10 +206,8 @@ class _LoginState extends State<Login> {
                 },
                 child: Text(
                   loginString,
-                  style: TextStyle(color: Theme
-                      .of(context)
-                      .colorScheme
-                      .secondary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
               ),
             ],

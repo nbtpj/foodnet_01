@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AppAnimations {
-  static String chatAnimation = 'assets/animations/chat-anim.json';
+  static String appAnimation = 'assets/animation/login.gif';
 }
 void notify(String notice){
   Fluttertoast.showToast(
