@@ -54,7 +54,7 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 
 <img src="./snapshots/Screenshot_20220626_081743.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081753.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081818.png" width="32%"> 
 
-<img src="./snapshots/Screenshot_20220626_081827.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081827.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081911.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081827.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081837.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081911.png" width="32%"> 
 
 <img src="./snapshots/Screenshot_20220626_081922.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081940.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081953.png" width="32%"> 
 
