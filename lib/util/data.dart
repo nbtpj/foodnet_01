@@ -106,9 +106,8 @@ String file_type(String url) {
 }
 
 ///_______________________searching_______________________
-/// define searching functions. Note: current FireStore DO NOT support fulltext search, but via a third party with payment!
-/// to deal with this problem, we define a "pseudo text search" strategy, which first fetch a limited possible
-/// result the sort them by weighted query-matching score (with post searching), and substring matching (with user searching).
+/// define searching functions. Note: current FireStore DO NOT support fulltext search, curent version using via a third party (Elastic Search App)
+/// some low-level API device may not use this calling!
 
 String normalize(String s) {
   /// normalize a string for text-matching
