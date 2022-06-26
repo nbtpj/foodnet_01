@@ -48,6 +48,8 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 
 ## Ảnh chụp một số màn hình chính
 
+<img src="./snapshots/Screenshot_20220626_124603.png" width="32%"> <img src="./snapshots/Screenshot_20220626_124618.png" width="32%"> 
+
 <img src="./snapshots/Screenshot_20220626_081551.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081616.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081629.png" width="32%"> 
 
 <img src="./snapshots/Screenshot_20220626_081642.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081705.png" width="32%"> <img src="./snapshots/Screenshot_20220626_081718.png" width="32%"> 
