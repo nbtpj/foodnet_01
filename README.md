@@ -12,6 +12,7 @@ Chạy lệnh sau để chạy ứng dụng trong các máy ảo:
 
 ```cmd
 flutter pub get
+flutter pub run flutter_launcher_icons:main
 flutter run
 ```
 
@@ -38,6 +39,31 @@ Các tài liệu liên quan được cập nhật tại địa chỉ [Google Dri
 * [Phân công công việc](https://docs.google.com/spreadsheets/d/14ROmwByNcetT_ewgx4Gf5Eghc_ls20IkjzbFpV1v3tc/edit?usp=sharing)
 * [Video demo](https://youtu.be/Nk5OWpM3rFs)
 * [Phiên bản cài đặt (cho Android)](https://drive.google.com/drive/folders/12tNAMTDt_631zcC2YndRZKceum_tzP1n?usp=sharing)
+
+## Ảnh chụp một số màn hình chính
+
+<img src="./snapshots/Screenshot_20220626_081551.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081616.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081629.png" width="32%"> 
+
+<img src="./snapshots/Screenshot_20220626_081642.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081705.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081718.png" width="32%"> 
+
+<img src="./snapshots/Screenshot_20220626_081743.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081753.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081818.png" width="32%"> 
+
+<img src="./snapshots/Screenshot_20220626_081827.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081827.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081911.png" width="32%"> 
+
+<img src="./snapshots/Screenshot_20220626_081922.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081940.png" width="32%"> 
+<img src="./snapshots/Screenshot_20220626_081953.png" width="32%"> 
+
+
+
 
 ## Nhóm tác giả
 * Lương Duy Đạt
