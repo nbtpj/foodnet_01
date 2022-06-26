@@ -12,7 +12,6 @@ import 'package:foodnet_01/util/entities.dart';
 import 'package:foodnet_01/util/enum.dart';
 import 'package:foodnet_01/util/extensions.dart';
 import 'package:foodnet_01/util/validations.dart';
-import 'package:lottie/lottie.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
