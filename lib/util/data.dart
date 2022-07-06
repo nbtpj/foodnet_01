@@ -14,8 +14,8 @@ import 'entities.dart';
 final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 final db = FirebaseFirestore.instance;
 final service = ElasticAppSearch(
-  endPoint: "https://firestore-eas.ent.asia-east1.gcp.elastic-cloud.com",
-  searchKey: "private-e9smabtgeiynh3vuyhavy5f1",
+  endPoint: "https://firestore-eas-4e04bb.ent.asia-east1.gcp.elastic-cloud.com",
+  searchKey: "private-2jqjx3htzpqn62f98uqfe8o6",
 );
 
 final CollectionReference<PostData> postsRef =
